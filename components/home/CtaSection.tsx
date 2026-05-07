@@ -7,7 +7,7 @@ import { useTranslation } from "@/lib/context/TranslationContext";
 import { motion } from "framer-motion";
 
 export default function CtaSection() {
-  const { t, dir } = useTranslation();
+  const { dir } = useTranslation();
 
   return (
     <section className="py-16 bg-orange-500 text-white" dir={dir}>

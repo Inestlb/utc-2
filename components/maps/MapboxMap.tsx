@@ -38,7 +38,7 @@ export default function MapboxMap({
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     // Ajouter un marqueur à l'emplacement spécifié
-    const marker = new mapboxgl.Marker({ color: '#f97316' }) // Couleur orange
+    new mapboxgl.Marker({ color: '#f97316' }) // Couleur orange
       .setLngLat([longitude, latitude])
       .setPopup(new mapboxgl.Popup().setHTML(`<h3>${markerTitle}</h3>`))
       .addTo(map.current);

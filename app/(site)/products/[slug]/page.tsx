@@ -2,20 +2,20 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Mail } from 'lucide-react';
+import { ArrowLeft, Mail, ArrowRight } from 'lucide-react';
 import { getProductById, getProducts, extraImages } from '@/data/products';
 import { Metadata } from 'next';
 import ProductGallery from '@/components/products/ProductGallery';
 
 interface ProductDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-// Generate metadata for the page
 export async function generateMetadata({ params }: ProductDetailPageProps): Promise<Metadata> {
-  const product = await getProductById(params.slug);
+  const { slug } = await params;
+  const product = await getProductById(slug);
 
   if (!product) {
     return {
@@ -23,8 +23,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     };
   }
 
-  // Utiliser header_title s'il est disponible, sinon utiliser name
-  const displayTitle = (product as any).header_title || product.name;
+  const displayTitle = product.header_title || product.name;
 
   return {
     title: `${displayTitle} | Entreprise d'Exportation Industrielle`,
@@ -33,145 +32,170 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const product = await getProductById(params.slug);
+  const { slug } = await params;
+  const product = await getProductById(slug);
 
-  // If product not found, show 404
   if (!product) {
     notFound();
   }
 
-  // Utiliser header_title s'il est disponible, sinon utiliser name
-  const displayTitle = (product as any).header_title || product.name;
+  const displayTitle = product.header_title || product.name;
 
-  // Fetch related products from the same category
   const relatedProducts = await getProducts({
     category: product.category,
   });
 
-  // Filter out the current product and limit to 3 related products
   const filteredRelatedProducts = relatedProducts
     .filter(p => p.id !== product.id)
     .slice(0, 3);
 
-  // Vérifier si nous avons des images supplémentaires pour ce produit
   const hasExtraImages = extraImages[product.id] && extraImages[product.id].length > 0;
 
   return (
-    <div className="py-12 animate-in fade-in-50 duration-700">
-      <div className="flex justify-center w-full">
-        <div className="w-full max-w-[1600px] px-12">
-          {/* Breadcrumb */}
-          <div className="mb-6 animate-in slide-in-from-left-5 duration-700 delay-150">
-            <nav className="flex text-sm">
-              <Link href="/" className="text-gray-500 hover:text-gray-700">
-                Accueil
-              </Link>
-              <span className="mx-2 text-gray-500">/</span>
-              <Link href="/products" className="text-gray-500 hover:text-gray-700">
-                Produits
-              </Link>
-              <span className="mx-2 text-gray-500">/</span>
-              <Link
-                href={`/products?category=${encodeURIComponent(product.category)}`}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                {product.category}
-              </Link>
-              <span className="mx-2 text-gray-500">/</span>
-              <span className="text-gray-900 font-medium">{displayTitle}</span>
-            </nav>
+    <div className="bg-white">
+      <div className="bg-[#0b2f4f]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-3">
+          <nav className="flex items-center text-[13px] text-[#a8c4db]">
+            <Link href="/" className="text-white hover:text-[#e47925]">
+              Accueil
+            </Link>
+            <span className="mx-2 text-[#6b98b8]">/</span>
+            <Link href="/products" className="text-white hover:text-[#e47925]">
+              Produits
+            </Link>
+            <span className="mx-2 text-[#6b98b8]">/</span>
+            <Link
+              href={`/products?category=${encodeURIComponent(product.category)}`}
+              className="text-white hover:text-[#e47925]"
+            >
+              {product.category}
+            </Link>
+            <span className="mx-2 text-[#6b98b8]">/</span>
+            <span className="text-[#e47925] font-medium">{displayTitle}</span>
+          </nav>
+        </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-8">
+        <Link
+          href={`/products?category=${encodeURIComponent(product.category)}&brand=lenze`}
+          className="inline-flex items-center text-[13px] text-[#0b2f4f] hover:text-[#e47925] mb-8 font-medium"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Retour aux produits
+        </Link>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            {!product.image ? (
+              <div className="aspect-square bg-[#f8f9fa] border border-[#cacdcf] rounded flex items-center justify-center max-w-[400px] mx-auto">
+                <span className="text-[#6b7280] text-4xl">{displayTitle.charAt(0)}</span>
+              </div>
+            ) : (
+              <ProductGallery
+                mainImage={product.image}
+                additionalImages={hasExtraImages ? extraImages[product.id] : []}
+                productName={displayTitle}
+              />
+            )}
           </div>
 
-          {/* Back Button */}
-          <div className="mb-8 animate-in slide-in-from-left-5 duration-700 delay-300">
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`/products?category=${encodeURIComponent(product.category)}&brand=lenze`}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Retour
+          <div>
+            <h1 className="text-xl font-semibold text-[#0b2f4f] mb-4">{displayTitle}</h1>
+
+            <div className="text-[15px] text-[#6b7280] leading-relaxed mb-6">
+              {product.description.split('\n\n').map((paragraph, idx) => (
+                <p key={idx} className="mb-4">{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-lg font-semibold text-[#0b2f4f]">Spécifications</h2>
+                <div className="h-px flex-1 bg-[#e47925] opacity-40" />
+              </div>
+              <div className="border border-[#cacdcf] overflow-hidden">
+                <dl>
+                  {Object.entries(product.specifications).map(([key, value], index) => (
+                    <div
+                      key={key}
+                      className={`py-3 px-5 grid grid-cols-3 gap-4 ${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]'}`}
+                    >
+                      <dt className="text-[13px] text-[#0b2f4f] font-medium">{key}</dt>
+                      <dd className="text-[13px] text-[#34383c] col-span-2">{String(value)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+
+            <Button
+              asChild
+              className="rounded-none bg-[#e47925] text-white hover:bg-[#0b2f4f] px-6 py-3 text-[13px] font-medium border border-[#e47925] hover:border-[#0b2f4f]"
+            >
+              <Link href="/contact">
+                <Mail className="mr-2 h-4 w-4" />
+                Demander des Informations
               </Link>
             </Button>
           </div>
+        </div>
 
-          {/* Product Details */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Product Images */}
-            <div className="animate-in slide-in-from-bottom-5 duration-700 delay-500">
-              {!product.image ? (
-                <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center max-w-[400px] mx-auto">
-                  <span className="text-gray-500 text-4xl">{displayTitle.charAt(0)}</span>
-                </div>
-              ) : (
-                <ProductGallery 
-                  mainImage={product.image}
-                  additionalImages={hasExtraImages ? extraImages[product.id] : []}
-                  productName={displayTitle}
-                />
-              )}
+        {filteredRelatedProducts.length > 0 && (
+          <div className="mt-16">
+            <div className="flex items-center gap-3 mb-6">
+              <h2 className="text-lg font-semibold text-[#0b2f4f]">Produits Associés</h2>
+              <div className="h-px flex-1 bg-[#e47925] opacity-40" />
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredRelatedProducts.map((relatedProduct) => {
+                const relatedDisplayTitle = relatedProduct.header_title || relatedProduct.name;
 
-            {/* Product Info */}
-            <div className="animate-in slide-in-from-bottom-5 duration-700 delay-700">
-              <div className="mb-6">
-                <h1 className="text-3xl font-bold mb-4">{displayTitle}</h1>
-                <div className="text-gray-600 mb-6 leading-relaxed">
-                  {product.description.split('\n\n').map((paragraph, idx) => (
-                    <p key={idx} className="mb-4">{paragraph}</p>
-                  ))}
-                </div>
-              </div>
+                return (
+                  <div
+                    key={relatedProduct.id}
+                    className="border border-[#cacdcf] bg-white overflow-hidden group/related hover:border-[#0b2f4f]"
+                  >
+                    <div className="h-56 w-full flex items-center justify-center bg-[#0b2f4f]">
+                      {!relatedProduct.image ? (
+                        <span className="text-white/25 text-3xl font-bold">{relatedDisplayTitle.charAt(0)}</span>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#f8f9fa]">
+                          <Image
+                            src={relatedProduct.image}
+                            alt={relatedDisplayTitle}
+                            width={400}
+                            height={300}
+                            className="object-contain w-auto h-full max-w-full"
+                          />
+                        </div>
+                      )}
+                    </div>
 
-              {/* Specifications */}
-              <div className="mb-8 animate-in slide-in-from-right-5 duration-700 delay-900">
-                <h2 className="text-xl font-semibold mb-4">Spécifications</h2>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <dl className="divide-y divide-gray-200">
-                    {Object.entries(product.specifications).map(([key, value], index) => (
-                      <div key={key} className="py-3 grid grid-cols-3 gap-4 animate-in fade-in-50 duration-700" style={{ animationDelay: `${900 + index * 100}ms` }}>
-                        <dt className="text-sm font-medium text-gray-500">{key}</dt>
-                        <dd className="text-sm text-gray-900 col-span-2">{value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-
-              {/* Contact Button */}
-              <div className="animate-in slide-in-from-bottom-5 duration-700 delay-1000">
-                <Button asChild className="w-full sm:w-auto transition-all duration-300 hover:bg-orange-600 hover:scale-105">
-                  <Link href="/contact">
-                    <Mail className="mr-2 h-4 w-4" />
-                    Demander des Informations
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Related Products */}
-          {filteredRelatedProducts.length > 0 && (
-            <div className="mt-16 animate-in fade-in-50 duration-700 delay-1000">
-              <h2 className="text-2xl font-bold mb-6">Produits Associés</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredRelatedProducts.map((relatedProduct, index) => {
-                  // Utiliser header_title pour les produits associés également
-                  const relatedDisplayTitle = (relatedProduct as any).header_title || relatedProduct.name;
-                  
-                  return (
-                    <div key={relatedProduct.id} className="bg-white rounded-lg shadow-sm border p-4 animate-in slide-in-from-bottom-5 duration-500" style={{ animationDelay: `${1000 + index * 200}ms` }}>
-                      <h3 className="font-semibold mb-2">{relatedDisplayTitle}</h3>
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">{relatedProduct.description}</p>
-                      <Button asChild variant="outline" size="sm" className="transition-all duration-300 hover:bg-orange-500 hover:text-white hover:border-orange-500">
+                    <div className="p-6">
+                      <h3 className="text-[15px] font-semibold text-[#0b2f4f] line-clamp-1 mb-2 group-hover/related:text-[#e47925]">
+                        {relatedDisplayTitle}
+                      </h3>
+                      <p className="text-[13px] text-[#6b7280] line-clamp-2 mb-4">
+                        {relatedProduct.description}
+                      </p>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="rounded-none w-full py-4 text-[13px] text-[#0b2f4f] border-[#0b2f4f] hover:bg-[#e47925] hover:text-white hover:border-[#e47925]"
+                      >
                         <Link href={`/products/${relatedProduct.id}`}>
-                          Voir les Détails
+                          Voir les détails
+                          <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

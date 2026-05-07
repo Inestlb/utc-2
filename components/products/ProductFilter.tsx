@@ -1,6 +1,5 @@
 "use client";
 
-import { IFM_CATEGORIES, LENZE_CATEGORIES, WAGO_CATEGORIES } from '@/lib/types';
 import { useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -18,11 +17,9 @@ export default function ProductFilter({
   const searchParams = useSearchParams();
   const brand = searchParams.get('brand');
 
-  // Détermine les catégories à afficher en fonction de la marque
   let displayCategories: string[] = [];
   
   if (brand === 'ifm') {
-    // Ordre exact comme sur l'image pour IFM
     const orderedCategories = [
       'Capteurs',
       'IO-Link',
@@ -35,7 +32,6 @@ export default function ProductFilter({
     ];
     displayCategories = orderedCategories;
   } else if (brand === 'lenze') {
-    // Catégories pour Lenze
     displayCategories = [
       'Variateurs et servovariateurs',
       'Moteurs',
@@ -46,7 +42,6 @@ export default function ProductFilter({
       'Software'
     ];
   } else if (brand === 'wago') {
-    // Catégories pour WAGO
     displayCategories = [
       'Technologies de raccordement électriques',
       'Interfaces électroniques',
@@ -56,34 +51,35 @@ export default function ProductFilter({
     displayCategories = categories;
   }
 
-  // Ajouter "All" comme première option
   const allCategories = ["All", ...displayCategories];
 
   return (
     <div className="w-full">
-      <div className="px-6 md:px-12">
-        <div className="flex flex-wrap gap-3">
-          {allCategories.map((category) => {
-            const isSelected = 
-              (category === "All" && !selectedCategory) || 
-              category === selectedCategory;
-            
-            return (
-              <button
-                key={category}
-                onClick={() => onCategoryChange(category === "All" ? undefined : category)}
-                className={cn(
-                  "px-5 py-3.5 text-center rounded-md text-sm font-medium transition-all duration-300 ease-in-out",
-                  isSelected 
-                    ? "bg-orange-500 text-white shadow-md" 
-                    : "bg-gray-100 hover:bg-gray-200 hover:shadow-sm hover:text-orange-500 text-gray-700"
-                )}
-              >
-                {category}
-              </button>
-            );
-          })}
-        </div>
+      <div className="flex items-center gap-3 mb-4">
+        <h2 className="text-base font-semibold text-[#0b2f4f]">Catégories</h2>
+        <div className="h-px flex-1 bg-[#0b2f4f] opacity-20" />
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {allCategories.map((category) => {
+          const isSelected =
+            (category === "All" && !selectedCategory) ||
+            category === selectedCategory;
+
+          return (
+            <button
+              key={category}
+              onClick={() => onCategoryChange(category === "All" ? undefined : category)}
+              className={cn(
+                "rounded-none px-5 py-2.5 text-[13px] font-medium",
+                isSelected
+                  ? "bg-[#e47925] text-white border border-[#e47925]"
+                  : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
+              )}
+            >
+              {category}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

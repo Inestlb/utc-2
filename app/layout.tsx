@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Playfair_Display } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import NavigationProgressBar from '@/components/NavigationProgressBar';
@@ -67,7 +68,9 @@ export default function RootLayout({
       <body className={`${inter.variable} ${poppins.variable} ${playfairDisplay.variable} 
           font-sans min-h-screen flex flex-col`}
       >
-        <NavigationProgressBar />
+        <Suspense fallback={null}>
+          <NavigationProgressBar />
+        </Suspense>
         <ClientLayout>
           {children}
         </ClientLayout>

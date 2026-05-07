@@ -29,13 +29,12 @@ export default function MailButtonFixed() {
       const direction = currentScrollY > lastScrollY ? 1 : -1;
       setScrollDirection(direction);
 
-      // Mettre à jour la position du bouton en fonction de la direction
       setMoveY(prev => {
-        if (direction === 1) { // Scroll vers le bas
-          return Math.min(prev + 5, 20); // Plus doux vers le bas
-        } else { // Scroll vers le haut
-          return Math.max(prev - 15, -220); // Plus haut vers le haut
+        if (direction === 1) {
+          return Math.min(prev + 2, 12);
         }
+
+        return Math.max(prev - 4, -48);
       });
       
       setLastScrollY(currentScrollY);
@@ -52,9 +51,9 @@ export default function MailButtonFixed() {
     const timer = setTimeout(() => {
       setMoveY(prev => {
         if (Math.abs(prev) < 1) return 0;
-        return prev * 0.94; // Retour plus progressif
+        return prev * 0.9;
       });
-    }, 100); // Délai plus long pour plus de fluidité
+    }, 80);
 
     return () => clearTimeout(timer);
   }, [moveY, scrollDirection]);
@@ -68,26 +67,26 @@ export default function MailButtonFixed() {
     <Dialog>
       <DialogTrigger asChild>
         <motion.button
-          className="fixed bottom-16 right-10 bg-orange-500 text-white p-6 rounded-full shadow-lg hover:bg-orange-600 hover:scale-110 hover:shadow-xl active:scale-95 transition-all duration-300 ease-in-out z-50 group"
+          className="group fixed bottom-8 right-6 md:bottom-12 md:right-10 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#e47925] text-white shadow-[0_22px_55px_rgba(228,121,37,0.34),0_12px_32px_rgba(7,24,39,0.24)] ring-1 ring-white/20 transition-transform duration-300 hover:scale-105 hover:bg-[#f18a3d] active:scale-95"
           animate={{
             y: moveY
           }}
           transition={{
             type: "spring",
-            stiffness: 300, // Plus doux
-            damping: 35,    // Plus de stabilité
-            mass: 0.9,      // Un peu plus lourd pour plus de fluidité
-            velocity: 1.5   // Vitesse initiale modérée
+            stiffness: 180,
+            damping: 28,
+            mass: 0.8
           }}
           aria-label="Ouvrir le formulaire de contact"
         >
-          <Mail className="h-8 w-8 group-hover:animate-bounce" />
+          <span className="absolute inset-1 rounded-full border border-white/18" />
+          <Mail className="relative h-7 w-7 transition-transform duration-300 group-hover:-translate-y-0.5" />
         </motion.button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            <span className="text-orange-500">Contactez</span>-Nous
+          <DialogTitle className="text-xl font-bold text-[#0b2f4f]">
+            <span className="text-[#e47925]">Contactez</span>-Nous
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useTranslation, Language } from '@/lib/context/TranslationContext';
-import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/context/TranslationContext';
 
 export default function LanguageSelector() {
   const { language, setLanguage, isClient } = useTranslation();
@@ -13,18 +12,14 @@ export default function LanguageSelector() {
     setMounted(true);
   }, []);
 
-  const handleLanguageChange = () => {
-    setLanguage(language === 'fr' ? 'ar' : 'fr');
-  };
-
   // Static button for server-side rendering
   const staticSwitch = (
-    <div className="relative w-[120px] h-[34px] rounded-lg cursor-pointer overflow-hidden">
+    <div className="relative w-[120px] h-[34px] rounded-full cursor-pointer overflow-hidden border border-white/12 bg-white/8">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-orange-500">FR</span>
-          <span className="text-sm font-medium text-orange-500 opacity-50">|</span>
-          <span className="text-sm font-medium text-orange-500 opacity-50">AR</span>
+          <span className="text-sm font-medium text-[#e47925]">FR</span>
+          <span className="text-sm font-medium text-white/35">|</span>
+          <span className="text-sm font-medium text-white/55">AR</span>
         </div>
       </div>
     </div>
@@ -46,20 +41,20 @@ export default function LanguageSelector() {
   };
 
   return (
-    <div className="relative w-[120px] h-[34px] rounded-lg cursor-pointer select-none hover:bg-gray-50/50 transition-colors duration-200 overflow-hidden">
+    <div className="relative w-[120px] h-[34px] rounded-full cursor-pointer select-none border border-white/12 bg-white/8 hover:bg-white/12 transition-colors duration-200 overflow-hidden">
       {/* Background text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3">
           <span 
             onClick={handleFrClick}
-            className={`text-sm font-medium text-orange-500 transition-opacity duration-200 hover:opacity-80 ${language !== 'fr' ? 'opacity-50' : ''}`}
+            className={`text-sm font-medium transition-opacity duration-200 hover:opacity-90 ${language === 'fr' ? 'text-[#e47925]' : 'text-white/55'}`}
           >
             FR
           </span>
-          <span className="text-sm font-medium text-orange-500 opacity-50">|</span>
+          <span className="text-sm font-medium text-white/35">|</span>
           <span 
             onClick={handleArClick}
-            className={`text-sm font-medium text-orange-500 transition-opacity duration-200 hover:opacity-80 ${language !== 'ar' ? 'opacity-50' : ''}`}
+            className={`text-sm font-medium transition-opacity duration-200 hover:opacity-90 ${language === 'ar' ? 'text-[#e47925]' : 'text-white/55'}`}
           >
             AR
           </span>

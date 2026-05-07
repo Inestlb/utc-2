@@ -5,7 +5,7 @@ export interface Product {
   subcategory: string;
   jsonCategory?: string; // Catégorie d'origine du JSON
   description: string;
-  specifications: Record<string, any>;
+  specifications: Record<string, unknown>;
   image: string;
   featured: boolean;
   additionalImages?: string[];

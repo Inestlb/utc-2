@@ -7,7 +7,7 @@ import ProductFilter from './ProductFilter';
 import LenzeCategoryCards from './LenzeCategoryCards';
 import SubCategoryFilter from './SubCategoryFilter';
 import { Button } from '@/components/ui/button';
-import { Grid, List, Loader2 } from 'lucide-react';
+import { Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
 
 interface ProductGridProps {
@@ -40,49 +40,29 @@ export default function ProductGrid({
      filterOptions.category === 'Moteurs' ? 'Moteurs triphasés' : undefined)
   );
   
-  // Définir la sous-catégorie par défaut pour les pages Lenze avec sous-catégories
   useEffect(() => {
     const isLenzeVariateursPage = brand === 'lenze' && filterOptions.category === 'Variateurs et servovariateurs';
     const isLenzeMotoreducteursPage = brand === 'lenze' && filterOptions.category === 'Motoréducteurs';
     const isLenzeMoteursPage = brand === 'lenze' && filterOptions.category === 'Moteurs';
     const isReducteurPage = brand === 'lenze' && filterOptions.category === 'Réducteurs';
     
-    console.log("====== DIAGNOSTIC Initialisation sous-catégorie ======");
-    console.log("Vérification des conditions initiales:");
-    console.log("- brand:", brand);
-    console.log("- filterOptions.category:", filterOptions.category);
-    console.log("- selectedSubCategory:", selectedSubCategory);
-    console.log("- isLenzeVariateursPage:", isLenzeVariateursPage);
-    console.log("- isLenzeMotoreducteursPage:", isLenzeMotoreducteursPage);
-    console.log("- isLenzeMoteursPage:", isLenzeMoteursPage);
-    console.log("- isReducteurPage:", isReducteurPage);
-    
     if (isLenzeVariateursPage && !selectedSubCategory) {
       const defaultSubcategory = 'Variateurs de vitesse';
-      console.log(`Définition de la sous-catégorie par défaut pour variateurs: "${defaultSubcategory}"`);
       setSelectedSubCategory(defaultSubcategory);
       
-      // On met à jour l'URL pour la cohérence visuelle
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set('subcategory', defaultSubcategory);
       router.push(`/products?${newParams.toString()}`);
     }
     else if (isLenzeMotoreducteursPage && !selectedSubCategory) {
       const defaultSubcategory = 'Motoréducteurs triphasés';
-      console.log(`Définition de la sous-catégorie par défaut pour motoréducteurs: "${defaultSubcategory}"`);
       setSelectedSubCategory(defaultSubcategory);
       
-      // On force immédiatement le filtrage côté client pour éviter l'écran vide
-      console.log("Forçage immédiat du filtrage côté client");
-      
-      // On met à jour l'URL pour la cohérence visuelle
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set('subcategory', defaultSubcategory);
       
-      // Utiliser une mise à jour d'URL sans rechargement pour une meilleure UX
       router.push(`/products?${newParams.toString()}`);
       
-      // Appeler onFilterChange pour informer le parent de la sous-catégorie sélectionnée
       if (onFilterChange) {
         onFilterChange({ 
           subcategory: defaultSubcategory
@@ -91,20 +71,13 @@ export default function ProductGrid({
     }
     else if (isLenzeMoteursPage && !selectedSubCategory) {
       const defaultSubcategory = 'Moteurs triphasés';
-      console.log(`Définition de la sous-catégorie par défaut pour moteurs: "${defaultSubcategory}"`);
       setSelectedSubCategory(defaultSubcategory);
       
-      // On force immédiatement le filtrage côté client pour éviter l'écran vide
-      console.log("Forçage immédiat du filtrage côté client");
-      
-      // On met à jour l'URL pour la cohérence visuelle
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set('subcategory', defaultSubcategory);
       
-      // Utiliser une mise à jour d'URL sans rechargement pour une meilleure UX
       router.push(`/products?${newParams.toString()}`);
       
-      // Appeler onFilterChange pour informer le parent de la sous-catégorie sélectionnée
       if (onFilterChange) {
         onFilterChange({ 
           subcategory: defaultSubcategory
@@ -113,31 +86,21 @@ export default function ProductGrid({
     }
     else if (isReducteurPage && !selectedSubCategory) {
       const defaultSubcategory = 'Réducteurs';
-      console.log(`Définition de la sous-catégorie par défaut pour réducteurs: "${defaultSubcategory}"`);
       setSelectedSubCategory(defaultSubcategory);
       
-      // On force immédiatement le filtrage côté client pour éviter l'écran vide
-      console.log("Forçage immédiat du filtrage côté client");
-      
-      // On met à jour l'URL pour la cohérence visuelle
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set('subcategory', defaultSubcategory);
       
-      // Utiliser une mise à jour d'URL sans rechargement pour une meilleure UX
       router.push(`/products?${newParams.toString()}`);
       
-      // Appeler onFilterChange pour informer le parent de la sous-catégorie sélectionnée
       if (onFilterChange) {
         onFilterChange({ 
           subcategory: defaultSubcategory
         });
       }
     }
-    
-    console.log("====== FIN DIAGNOSTIC Initialisation sous-catégorie ======");
   }, [brand, filterOptions.category, searchParams, router, onFilterChange, selectedSubCategory]);
   
-  // Pour la page Lenze, on affiche les cards catégories au lieu des filtres par défaut
   useEffect(() => {
     if (brand === 'lenze' && !filterOptions.category) {
       setShowFilters(false);
@@ -154,13 +117,8 @@ export default function ProductGrid({
   
   const handleCategorySelect = (category: string) => {
     if (onFilterChange) {
-      console.log("====== DIAGNOSTIC handleCategorySelect ======");
-      console.log("Sélection de catégorie:", category);
-      console.log("brand:", brand);
-      
       if (category === 'Variateurs et servovariateurs' && brand === 'lenze') {
         const defaultSubcategory = 'Variateurs de vitesse';
-        console.log(`Définition de la sous-catégorie par défaut: "${defaultSubcategory}"`);
         setSelectedSubCategory(defaultSubcategory);
         onFilterChange({ 
           category, 
@@ -169,7 +127,6 @@ export default function ProductGrid({
         });
       } else if (category === 'Motoréducteurs' && brand === 'lenze') {
         const defaultSubcategory = 'Motoréducteurs triphasés';
-        console.log(`Définition de la sous-catégorie par défaut pour motoréducteurs: "${defaultSubcategory}"`);
         setSelectedSubCategory(defaultSubcategory);
         onFilterChange({ 
           category, 
@@ -178,7 +135,6 @@ export default function ProductGrid({
         });
       } else if (category === 'Moteurs' && brand === 'lenze') {
         const defaultSubcategory = 'Moteurs triphasés';
-        console.log(`Définition de la sous-catégorie par défaut pour moteurs: "${defaultSubcategory}"`);
         setSelectedSubCategory(defaultSubcategory);
         onFilterChange({ 
           category, 
@@ -193,7 +149,6 @@ export default function ProductGrid({
           page: 1 
         });
       } else {
-        console.log("Réinitialisation de la sous-catégorie (undefined)");
         setSelectedSubCategory(undefined);
         onFilterChange({ 
           category, 
@@ -202,81 +157,56 @@ export default function ProductGrid({
         });
       }
       setShowFilters(true);
-      console.log("====== FIN DIAGNOSTIC handleCategorySelect ======");
     }
   };
   
   const handleSubCategoryChange = (subCategory?: string) => {
     setSelectedSubCategory(subCategory);
     if (onFilterChange) {
-      console.log("handleSubCategoryChange - Changement de sous-catégorie vers:", subCategory);
-      
-      // Envoyer la sous-catégorie sélectionnée au serveur
       onFilterChange({ 
         subcategory: subCategory, 
         page: 1 
       });
       
-      // Mettre à jour l'URL
       const newParams = new URLSearchParams(searchParams.toString());
       if (subCategory) {
         newParams.set('subcategory', subCategory);
       } else {
         newParams.delete('subcategory');
       }
-      console.log("URL mise à jour:", `/products?${newParams.toString()}`);
       router.push(`/products?${newParams.toString()}`);
     }
   };
 
-  // Déterminer si nous sommes sur une page avec des sous-catégories
   const isVariateurPage = brand === 'lenze' && filterOptions.category === 'Variateurs et servovariateurs';
   const isMotoreducteurPage = brand === 'lenze' && filterOptions.category === 'Motoréducteurs';
   const isMoteursPage = brand === 'lenze' && filterOptions.category === 'Moteurs';
   const isReducteurPage = brand === 'lenze' && filterOptions.category === 'Réducteurs';
   const hasSubcategories = isVariateurPage || isMotoreducteurPage || isMoteursPage || isReducteurPage;
 
-  // Trier les produits par sous-catégorie sélectionnée
   useEffect(() => {
-    console.log("====== DIAGNOSTIC ProductGrid ======");
-    console.log("ProductGrid reçoit", products.length, "produits");
-    console.log("selectedSubCategory:", selectedSubCategory);
-    
-    // Vérifier s'il s'agit de la page des motoréducteurs ou des moteurs
     const isMotoreducteursPage = filterOptions.category === 'Motoréducteurs';
     const isMoteursPage = filterOptions.category === 'Moteurs';
     const isReducteursPage = filterOptions.category === 'Réducteurs';
-    
-    // Si c'est la page des motoréducteurs, moteurs ou réducteurs sans sous-catégorie sélectionnée,
-    // nous ne devrions pas arriver ici car la sous-catégorie par défaut est définie dans l'autre useEffect
+
     if ((isMotoreducteursPage || isMoteursPage || isReducteursPage) && !selectedSubCategory) {
-      console.log(`Page des ${filterOptions.category} sans sous-catégorie sélectionnée - Cas anormal`);
-      // Nous allons quand même gérer ce cas en montrant tous les produits
       setFilteredProducts(products);
       return;
     }
     
-    // Pour la page des motoréducteurs, moteurs ou réducteurs avec une sous-catégorie sélectionnée
     if ((isMotoreducteursPage || isMoteursPage || isReducteursPage) && selectedSubCategory) {
-      console.log(`Filtrage pour la sous-catégorie : ${selectedSubCategory}`);
       const filteredBySubcategory = products.filter(p => p.subcategory === selectedSubCategory);
-      console.log(`Nombre de produits après filtrage : ${filteredBySubcategory.length}`);
       
-      // Trier par nom au sein de la sous-catégorie
       filteredBySubcategory.sort((a, b) => a.name.localeCompare(b.name));
       setFilteredProducts(filteredBySubcategory);
       return;
     }
     
-    // Pour les autres pages, ne pas trier spécialement
     setFilteredProducts(products);
-    
-    console.log("====== FIN DIAGNOSTIC ProductGrid ======");
   }, [products, filterOptions.category, selectedSubCategory]);
 
   return (
     <div className="w-full">
-      {/* Filtres ou Cards Lenze - ne pas afficher pour la page Variateurs et servovariateurs */}
       {!hasSubcategories && (
         <div className="w-full mb-10">
           {brand === 'lenze' && !showFilters ? (
@@ -332,7 +262,6 @@ export default function ProductGrid({
         </div>
       )}
       
-      {/* Sous-filtres pour les catégories avec sous-catégories - toujours visible quand on est sur cette page */}
       {hasSubcategories && (
         <div className="px-6 md:px-12 mb-8">
           <SubCategoryFilter
@@ -340,43 +269,29 @@ export default function ProductGrid({
             selectedSubCategory={selectedSubCategory}
             onSubCategoryChange={handleSubCategoryChange}
           />
-          
-          {/* ⚠️ DÉBOGAGE - Information sur les sous-catégories disponibles */}
-          {filterOptions.category === 'Motoréducteurs' && (
-            <div className="text-xs text-gray-400 mt-2">
-              Sous-catégories: Motoréducteurs triphasés | Motoréducteurs triphasés avec variateurs de vitesse | Servo-motoréducteurs
-            </div>
-          )}
-          
-          {/* ⚠️ DÉBOGAGE - Information sur les sous-catégories disponibles pour Moteurs */}
-          {filterOptions.category === 'Moteurs' && (
-            <div className="text-xs text-gray-400 mt-2">
-              Sous-catégories: Moteurs triphasés | Servomoteurs | Produits antérieurs – Moteurs
-            </div>
-          )}
-          
-          {/* ⚠️ DÉBOGAGE - Information sur les sous-catégories disponibles pour Réducteurs */}
-          {filterOptions.category === 'Réducteurs' && (
-            <div className="text-xs text-gray-400 mt-2">
-              Sous-catégories: Réducteurs | Produits antérieurs – Réducteurs
-            </div>
-          )}
         </div>
       )}
       
-      {/* View Toggle and Results Count - Only show when showing product results */}
       {showFilters && (
         <div className="flex justify-between items-center mb-8 px-6 md:px-12">
-          <p className="text-sm text-gray-600">
-            {isLoading ? 'Chargement des produits...' : `Affichage de ${filteredProducts.length} produits`}
+          <p className="text-[13px] text-[#0b2f4f] font-medium">
+            {isLoading ? 'Chargement des produits...' : (
+              <>
+                Affichage de <span className="text-[#e47925]">{filteredProducts.length}</span> produits
+              </>
+            )}
           </p>
-          <div className="flex space-x-3">
+          <div className="flex space-x-2">
             <Button
               variant={viewMode === 'grid' ? 'default' : 'outline'}
               size="icon"
               onClick={() => setViewMode('grid')}
               aria-label="Vue en grille"
-              className="transition-all duration-300 ease-in-out hover:scale-110"
+              className={`rounded-none ${
+                viewMode === 'grid'
+                  ? 'bg-[#e47925] text-white border-[#e47925]'
+                  : 'bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]'
+              }`}
             >
               <Grid className="h-4 w-4" />
             </Button>
@@ -385,7 +300,11 @@ export default function ProductGrid({
               size="icon"
               onClick={() => setViewMode('list')}
               aria-label="Vue en liste"
-              className="transition-all duration-300 ease-in-out hover:scale-110"
+              className={`rounded-none ${
+                viewMode === 'list'
+                  ? 'bg-[#e47925] text-white border-[#e47925]'
+                  : 'bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]'
+              }`}
             >
               <List className="h-4 w-4" />
             </Button>
@@ -393,26 +312,21 @@ export default function ProductGrid({
         </div>
       )}
 
-      {/* Loading State */}
       {showFilters && isLoading && (
         <div className="flex flex-col justify-center items-center py-16 px-6 md:px-12">
-          <div className="relative w-20 h-20">
-            <div className="absolute top-0 w-full h-full rounded-full border-4 border-gray-200"></div>
-            <div className="absolute top-0 w-full h-full rounded-full border-4 border-t-orange-500 animate-spin"></div>
-          </div>
-          <p className="mt-4 text-gray-600 animate-pulse">Chargement des produits...</p>
+          <div className="w-6 h-6 border-2 border-[#cacdcf] border-t-[#e47925] animate-spin"></div>
+          <p className="mt-4 text-[13px] text-[#6b7280]">Chargement des produits...</p>
         </div>
       )}
 
-      {/* Empty State */}
       {showFilters && !isLoading && filteredProducts.length === 0 && (
-        <div className="text-center py-16 bg-gray-50 rounded-lg mx-6 md:mx-12 animate-in fade-in-50 duration-300">
-          <h3 className="text-lg font-medium text-gray-900">Aucun produit trouvé</h3>
-          <p className="mt-3 text-sm text-gray-600">
+        <div className="text-center py-16 bg-[#f8f9fa] mx-6 md:mx-12">
+          <h3 className="text-lg font-semibold text-[#34383c]">Aucun produit trouvé</h3>
+          <p className="mt-3 text-[13px] text-[#6b7280]">
             Essayez d&apos;ajuster votre recherche ou vos filtres pour trouver ce que vous cherchez.
           </p>
           <Button
-            className="mt-6 transition-all duration-300 ease-in-out hover:bg-custom-orange hover:scale-105 py-5 px-6"
+            className="mt-6 rounded-none text-[#e47925] text-[13px] py-2 px-4 border border-[#e47925] bg-white hover:bg-[#e47925] hover:text-white"
             onClick={() => {
               onFilterChange?.({ 
                 category: undefined, 
@@ -429,49 +343,46 @@ export default function ProductGrid({
         </div>
       )}
 
-      {/* Product Grid - Only show when showing product results */}
       {showFilters && !isLoading && filteredProducts.length > 0 && (
         <div className="px-6 md:px-12">
           {hasSubcategories ? (
-            // Affichage des produits groupés par sous-catégorie
-            <div className="space-y-10 animate-in fade-in-50 duration-500">
-              {/* Si aucune sous-catégorie n'est sélectionnée, afficher un titre global */}
+            <div className="space-y-10">
               {!selectedSubCategory && (
-                <div className="mb-4">
-                  <h2 className="text-xl font-semibold text-gray-800">Nos {filterOptions.category} par catégorie</h2>
-                  <p className="text-sm text-gray-600 mt-1">Sélectionnez une catégorie ci-dessus pour filtrer les produits</p>
+                <div className="mb-4 border-l-[3px] border-[#0b2f4f] pl-4">
+                  <h2 className="text-lg font-semibold text-[#0b2f4f]">Nos {filterOptions.category} par catégorie</h2>
+                  <p className="text-[13px] text-[#6b7280] mt-1">Sélectionnez une catégorie ci-dessus pour filtrer les produits</p>
                 </div>
               )}
               
-              {/* Boucle sur les sous-catégories à afficher */}
               {(selectedSubCategory ? [selectedSubCategory] : [...new Set(filteredProducts.map(p => p.subcategory))]).map(subcategory => {
-                // Filtrer les produits pour cette sous-catégorie
                 const subcategoryProducts = filteredProducts.filter(p => p.subcategory === subcategory);
                 
-                // Ne rien afficher si pas de produits dans cette sous-catégorie
                 if (subcategoryProducts.length === 0) return null;
                 
                 return (
                   <div key={subcategory} className="mb-8">
-                    <h3 className={`text-lg font-semibold mb-4 border-l-4 pl-3 ${
-                      subcategory === selectedSubCategory 
-                        ? 'border-orange-500 text-orange-700' 
-                        : 'border-gray-300 text-gray-700'
-                    }`}>
-                      {subcategory}
-                    </h3>
+                    <div className="flex items-center gap-3 mb-4">
+                      <h3 className={`text-base font-semibold border-l-[3px] pl-3 py-0.5 ${
+                        subcategory === selectedSubCategory
+                          ? 'border-[#e47925] text-[#0b2f4f]'
+                          : 'border-[#0b2f4f] text-[#0b2f4f]'
+                      }`}>
+                        {subcategory}
+                      </h3>
+                      <span className="text-[12px] text-[#e47925] font-medium bg-[#fef3e8] px-2 py-0.5">
+                        {subcategoryProducts.length} produits
+                      </span>
+                    </div>
                     <div className={`${
                       viewMode === 'grid'
-                        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-                        : "space-y-6"
+                        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                        : "space-y-4"
                     }`}>
-                      {subcategoryProducts.map((product, index) => (
+                      {subcategoryProducts.map((product) => (
                         <div 
                           key={product.id} 
-                          className={`${viewMode === 'list' ? "border rounded-lg overflow-hidden" : ""} animate-in fade-in-50 slide-in-from-bottom-3 duration-300`}
-                          style={{ animationDelay: `${index * 100}ms` }}
                         >
-                          <ProductCard product={product} />
+                          <ProductCard product={product} viewMode={viewMode} />
                         </div>
                       ))}
                     </div>
@@ -480,19 +391,16 @@ export default function ProductGrid({
               })}
             </div>
           ) : (
-            // Affichage standard pour les autres catégories
             <div className={`${
               viewMode === 'grid'
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in-50 duration-500"
-                : "space-y-6 animate-in fade-in-50 duration-500"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                : "space-y-4"
             }`}>
-              {filteredProducts.map((product, index) => (
+              {filteredProducts.map((product) => (
                 <div 
                   key={product.id} 
-                  className={`${viewMode === 'list' ? "border rounded-lg overflow-hidden" : ""} animate-in fade-in-50 slide-in-from-bottom-3 duration-300`}
-                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <ProductCard product={product} />
+                  <ProductCard product={product} viewMode={viewMode} />
                 </div>
               ))}
             </div>
@@ -500,20 +408,19 @@ export default function ProductGrid({
         </div>
       )}
 
-      {/* Pagination - Only show when showing product results */}
       {showFilters && totalPages > 1 && !hasSubcategories && (
         <div className="flex justify-center mt-12 px-6 md:px-12">
-          <div className="flex space-x-3">
+          <div className="flex space-x-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <Button
                 key={page}
                 variant={page === filterOptions.page ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handlePageChange(page)}
-                className={`transition-all duration-300 ease-in-out py-5 px-6 ${
+                className={`rounded-none py-2 px-4 text-[13px] ${
                   page === filterOptions.page 
-                    ? "bg-custom-orange hover:bg-[#d47d0e] hover:scale-110"
-                    : "hover:border-custom-orange hover:text-custom-orange hover:scale-110"
+                    ? "bg-[#e47925] text-white border-[#e47925]"
+                    : "border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925] bg-white"
                 }`}
               >
                 {page}

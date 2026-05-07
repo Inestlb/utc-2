@@ -79,9 +79,9 @@ export default function ClientLayout({
     <TranslationProvider>
       <Navbar />
       <AnimatePresence mode="wait">
-        <motion.main 
+        <motion.main
           key={pathname}
-          className="flex-grow pt-16 md:pt-20"
+          className={pathname === '/' ? 'flex-grow' : 'flex-grow pt-16 md:pt-20'}
           initial="hidden"
           animate="visible"
           exit="exit"

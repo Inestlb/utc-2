@@ -5,13 +5,13 @@ import SearchBar from '@/components/products/SearchBar';
 import { Loader2 } from 'lucide-react';
 
 interface ProductsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     category?: string;
     subcategory?: string;
     brand?: string;
     q?: string;
     page?: string;
-  };
+  }>;
 }
 
 export const metadata = {
@@ -20,17 +20,14 @@ export const metadata = {
 };
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  // Parse search parameters
-  const category = searchParams.category;
-  const subcategory = searchParams.subcategory;
-  const brand = searchParams.brand;
-  const search = searchParams.q;
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
+  const resolvedSearchParams = await searchParams;
+  const category = resolvedSearchParams.category;
+  const subcategory = resolvedSearchParams.subcategory;
+  const brand = resolvedSearchParams.brand;
+  const search = resolvedSearchParams.q;
+  const page = resolvedSearchParams.page ? parseInt(resolvedSearchParams.page) : 1;
 
-  console.log("Page produits - Paramètres de recherche:", { category, subcategory, brand, search, page });
-
-  // Récupérer TOUS les produits sans filtre de sous-catégorie si nous sommes sur la page des variateurs Lenze
-  let productsOptions: {
+  const productsOptions: {
     category?: string;
     subcategory?: string;
     brand?: string;
@@ -42,72 +39,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     search,
     page,
   };
-  
-  // Ne pas filtrer par sous-catégorie sur le serveur pour les catégories spéciales, nous le ferons côté client
-  if (!(brand === 'lenze' && (category === 'Variateurs et servovariateurs' || 
-                             category === 'Motoréducteurs' || 
-                             category === 'Moteurs'))) {
+
+  if (!(brand === 'lenze' && (category === 'Variateurs et servovariateurs' ||
+                              category === 'Motoréducteurs' ||
+                              category === 'Moteurs'))) {
     productsOptions.subcategory = subcategory;
   }
 
-  console.log("Options de requête produits:", productsOptions);
-
-  // Fetch products and categories
   const productsPromise = getProducts(productsOptions);
-
   const categoriesPromise = getProductCategories();
-
-  // Wait for both promises to resolve
   const [products, categories] = await Promise.all([
     productsPromise,
     categoriesPromise,
   ]);
 
-  console.log(`Produits récupérés: ${products.length}`);
-  
-  // Si nous sommes sur la page des variateurs Lenze, affichons la répartition des sous-catégories
-  if (brand === 'lenze' && category === 'Variateurs et servovariateurs') {
-    const subcatCounts = {
-      'Variateurs de vitesse': products.filter(p => p.subcategory === 'Variateurs de vitesse').length,
-      'Servovariateurs': products.filter(p => p.subcategory === 'Servovariateurs').length,
-      'Produits antérieurs - Variateurs de vitesse': products.filter(p => p.subcategory === 'Produits antérieurs - Variateurs de vitesse').length
-    };
-    console.log("Nombre de produits par sous-catégorie (page.tsx):", subcatCounts);
-  }
-  
-  // Si nous sommes sur la page des motoréducteurs Lenze, affichons la répartition des sous-catégories
-  if (brand === 'lenze' && category === 'Motoréducteurs') {
-    const subcatCounts = {
-      'Motoréducteurs triphasés': products.filter(p => p.subcategory === 'Motoréducteurs triphasés').length,
-      'Motoréducteurs triphasés avec variateurs de vitesse': products.filter(p => p.subcategory === 'Motoréducteurs triphasés avec variateurs de vitesse').length,
-      'Servo-motoréducteurs': products.filter(p => p.subcategory === 'Servo-motoréducteurs').length
-    };
-    console.log("Nombre de produits par sous-catégorie des motoréducteurs (page.tsx):", subcatCounts);
-  }
-  
-  // Si nous sommes sur la page des moteurs Lenze, affichons la répartition des sous-catégories
-  if (brand === 'lenze' && category === 'Moteurs') {
-    const subcatCounts = {
-      'Moteurs triphasés': products.filter(p => p.subcategory === 'Moteurs triphasés').length,
-      'Servomoteurs': products.filter(p => p.subcategory === 'Servomoteurs').length,
-      'Produits antérieurs – Moteurs': products.filter(p => p.subcategory === 'Produits antérieurs – Moteurs').length
-    };
-    console.log("Nombre de produits par sous-catégorie des moteurs (page.tsx):", subcatCounts);
-  }
-  
-  // Si nous sommes sur la page des réducteurs Lenze, affichons la répartition des sous-catégories
-  if (brand === 'lenze' && category === 'Réducteurs') {
-    const subcatCounts = {
-      'Réducteurs': products.filter(p => p.subcategory === 'Réducteurs').length,
-      'Produits antérieurs – Réducteurs': products.filter(p => p.subcategory === 'Produits antérieurs – Réducteurs').length
-    };
-    console.log("Nombre de produits par sous-catégorie des réducteurs (page.tsx):", subcatCounts);
-  }
-
-  // Calculate total pages (in a real app, this would come from the API)
   const totalPages = Math.ceil(products.length / 4);
 
-  // Dynamically update page title based on brand/category
   let pageTitle = 'Nos Produits';
   if (brand === 'lenze') {
     pageTitle = 'Nos Produits Lenze';
@@ -124,45 +71,41 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   }
 
   return (
-    <div className="py-16">
-      <div className="flex justify-center w-full">
-        <div className="w-full max-w-[1600px]">
-          <div className="mb-10 px-6 md:px-12">
-            <h1 className="text-4xl font-bold mb-5">{pageTitle}</h1>
-            <p className="text-gray-600 max-w-3xl text-lg">
-              Parcourez notre catalogue complet de produits industriels conçus pour la <span className="font-medium">fiabilité</span>,
-              l&apos;<span className="font-medium">efficacité</span> et la <span className="font-medium">performance</span>. Utilisez les filtres pour trouver exactement ce dont vous avez besoin.
-            </p>
-          </div>
-
-          {/* Search Bar */}
-          <div className="mb-12 px-6 md:px-12">
-            <SearchBar
-              products={products}
-              initialQuery={search || ''}
-            />
-          </div>
-
-          {/* Product Grid with Filters */}
-          <Suspense fallback={
-            <div className="flex justify-center items-center py-16">
-              <Loader2 className="h-10 w-10 animate-spin text-custom-orange" />
-            </div>
-          }>
-            <ProductGrid
-              products={products}
-              categories={categories}
-              filterOptions={{
-                category,
-                subcategory,
-                brand,
-                search,
-                page,
-              }}
-              totalPages={totalPages}
-            />
-          </Suspense>
+    <div className="bg-white">
+      <div className="bg-[#0b2f4f]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-10 pb-8">
+          <h1 className="text-2xl font-semibold text-white mb-3">{pageTitle}</h1>
+          <p className="text-[15px] text-[#a8c4db] max-w-3xl mb-4">
+            Parcourez notre catalogue complet de produits industriels conçus pour la <span className="text-white font-medium">fiabilité</span>,
+            l&apos;<span className="text-white font-medium">efficacité</span> et la <span className="text-white font-medium">performance</span>. Utilisez les filtres pour trouver exactement ce dont vous avez besoin.
+          </p>
+          <div className="h-px bg-[#e47925] w-16 mb-6" />
+          <SearchBar
+            products={products}
+            initialQuery={search || ''}
+          />
         </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-10">
+        <Suspense fallback={
+          <div className="flex justify-center items-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-[#e47925]" />
+          </div>
+        }>
+          <ProductGrid
+            products={products}
+            categories={categories}
+            filterOptions={{
+              category,
+              subcategory,
+              brand,
+              search,
+              page,
+            }}
+            totalPages={totalPages}
+          />
+        </Suspense>
       </div>
     </div>
   );

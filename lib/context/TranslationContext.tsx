@@ -45,16 +45,44 @@ const translations: Translations = {
 
   // Home Page
   'home.hero.title': {
-    fr: 'Solutions Industrielles de Qualité Supérieure',
-    ar: 'حلول صناعية عالية الجودة'
+    fr: 'Solutions industrielles UTC',
+    ar: 'حلول UTC الصناعية'
+  },
+  'home.hero.eyebrow': {
+    fr: 'Distribution industrielle, automatisme et motorisation',
+    ar: 'توزيع صناعي، أتمتة ومحركات'
   },
   'home.hero.subtitle': {
-    fr: 'Votre partenaire de confiance pour l\'exportation industrielle',
-    ar: 'شريكك الموثوق للتصدير الصناعي'
+    fr: 'Votre partenaire de confiance pour l\'exportation industrielle. Nous connectons vos lignes de production aux meilleurs équipements Lenze, IFM et WAGO.',
+    ar: 'شريكك الموثوق للتصدير الصناعي. نربط خطوط إنتاجك بأفضل تجهيزات Lenze وIFM وWAGO.'
   },
   'home.hero.cta': {
     fr: 'Découvrir nos produits',
     ar: 'اكتشف منتجاتنا'
+  },
+  'home.hero.secondaryCta': {
+    fr: 'Parler à un expert',
+    ar: 'تحدث إلى خبير'
+  },
+  'home.hero.network': {
+    fr: 'Réseau UTC',
+    ar: 'شبكة UTC'
+  },
+  'home.hero.reliableAutomation': {
+    fr: 'Automatisation fiable',
+    ar: 'أتمتة موثوقة'
+  },
+  'home.hero.motorization': {
+    fr: 'Motorisation',
+    ar: 'المحركات'
+  },
+  'home.hero.detection': {
+    fr: 'Détection',
+    ar: 'الكشف'
+  },
+  'home.hero.connectivity': {
+    fr: 'Connectique',
+    ar: 'التوصيل'
   },
   'home.features.title': {
     fr: 'Pourquoi nous choisir',
@@ -413,6 +441,22 @@ const translations: Translations = {
   'expertise.robotics.description': {
     fr: 'Solutions d\'automatisation et de robotique industrielle pour optimiser les processus de production et améliorer l\'efficacité opérationnelle.',
     ar: 'حلول الأتمتة والروبوتات الصناعية لتحسين عمليات الإنتاج وتحسين الكفاءة التشغيلية'
+  },
+  'expertise.cement.title': {
+    fr: 'Cimenterie',
+    ar: 'مصانع الإسمنت'
+  },
+  'expertise.cement.description': {
+    fr: 'Solutions robustes pour les lignes de production de ciment, conçues pour les environnements exigeants et les fortes cadences.',
+    ar: 'حلول قوية لخطوط إنتاج الإسمنت، مصممة للبيئات الصعبة ومعدلات الإنتاج العالية'
+  },
+  'expertise.brick.title': {
+    fr: 'Briquerie et Produits Rouges',
+    ar: 'مصانع الآجر والمنتجات الحمراء'
+  },
+  'expertise.brick.description': {
+    fr: 'Équipements adaptés aux briqueteries et aux produits rouges pour fiabiliser la manutention, la cuisson et la production continue.',
+    ar: 'معدات ملائمة لمصانع الآجر والمنتجات الحمراء لضمان موثوقية المناولة والحرق والإنتاج المستمر'
   },
 };
 

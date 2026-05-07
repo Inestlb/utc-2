@@ -83,7 +83,7 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="text-white hover:text-orange-500 transition-colors duration-200">
+                  <Link href="/partners" className="text-white hover:text-orange-500 transition-colors duration-200">
                     {getTextContent('nav.partners')}
                   </Link>
                 </li>

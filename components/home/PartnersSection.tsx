@@ -17,12 +17,13 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
 
   return (
     <>
-      <section className="py-20 bg-gray-50" dir={dir}>
+      <section className="bg-[#f4f0e8] py-24" dir={dir}>
         <div className="flex justify-center w-full">
-          <div className="w-full max-w-[1600px] px-12">
-            <div className="text-center mb-12">
+          <div className="w-full max-w-[1600px] px-6 md:px-12">
+            <div className="mb-12 max-w-3xl">
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#e47925]">Partenaires</p>
               <motion.h2
-                className="text-3xl font-bold mb-4"
+                className="text-4xl md:text-6xl font-semibold tracking-[-0.055em] text-[#0b2f4f]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -31,16 +32,8 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                 {t('partners.title')}
               </motion.h2>
 
-              <motion.div
-                className="w-24 h-1 bg-orange-500 mx-auto mb-6"
-                initial={{ opacity: 0, width: 0 }}
-                whileInView={{ opacity: 1, width: 96 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              ></motion.div>
-
               <motion.p
-                className="text-gray-600 max-w-2xl mx-auto"
+                className="mt-6 text-lg leading-relaxed text-[#39495a]"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -51,11 +44,11 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
             </div>
 
             <div className="flex justify-center items-center py-6">
-              <div className="w-full flex flex-col md:flex-row justify-center items-center space-y-12 md:space-y-0 md:space-x-16 lg:space-x-20">
+              <div className="w-full grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
                 {partners.map((partner, index) => (
-                  <motion.div 
-                    key={partner.id} 
-                    className="bg-white p-12 rounded-xl shadow-sm flex flex-col items-center justify-center w-64 h-56 transition-all hover:shadow-lg border border-gray-50 gpu-accelerated"
+                  <motion.div
+                    key={partner.id}
+                    className="group flex min-h-56 flex-col items-center justify-center rounded-[1.75rem] border border-[#0b2f4f]/10 bg-white p-10 shadow-[0_22px_60px_rgba(3,25,43,0.08)] transition-colors hover:bg-[#0b2f4f]"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ 
                       opacity: 1, 
@@ -69,7 +62,7 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                     viewport={{ once: true, margin: "-50px" }}
                     whileHover={{ 
                       scale: 1.03, 
-                      boxShadow: "0 10px 30px -8px rgba(0, 0, 0, 0.1)",
+                      boxShadow: "0 24px 70px -22px rgba(7, 24, 39, 0.36)",
                       transition: { duration: 0.3 }
                     }}
                   >
@@ -87,7 +80,7 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                         alt="Lenze"
                         width={180}
                         height={55}
-                        className="object-contain"
+                        className="object-contain transition-[filter] duration-200 group-hover:brightness-0 group-hover:invert"
                       />
                     ) : partner.name === "Wago" ? (
                       <Image
@@ -95,10 +88,10 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                         alt="Wago"
                         width={180}
                         height={65}
-                        className="object-contain"
+                        className="object-contain transition-[filter] duration-200 group-hover:brightness-0 group-hover:invert"
                       />
                     ) : (
-                      <div className="font-bold text-4xl text-gray-800 hover:text-orange-500 transition-colors">{partner.name}</div>
+                      <div className="font-bold text-4xl text-gray-800 group-hover:text-white transition-colors">{partner.name}</div>
                     )}
                   </motion.div>
                 ))}
@@ -112,8 +105,8 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                 transition={{ delay: 0.5, duration: 0.5 }}
                 viewport={{ once: true }}
               >
-                <Button asChild variant="outline" className="hover:border-orange-500 hover:text-orange-500">
-                  <Link href="/blog">
+                <Button asChild variant="outline" className="rounded-full border-[#0b2f4f]/20 px-6 text-[#0b2f4f] hover:border-[#e47925] hover:text-[#e47925]">
+                  <Link href="/partners">
                     {t('button.readMore')}
                     <ArrowRight className="ml-1 h-4 w-4"/>
                   </Link>
@@ -125,20 +118,24 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-orange-500 text-white" dir={dir}>
+      <section className="bg-[#0b2f4f] py-20 text-white" dir={dir}>
         <div className="flex justify-center w-full">
-          <div className="w-full max-w-[1600px] px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">Prêt à Commencer?</h2>
-            <p className="text-lg mb-8 max-w-2xl mx-auto">
+          <div className="w-full max-w-[1600px] px-6 md:px-12">
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 md:p-12 lg:flex lg:items-center lg:justify-between">
+              <div className="max-w-3xl">
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-[-0.055em] mb-5">Prêt à commencer?</h2>
+            <p className="text-lg mb-8 max-w-2xl text-[#c7d3dc] lg:mb-0">
               Contactez notre équipe dès aujourd'hui pour discuter de vos besoins en équipement industriel et découvrir
               comment nous pouvons aider votre entreprise à réussir.
             </p>
-            <Button asChild size="lg" className="bg-white text-orange-500 hover:bg-gray-100">
+              </div>
+            <Button asChild size="lg" className="rounded-full bg-[#e47925] px-7 py-6 text-white hover:bg-[#f18a3d]">
               <Link href="/contact">
                 {t('button.contact')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
+            </div>
           </div>
         </div>
       </section>

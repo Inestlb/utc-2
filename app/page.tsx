@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import HeroSection from "@/components/home/HeroSection";
 import SolutionsSection from "@/components/home/SolutionsSection";
 import ExpertiseSection from "@/components/home/ExpertiseSection";
-import ValuePropositionSection from "@/components/home/ValuePropositionSection";
 import PartnersSection from "@/components/home/PartnersSection";
 import { getPartners } from "@/data/partners";
 
@@ -19,7 +18,6 @@ export default async function Home() {
       <HeroSection />
       <SolutionsSection />
       <ExpertiseSection />
-      <ValuePropositionSection />
       <PartnersSection partners={partners} />
     </main>
   );

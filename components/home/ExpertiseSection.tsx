@@ -1,6 +1,6 @@
 "use client";
 
-import { Droplet, Beaker, Apple, Bot } from "lucide-react";
+import { Apple, Droplet, Beaker, Factory, Building2 } from "lucide-react";
 import { useTranslation } from "@/lib/context/TranslationContext";
 import { motion } from "framer-motion";
 
@@ -8,12 +8,13 @@ export default function ExpertiseSection() {
   const { t, dir } = useTranslation();
 
   return (
-    <section className="py-20 bg-gray-50" dir={dir}>
+    <section className="bg-[#0b2f4f] py-24 text-white" dir={dir}>
       <div className="flex justify-center w-full">
-        <div className="w-full max-w-[1600px] px-12">
-          <div className="text-center mb-12">
+        <div className="w-full max-w-[1600px] px-6 md:px-12">
+          <div className="mb-14 max-w-4xl">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#e47925]">Expertise terrain</p>
             <motion.h2
-              className="text-3xl font-bold mb-4"
+              className="text-4xl md:text-6xl font-semibold tracking-[-0.055em]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -22,16 +23,8 @@ export default function ExpertiseSection() {
               {t('expertise.title')}
             </motion.h2>
 
-            <motion.div
-              className="w-24 h-1 bg-orange-500 mx-auto mb-6"
-              initial={{ opacity: 0, width: 0 }}
-              whileInView={{ opacity: 1, width: 96 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            ></motion.div>
-
             <motion.p
-              className="text-gray-600 max-w-2xl mx-auto"
+              className="mt-6 max-w-2xl text-lg leading-relaxed text-[#c7d3dc]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -41,56 +34,69 @@ export default function ExpertiseSection() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Secteur 1: Hygiène */}
-            <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow group hover:border-orange-500">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-orange-100">
-                <Droplet className="h-8 w-8 text-blue-600 group-hover:text-orange-500" />
+          <div className="grid grid-cols-1 items-stretch gap-px overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 md:grid-cols-2 lg:grid-cols-5">
+            {/* Secteur 1: Agroalimentaire */}
+            <div className="group flex min-h-[280px] flex-col bg-[#103d64] p-8 transition-colors hover:bg-[#164a76]">
+              <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-[#e47925]">
+                <Apple className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-semibold mb-4 text-center group-hover:text-orange-500">
-                {t('expertise.hygiene.title')}
-              </h3>
-              <p className="text-gray-600 text-center">
-                {t('expertise.hygiene.description')}
-              </p>
-            </div>
-
-            {/* Secteur 2: Pharmaceutique */}
-            <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow group hover:border-orange-500">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-orange-100">
-                <Beaker className="h-8 w-8 text-green-600 group-hover:text-orange-500" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4 text-center group-hover:text-orange-500">
-                {t('expertise.pharmaceutical.title')}
-              </h3>
-              <p className="text-gray-600 text-center">
-                {t('expertise.pharmaceutical.description')}
-              </p>
-            </div>
-
-            {/* Secteur 3: Agroalimentaire */}
-            <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow group hover:border-orange-500">
-              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-orange-100">
-                <Apple className="h-8 w-8 text-yellow-600 group-hover:text-orange-500" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4 text-center group-hover:text-orange-500">
+              <h3 className="mb-4 text-xl font-semibold tracking-[-0.02em] group-hover:text-[#e47925]">
                 {t('expertise.food.title')}
               </h3>
-              <p className="text-gray-600 text-center">
+              <p className="text-sm leading-relaxed text-[#c7d3dc]">
                 {t('expertise.food.description')}
               </p>
             </div>
 
-            {/* Secteur 4: Robotique */}
-            <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow group hover:border-orange-500">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:bg-orange-100">
-                <Bot className="h-8 w-8 text-purple-600 group-hover:text-orange-500" />
+            {/* Secteur 2: Hygiène */}
+            <div className="group flex min-h-[280px] flex-col bg-[#103d64] p-8 transition-colors hover:bg-[#164a76]">
+              <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-[#e47925]">
+                <Droplet className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-semibold mb-4 text-center group-hover:text-orange-500">
-                {t('expertise.robotics.title')}
+              <h3 className="mb-4 text-xl font-semibold tracking-[-0.02em] group-hover:text-[#e47925]">
+                {t('expertise.hygiene.title')}
               </h3>
-              <p className="text-gray-600 text-center">
-                {t('expertise.robotics.description')}
+              <p className="text-sm leading-relaxed text-[#c7d3dc]">
+                {t('expertise.hygiene.description')}
+              </p>
+            </div>
+
+            {/* Secteur 3: Pharmaceutique */}
+            <div className="group flex min-h-[280px] flex-col bg-[#103d64] p-8 transition-colors hover:bg-[#164a76]">
+              <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-[#e47925]">
+                <Beaker className="h-7 w-7" />
+              </div>
+              <h3 className="mb-4 text-xl font-semibold tracking-[-0.02em] group-hover:text-[#e47925]">
+                {t('expertise.pharmaceutical.title')}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#c7d3dc]">
+                {t('expertise.pharmaceutical.description')}
+              </p>
+            </div>
+
+            {/* Secteur 4: Cimenterie */}
+            <div className="group flex min-h-[280px] flex-col bg-[#103d64] p-8 transition-colors hover:bg-[#164a76]">
+              <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-[#e47925]">
+                <Factory className="h-7 w-7" />
+              </div>
+              <h3 className="mb-4 text-xl font-semibold tracking-[-0.02em] group-hover:text-[#e47925]">
+                {t('expertise.cement.title')}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#c7d3dc]">
+                {t('expertise.cement.description')}
+              </p>
+            </div>
+
+            {/* Secteur 5: Briquerie et produits rouges */}
+            <div className="group flex min-h-[280px] flex-col bg-[#103d64] p-8 transition-colors hover:bg-[#164a76]">
+              <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-[#e47925]">
+                <Building2 className="h-7 w-7" />
+              </div>
+              <h3 className="mb-4 text-xl font-semibold tracking-[-0.02em] group-hover:text-[#e47925]">
+                {t('expertise.brick.title')}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#c7d3dc]">
+                {t('expertise.brick.description')}
               </p>
             </div>
           </div>

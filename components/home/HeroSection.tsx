@@ -1,46 +1,58 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/lib/context/TranslationContext";
 import { motion } from "framer-motion";
 
+const brands = [
+  { labelKey: 'home.hero.motorization' as const, name: 'Lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30 },
+  { labelKey: 'home.hero.detection' as const, name: 'IFM', logo: '/images/logo-ifm.svg', width: 82, height: 82 },
+  { labelKey: 'home.hero.connectivity' as const, name: 'WAGO', logo: '/images/logo-WAGO.svg', width: 102, height: 38 },
+];
+
 export default function HeroSection() {
-  const { t, dir } = useTranslation();
+  const { t } = useTranslation();
+  const heroTitle = t('home.hero.title');
+  const titleParts = heroTitle.split('UTC');
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/images/hero-pattern.svg')] opacity-30"></div>
-      <div className="flex justify-center w-full">
-        <div className="w-full max-w-[1600px] px-12 flex flex-col justify-center min-h-screen text-white">
-          <div className="max-w-2xl">
+    <section className="relative min-h-screen overflow-hidden bg-[#0b2f4f] text-white">
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,#0b2f4f_0%,#0e3a61_50%,#082742_100%)]" />
+      <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:72px_72px]" />
+
+      <div className="relative flex justify-center w-full">
+        <div className="w-full max-w-[1600px] px-6 md:px-12 grid min-h-screen grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] items-center gap-12 pt-28 pb-20">
+          <div className="max-w-3xl">
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+              className="text-[clamp(3rem,8vw,7rem)] font-semibold leading-[0.9] tracking-[-0.07em]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span dangerouslySetInnerHTML={{
-                __html: t('home.hero.title').replace(
-                  /([A-Za-zÀ-ÖØ-öø-ÿ]+)(\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)?$/i,
-                  '<span class="text-orange-500">$&</span>'
-                )
-              }} />
+              {titleParts.length > 1 ? (
+                <>
+                  {titleParts[0]}<span className="text-[#e47925]">UTC</span>{titleParts.slice(1).join('UTC')}
+                </>
+              ) : (
+                heroTitle
+              )}
             </motion.h1>
 
             <motion.div
-              className="w-20 h-1 bg-orange-500 mb-6"
+              className="my-8 h-px w-full max-w-xl bg-gradient-to-r from-[#e47925] via-white/30 to-transparent"
               initial={{ opacity: 0, width: 0 }}
-              animate={{ opacity: 1, width: 80 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              animate={{ opacity: 1, width: '100%' }}
+              transition={{ duration: 0.7, delay: 0.2 }}
             ></motion.div>
 
             <motion.p
-              className="text-lg md:text-xl mb-8 text-gray-200 leading-relaxed"
+              className="max-w-2xl text-lg md:text-xl mb-9 text-[#d7e2eb] leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
             >
               {t('home.hero.subtitle')}
             </motion.p>
@@ -49,16 +61,54 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
             >
-              <Button asChild size="lg" className="bg-orange-500 hover:bg-orange-600 transition-colors duration-300">
+              <Button asChild size="lg" className="rounded-full bg-[#e47925] px-7 py-6 text-base font-semibold text-white shadow-[0_18px_45px_rgba(228,121,37,0.28)] hover:bg-[#f18a3d]">
                 <Link href="/products" className="flex items-center">
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
+              <Button asChild size="lg" variant="outline" className="rounded-full border-white/20 bg-white/5 px-7 py-6 text-base font-semibold text-white hover:bg-white/12 hover:text-white">
+                <Link href="/contact">{t('home.hero.secondaryCta')}</Link>
+              </Button>
             </motion.div>
           </div>
+
+          <motion.div
+            className="relative hidden lg:block"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="relative ml-auto max-w-xl overflow-hidden rounded-[2rem] border border-white/14 bg-[#103d64]/92 p-6 shadow-[0_30px_100px_rgba(3,25,43,0.34)] backdrop-blur-xl">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_10%,rgba(228,121,37,0.17),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]" />
+              <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full border border-white/12" />
+              <div className="relative">
+                <div className="mb-7 border-b border-white/12 pb-5">
+                  <p className="text-sm uppercase tracking-[0.32em] text-white/55">{t('home.hero.network')}</p>
+                  <p className="mt-2 text-2xl font-semibold tracking-[-0.03em]">{t('home.hero.reliableAutomation')}</p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {brands.map((item) => (
+                    <div key={item.name} className="group flex min-h-[178px] flex-col items-center justify-between rounded-2xl bg-white/[0.92] p-5 shadow-[0_18px_45px_rgba(3,25,43,0.18)] transition-colors duration-200 hover:bg-[#0b2f4f]">
+                      <div className="flex flex-1 items-center justify-center">
+                        <Image
+                          src={item.logo}
+                          alt={item.name}
+                          width={item.width}
+                          height={item.height}
+                          className={`max-h-14 w-auto object-contain transition-[filter] duration-200 ${item.name === 'IFM' ? '' : 'group-hover:brightness-0 group-hover:invert'}`}
+                        />
+                      </div>
+                      <p className="text-xs uppercase tracking-[0.18em] text-[#5d7081] transition-colors duration-200 group-hover:text-white/60">{t(item.labelKey)}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

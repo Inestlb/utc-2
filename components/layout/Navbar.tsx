@@ -57,7 +57,7 @@ const mainNavLinks: NavLink[] = [
     ]
   },
   { key: 'nav.about', href: '/about' },
-  { key: 'nav.partners', href: '/blog' },
+  { key: 'nav.partners', href: '/partners' },
 ];
 
 // Lien Contact séparé
@@ -78,9 +78,9 @@ const staticTranslations: Record<string, string> = {
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { t, dir, isClient } = useTranslation();
-  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+  const { t, isClient } = useTranslation();
   const [isProductsHovered, setIsProductsHovered] = useState(false);
+  const isHomeTop = pathname === '/' && !isScrolled;
 
   // Handle transparent navbar on scroll
   useEffect(() => {
@@ -88,6 +88,7 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 10);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -101,9 +102,15 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-md border-b border-orange-50">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        isHomeTop
+          ? 'bg-transparent border-transparent'
+          : 'bg-[#0b2f4f]/95 border-b border-white/10 shadow-[0_18px_60px_rgba(3,25,43,0.28)] backdrop-blur-xl'
+      }`}
+    >
       <div className="flex justify-center w-full">
-        <div className="w-full max-w-[1600px] flex items-center justify-between h-20 md:h-24 px-12">
+        <div className={`w-full max-w-[1600px] flex items-center justify-between px-6 md:px-12 transition-all duration-500 ${isScrolled ? 'h-16 md:h-20' : 'h-20 md:h-24'}`}>
           {/* Left section: Logo and main navigation */}
           <div className="flex items-center">
             {/* Logo */}
@@ -115,7 +122,7 @@ export default function Navbar() {
                   width={200}
                   height={200}
                   priority={true}
-                  className="h-[95px] w-auto"
+                  className={`w-auto transition-all duration-500 ${isScrolled ? 'h-[78px]' : 'h-[95px]'}`}
                 />
               </div>
             </Link>
@@ -131,12 +138,10 @@ export default function Navbar() {
                     onMouseLeave={() => setIsProductsHovered(false)}
                   >
                     <button
-                      className={`text-[15px] tracking-wide font-medium transition-colors hover:text-orange-500 flex items-center gap-2 ${
+                      className={`text-[15px] tracking-wide font-medium transition-colors hover:text-[#e47925] flex items-center gap-2 ${
                         pathname.startsWith(link.href)
-                          ? 'text-orange-500 font-semibold'
-                          : isScrolled
-                          ? 'text-gray-800'
-                          : 'text-gray-800'
+                          ? 'text-[#e47925] font-semibold'
+                          : 'text-white/88'
                       }`}
                     >
                       {getTextContent(link.key)}
@@ -153,13 +158,13 @@ export default function Navbar() {
                       onMouseEnter={() => setIsProductsHovered(true)}
                       onMouseLeave={() => setIsProductsHovered(false)}
                     >
-                      <div className="bg-white rounded-md shadow-lg w-[280px]">
+                      <div className="bg-[#0b2f4f]/95 rounded-2xl shadow-[0_24px_70px_rgba(3,25,43,0.35)] w-[280px] border border-white/10 backdrop-blur-xl">
                         <div className="grid gap-2 p-3">
                           {link.submenu?.map((item) => (
                             <Link
                               key={item.href}
                               href={item.href}
-                              className="flex items-center p-3 rounded-md hover:bg-gray-50 transition-colors duration-200"
+                              className="flex items-center p-3 rounded-xl hover:bg-white/8 transition-colors duration-200"
                             >
                               <div className="flex-shrink-0 h-10 w-10 mr-3 flex items-center justify-center">
                                 {item.logo && (
@@ -172,7 +177,7 @@ export default function Navbar() {
                                   />
                                 )}
                               </div>
-                              <div className="font-medium text-gray-800">{item.name}</div>
+                              <div className="font-medium text-white/90">{item.name}</div>
                             </Link>
                           ))}
                         </div>
@@ -183,17 +188,15 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`text-[15px] tracking-wide font-medium transition-colors hover:text-orange-500 relative inline-flex group ${
+                    className={`text-[15px] tracking-wide font-medium transition-colors hover:text-[#e47925] relative inline-flex group ${
                       pathname === link.href
-                        ? 'text-orange-500 font-semibold'
-                        : isScrolled
-                        ? 'text-gray-800'
-                        : 'text-gray-800'
+                        ? 'text-[#e47925] font-semibold'
+                        : 'text-white/88'
                     }`}
                   >
                     <span className="relative">
                       {getTextContent(link.key)}
-                      <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-orange-500 opacity-0 group-hover:opacity-100 group-hover:w-full transition-all duration-300 ease-out"></span>
+                      <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#e47925] opacity-0 group-hover:opacity-100 group-hover:w-full transition-all duration-300 ease-out"></span>
                     </span>
                   </Link>
                 )
@@ -213,9 +216,9 @@ export default function Navbar() {
             <Link
               href={contactLink.href}
               className={`text-[15px] font-medium transition-colors duration-300 rounded-lg px-5 py-2.5 flex items-center gap-2 ${
-                pathname === contactLink.href
-                  ? 'bg-orange-600 text-white'
-                  : 'bg-orange-500 text-white hover:bg-orange-600'
+                  pathname === contactLink.href
+                  ? 'bg-[#e47925] text-white shadow-[0_10px_30px_rgba(228,121,37,0.26)]'
+                  : 'bg-[#e47925] text-white hover:bg-[#f18a3d] shadow-[0_10px_30px_rgba(228,121,37,0.22)]'
               }`}
             >
               <Mail className="h-[18px] w-[18px]" />
@@ -227,11 +230,11 @@ export default function Navbar() {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Menu" className="hover:text-orange-500 transition-colors duration-300">
+                <Button variant="ghost" size="icon" aria-label="Menu" className="text-white hover:text-[#e47925] hover:bg-white/10 transition-colors duration-300">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="border-l-orange-500 w-[85vw] max-w-[350px]">
+              <SheetContent side="right" className="border-l-[#e47925] bg-[#0b2f4f] text-white w-[85vw] max-w-[350px]">
                 <div className="flex flex-col space-y-6 mt-8">
                   {/* Mobile Search Bar */}
                   <div className="mb-2">
@@ -250,7 +253,7 @@ export default function Navbar() {
                         {link.hasSubmenu ? (
                           <DropdownMenu>
                             <DropdownMenuTrigger className="flex items-center justify-between w-full text-left">
-                              <span className={`text-lg font-medium ${pathname.startsWith(link.href) ? 'text-orange-500' : ''}`}>
+                              <span className={`text-lg font-medium ${pathname.startsWith(link.href) ? 'text-[#e47925]' : 'text-white'}`}>
                                 {getTextContent(link.key)}
                               </span>
                               <ChevronDown className="h-4 w-4 opacity-70" />
@@ -279,9 +282,9 @@ export default function Navbar() {
                         ) : (
                           <Link
                             href={link.href}
-                            className={`block text-lg font-medium transition-colors hover:text-orange-500 ${
-                              pathname === link.href ? 'text-orange-500' : ''
-                            } ${link.highlight ? 'mt-6 bg-orange-500 text-white hover:text-white px-4 py-2 rounded-lg text-center' : ''}`}
+                            className={`block text-lg font-medium transition-colors hover:text-[#e47925] ${
+                              pathname === link.href ? 'text-[#e47925]' : 'text-white'
+                            } ${link.highlight ? 'mt-6 bg-[#e47925] text-white hover:text-white px-4 py-2 rounded-lg text-center' : ''}`}
                           >
                             {getTextContent(link.key)}
                           </Link>

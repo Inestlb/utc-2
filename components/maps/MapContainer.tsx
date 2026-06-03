@@ -1,45 +1,66 @@
-"use client";
-
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-
-// Import dynamique du composant MapboxMap pour éviter les erreurs de rendu côté serveur
-const MapboxMap = dynamic(() => import('@/components/maps/MapboxMap'), {
-  ssr: false,
-  loading: () => (
-    <div className="bg-gray-200 rounded-lg overflow-hidden h-full flex items-center justify-center border border-orange-200">
-      <p className="text-gray-500">Chargement de la carte...</p>
-    </div>
-  )
-});
+import { ExternalLink, Mail, MapPin, Phone } from 'lucide-react';
+import { getGoogleMapsEmbedUrl, getGoogleMapsUrl } from '@/lib/maps';
 
 interface MapContainerProps {
-  longitude?: number;
-  latitude?: number;
-  zoom?: number;
   markerTitle?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export default function MapContainer({
-  longitude = 3.8767,
-  latitude = 43.6108,
-  zoom = 14,
-  markerTitle = 'UTC Industrie'
+  markerTitle = 'UTC Industrie',
+  address = '450 Rue Baden Powell, Espace Optimum, 34000 Montpellier',
+  phone = '+1 (234) 567-890',
+  email = 'info@industrialexport.com',
+  latitude,
+  longitude
 }: MapContainerProps) {
+  const mapsUrl = getGoogleMapsUrl(address);
+  const embedUrl = getGoogleMapsEmbedUrl(address, latitude, longitude);
+  const phoneHref = `tel:${phone.replace(/[^\d+]/g, '')}`;
+
   return (
-    <div className="rounded-lg overflow-hidden h-80 border border-orange-200">
-      <Suspense fallback={
-        <div className="bg-gray-200 h-full flex items-center justify-center">
-          <p className="text-gray-500">Chargement de la carte...</p>
+    <div className="relative h-full w-full overflow-hidden bg-[#f4f7f8]">
+      <iframe
+        title={`${markerTitle} map`}
+        src={embedUrl}
+        className="h-full w-full border-0"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        allowFullScreen
+      />
+      <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 z-[1] h-24 w-36 bg-[#f4f7f8]" />
+      <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-white/95 px-3 py-2 text-xs text-[#0b2f4f] shadow-md backdrop-blur">
+        <div className="flex items-start gap-2">
+          <MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#e47925]" />
+          <div className="min-w-0">
+            <p className="font-semibold leading-tight">{markerTitle}</p>
+            <p className="mt-1 leading-relaxed text-[#39495a]">{address}</p>
+            <div className="mt-2 flex flex-col gap-1.5 border-t border-[#0b2f4f]/10 pt-2">
+              <a href={phoneHref} className="inline-flex items-center gap-2 leading-tight text-[#39495a] transition-colors hover:text-[#e47925]">
+                <Phone className="h-3.5 w-3.5 flex-shrink-0 text-[#e47925]" />
+                {phone}
+              </a>
+              <a href={`mailto:${email}`} className="inline-flex items-center gap-2 leading-tight text-[#39495a] transition-colors hover:text-[#e47925]">
+                <Mail className="h-3.5 w-3.5 flex-shrink-0 text-[#e47925]" />
+                {email}
+              </a>
+            </div>
+          </div>
         </div>
-      }>
-        <MapboxMap
-          longitude={longitude}
-          latitude={latitude}
-          zoom={zoom}
-          markerTitle={markerTitle}
-        />
-      </Suspense>
+      </div>
+      <a
+        href={mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-md bg-[#0b2f4f] px-3 py-2 text-xs font-medium text-white shadow-md transition-colors hover:bg-[#e47925]"
+      >
+        <ExternalLink className="h-3.5 w-3.5" />
+        Ouvrir dans Google Maps
+      </a>
     </div>
   );
 }

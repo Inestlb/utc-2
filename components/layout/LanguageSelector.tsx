@@ -14,10 +14,10 @@ export default function LanguageSelector() {
 
   // Static button for server-side rendering
   const staticSwitch = (
-    <div className="relative w-[120px] h-[34px] rounded-full cursor-pointer overflow-hidden border border-white/12 bg-white/8">
+    <div className="relative w-[120px] h-10 rounded-lg cursor-pointer overflow-hidden border border-white/12 bg-white/8">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-[#e47925]">FR</span>
+          <span className="text-sm font-semibold text-white">FR</span>
           <span className="text-sm font-medium text-white/35">|</span>
           <span className="text-sm font-medium text-white/55">AR</span>
         </div>
@@ -41,20 +41,20 @@ export default function LanguageSelector() {
   };
 
   return (
-    <div className="relative w-[120px] h-[34px] rounded-full cursor-pointer select-none border border-white/12 bg-white/8 hover:bg-white/12 transition-colors duration-200 overflow-hidden">
+    <div className="relative w-[120px] h-10 rounded-lg cursor-pointer select-none border border-white/12 bg-white/8 hover:bg-white/12 transition-colors duration-200 overflow-hidden">
       {/* Background text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3">
           <span 
             onClick={handleFrClick}
-            className={`text-sm font-medium transition-opacity duration-200 hover:opacity-90 ${language === 'fr' ? 'text-[#e47925]' : 'text-white/55'}`}
+            className={`text-sm transition-opacity duration-200 hover:opacity-90 ${language === 'fr' ? 'font-semibold text-white' : 'font-medium text-white/55'}`}
           >
             FR
           </span>
           <span className="text-sm font-medium text-white/35">|</span>
           <span 
             onClick={handleArClick}
-            className={`text-sm font-medium transition-opacity duration-200 hover:opacity-90 ${language === 'ar' ? 'text-[#e47925]' : 'text-white/55'}`}
+            className={`text-sm transition-opacity duration-200 hover:opacity-90 ${language === 'ar' ? 'font-semibold text-white' : 'font-medium text-white/55'}`}
           >
             AR
           </span>

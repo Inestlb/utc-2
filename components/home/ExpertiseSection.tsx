@@ -12,7 +12,6 @@ export default function ExpertiseSection() {
       <div className="flex justify-center w-full">
         <div className="w-full max-w-[1600px] px-6 md:px-12">
           <div className="mb-14 max-w-4xl">
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#e47925]">Expertise terrain</p>
             <motion.h2
               className="text-4xl md:text-6xl font-semibold tracking-[-0.055em]"
               initial={{ opacity: 0, y: 20 }}

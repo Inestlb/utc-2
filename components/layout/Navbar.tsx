@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, Mail, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -29,7 +29,6 @@ interface NavLink {
 interface SubMenuItem {
   name: string;
   href: string;
-  logo?: string;
 }
 
 // Liens de navigation principaux
@@ -41,30 +40,25 @@ const mainNavLinks: NavLink[] = [
     submenu: [
       {
         name: 'Lenze',
-        href: '/products?brand=lenze',
-        logo: '/images/logo-Lenze.svg'
+        href: '/products?brand=lenze'
       },
       {
         name: 'IFM',
-        href: '/products?brand=ifm',
-        logo: '/images/logo-ifm.svg'
+        href: '/products?brand=ifm'
       },
       {
         name: 'Wago',
-        href: '/products?brand=wago',
-        logo: '/images/logo-WAGO.svg'
+        href: '/products?brand=wago'
       }
     ]
   },
   { key: 'nav.about', href: '/about' },
   { key: 'nav.partners', href: '/partners' },
+  { key: 'nav.contact', href: '/contact' },
 ];
 
-// Lien Contact séparé
-const contactLink: NavLink = { key: 'nav.contact', href: '/contact', highlight: true };
-
 // Tous les liens pour le menu mobile
-const allNavLinks: NavLink[] = [...mainNavLinks, contactLink];
+const allNavLinks: NavLink[] = [...mainNavLinks];
 
 // Static French translations for server-side rendering
 const staticTranslations: Record<string, string> = {
@@ -80,6 +74,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { t, isClient } = useTranslation();
   const [isProductsHovered, setIsProductsHovered] = useState(false);
+  const productsMenuCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHomeTop = pathname === '/' && !isScrolled;
 
   // Handle transparent navbar on scroll
@@ -93,12 +88,35 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (productsMenuCloseTimer.current) {
+        clearTimeout(productsMenuCloseTimer.current);
+      }
+    };
+  }, []);
+
   // Helper function to get text content safely during SSR
   const getTextContent = (key: string) => {
     if (isClient) {
       return t(key);
     }
     return staticTranslations[key] || key;
+  };
+
+  const openProductsMenu = () => {
+    if (productsMenuCloseTimer.current) {
+      clearTimeout(productsMenuCloseTimer.current);
+      productsMenuCloseTimer.current = null;
+    }
+    setIsProductsHovered(true);
+  };
+
+  const closeProductsMenu = () => {
+    productsMenuCloseTimer.current = setTimeout(() => {
+      setIsProductsHovered(false);
+      productsMenuCloseTimer.current = null;
+    }, 120);
   };
 
   return (
@@ -134,10 +152,13 @@ export default function Navbar() {
                   <div
                     key={link.href}
                     className="relative group"
-                    onMouseEnter={() => setIsProductsHovered(true)}
-                    onMouseLeave={() => setIsProductsHovered(false)}
+                    onMouseLeave={closeProductsMenu}
+                    onBlur={closeProductsMenu}
                   >
                     <button
+                      type="button"
+                      onMouseEnter={openProductsMenu}
+                      onFocus={openProductsMenu}
                       className={`text-[15px] tracking-wide font-medium transition-colors hover:text-[#e47925] flex items-center gap-2 ${
                         pathname.startsWith(link.href)
                           ? 'text-[#e47925] font-semibold'
@@ -149,35 +170,25 @@ export default function Navbar() {
                     </button>
 
                     {/* Conteneur du menu déroulant avec une grande zone de détection */}
-                    <div 
-                      className={`absolute left-0 w-[320px] -mt-6 pt-10 transition-opacity duration-200 ${
+                    <div
+                      className={`absolute left-1/2 top-full w-[220px] -translate-x-1/2 pt-5 transition-all duration-200 ${
                         isProductsHovered 
-                          ? 'opacity-100 pointer-events-auto' 
-                          : 'opacity-0 pointer-events-none'
+                          ? 'translate-y-0 opacity-100 pointer-events-auto'
+                          : '-translate-y-2 opacity-0 pointer-events-none'
                       }`}
-                      onMouseEnter={() => setIsProductsHovered(true)}
-                      onMouseLeave={() => setIsProductsHovered(false)}
+                      onMouseEnter={openProductsMenu}
+                      onMouseLeave={closeProductsMenu}
+                      onFocus={openProductsMenu}
                     >
-                      <div className="bg-[#0b2f4f]/95 rounded-2xl shadow-[0_24px_70px_rgba(3,25,43,0.35)] w-[280px] border border-white/10 backdrop-blur-xl">
-                        <div className="grid gap-2 p-3">
+                      <div className="relative overflow-hidden rounded-[4px] border border-[#d9e2e8] bg-white shadow-[0_28px_70px_rgba(3,25,43,0.28)] ring-1 ring-[#0b2f4f]/5">
+                        <div className="grid gap-2 p-2.5">
                           {link.submenu?.map((item) => (
                             <Link
                               key={item.href}
                               href={item.href}
-                              className="flex items-center p-3 rounded-xl hover:bg-white/8 transition-colors duration-200"
+                              className="group flex items-center justify-center rounded-[3px] border border-transparent px-5 py-3 text-center transition-all duration-200 hover:border-[#e47925]/20 hover:bg-[#f7f9fb] hover:shadow-[0_10px_26px_rgba(11,47,79,0.10)]"
                             >
-                              <div className="flex-shrink-0 h-10 w-10 mr-3 flex items-center justify-center">
-                                {item.logo && (
-                                  <Image
-                                    src={item.logo}
-                                    alt={item.name}
-                                    width={30}
-                                    height={30}
-                                    className="object-contain"
-                                  />
-                                )}
-                              </div>
-                              <div className="font-medium text-white/90">{item.name}</div>
+                              <span className="text-[15px] font-semibold text-[#0b2f4f] transition-colors duration-200 group-hover:text-[#e47925]">{item.name}</span>
                             </Link>
                           ))}
                         </div>
@@ -204,26 +215,10 @@ export default function Navbar() {
             </nav>
           </div>
 
-          {/* Right section: Search, Language, Contact */}
+          {/* Right section: Search, Language */}
           <div className="hidden md:flex items-center space-x-6">
-            {/* Search Bar */}
             <NavbarSearch />
-
-            {/* Language Selector */}
             <LanguageSelector />
-
-            {/* Contact link */}
-            <Link
-              href={contactLink.href}
-              className={`text-[15px] font-medium transition-colors duration-300 rounded-lg px-5 py-2.5 flex items-center gap-2 ${
-                  pathname === contactLink.href
-                  ? 'bg-[#e47925] text-white shadow-[0_10px_30px_rgba(228,121,37,0.26)]'
-                  : 'bg-[#e47925] text-white hover:bg-[#f18a3d] shadow-[0_10px_30px_rgba(228,121,37,0.22)]'
-              }`}
-            >
-              <Mail className="h-[18px] w-[18px]" />
-              {getTextContent(contactLink.key)}
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -262,17 +257,6 @@ export default function Navbar() {
                               {link.submenu?.map((item) => (
                                 <DropdownMenuItem key={item.href} asChild>
                                   <Link href={item.href} className="flex items-center w-full p-2">
-                                    {item.logo && (
-                                      <div className="mr-2 h-6 w-6 flex-shrink-0">
-                                        <Image
-                                          src={item.logo}
-                                          alt={item.name}
-                                          width={24}
-                                          height={24}
-                                          className="object-contain"
-                                        />
-                                      </div>
-                                    )}
                                     <span>{item.name}</span>
                                   </Link>
                                 </DropdownMenuItem>

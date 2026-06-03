@@ -8,9 +8,9 @@ import { useTranslation } from "@/lib/context/TranslationContext";
 import { motion } from "framer-motion";
 
 const brands = [
-  { labelKey: 'home.hero.motorization' as const, name: 'Lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30 },
-  { labelKey: 'home.hero.detection' as const, name: 'IFM', logo: '/images/logo-ifm.svg', width: 82, height: 82 },
-  { labelKey: 'home.hero.connectivity' as const, name: 'WAGO', logo: '/images/logo-WAGO.svg', width: 102, height: 38 },
+  { labelKey: 'home.hero.motorization' as const, name: 'Lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30, href: '/products?brand=lenze' },
+  { labelKey: 'home.hero.detection' as const, name: 'IFM', logo: '/images/logo-ifm.svg', width: 82, height: 82, href: '/products?brand=ifm' },
+  { labelKey: 'home.hero.connectivity' as const, name: 'WAGO', logo: '/images/logo-WAGO.svg', width: 102, height: 38, href: '/products?brand=wago' },
 ];
 
 export default function HeroSection() {
@@ -58,19 +58,16 @@ export default function HeroSection() {
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
             >
-              <Button asChild size="lg" className="rounded-full bg-[#e47925] px-7 py-6 text-base font-semibold text-white shadow-[0_18px_45px_rgba(228,121,37,0.28)] hover:bg-[#f18a3d]">
+              <Button asChild size="lg" className="rounded-lg bg-[#e47925] px-7 py-6 text-base font-semibold text-white hover:bg-[#f18a3d]">
                 <Link href="/products" className="flex items-center">
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full border-white/20 bg-white/5 px-7 py-6 text-base font-semibold text-white hover:bg-white/12 hover:text-white">
-                <Link href="/contact">{t('home.hero.secondaryCta')}</Link>
               </Button>
             </motion.div>
           </div>
@@ -92,18 +89,18 @@ export default function HeroSection() {
 
                 <div className="grid grid-cols-3 gap-3">
                   {brands.map((item) => (
-                    <div key={item.name} className="group flex min-h-[178px] flex-col items-center justify-between rounded-2xl bg-white/[0.92] p-5 shadow-[0_18px_45px_rgba(3,25,43,0.18)] transition-colors duration-200 hover:bg-[#0b2f4f]">
+                    <Link key={item.name} href={item.href} className="group flex min-h-[178px] flex-col items-center justify-between rounded-2xl bg-white/[0.92] p-5 shadow-[0_18px_45px_rgba(3,25,43,0.18)] transition-colors duration-200 hover:bg-[#0b2f4f]">
                       <div className="flex flex-1 items-center justify-center">
                         <Image
                           src={item.logo}
                           alt={item.name}
                           width={item.width}
                           height={item.height}
-                          className={`max-h-14 w-auto object-contain transition-[filter] duration-200 ${item.name === 'IFM' ? '' : 'group-hover:brightness-0 group-hover:invert'}`}
+                          className={`max-h-14 w-auto object-contain transition-[filter] duration-200 ${item.name === 'IFM' ? '!max-h-[72px]' : 'group-hover:brightness-0 group-hover:invert'}`}
                         />
                       </div>
                       <p className="text-xs uppercase tracking-[0.18em] text-[#5d7081] transition-colors duration-200 group-hover:text-white/60">{t(item.labelKey)}</p>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>

@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useMemo, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import ProductCard from './ProductCard';
 import ProductFilter from './ProductFilter';
 import LenzeCategoryCards from './LenzeCategoryCards';
 import SubCategoryFilter from './SubCategoryFilter';
 import { Button } from '@/components/ui/button';
-import { Grid, List } from 'lucide-react';
+import { ArrowLeft, Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
+import { filterProductsForSubcategory, getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
 
 interface ProductGridProps {
   products: Product[];
@@ -29,77 +31,21 @@ export default function ProductGrid({
 }: ProductGridProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const searchParams = useSearchParams();
-  const router = useRouter();
   const brand = searchParams.get('brand');
   const [showFilters, setShowFilters] = useState(true);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>(
-    filterOptions.subcategory || 
-    (filterOptions.category === 'Variateurs et servovariateurs' ? 'Variateurs de vitesse' : 
-     filterOptions.category === 'Motoréducteurs' ? 'Motoréducteurs triphasés' : 
-     filterOptions.category === 'Moteurs' ? 'Moteurs triphasés' : undefined)
+    getInitialSelectedSubcategory({
+      brand,
+      category: filterOptions.category,
+      requestedSubCategory: filterOptions.subcategory,
+    })
   );
-  
-  useEffect(() => {
-    const isLenzeVariateursPage = brand === 'lenze' && filterOptions.category === 'Variateurs et servovariateurs';
-    const isLenzeMotoreducteursPage = brand === 'lenze' && filterOptions.category === 'Motoréducteurs';
-    const isLenzeMoteursPage = brand === 'lenze' && filterOptions.category === 'Moteurs';
-    const isReducteurPage = brand === 'lenze' && filterOptions.category === 'Réducteurs';
-    
-    if (isLenzeVariateursPage && !selectedSubCategory) {
-      const defaultSubcategory = 'Variateurs de vitesse';
-      setSelectedSubCategory(defaultSubcategory);
-      
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set('subcategory', defaultSubcategory);
-      router.push(`/products?${newParams.toString()}`);
-    }
-    else if (isLenzeMotoreducteursPage && !selectedSubCategory) {
-      const defaultSubcategory = 'Motoréducteurs triphasés';
-      setSelectedSubCategory(defaultSubcategory);
-      
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set('subcategory', defaultSubcategory);
-      
-      router.push(`/products?${newParams.toString()}`);
-      
-      if (onFilterChange) {
-        onFilterChange({ 
-          subcategory: defaultSubcategory
-        });
-      }
-    }
-    else if (isLenzeMoteursPage && !selectedSubCategory) {
-      const defaultSubcategory = 'Moteurs triphasés';
-      setSelectedSubCategory(defaultSubcategory);
-      
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set('subcategory', defaultSubcategory);
-      
-      router.push(`/products?${newParams.toString()}`);
-      
-      if (onFilterChange) {
-        onFilterChange({ 
-          subcategory: defaultSubcategory
-        });
-      }
-    }
-    else if (isReducteurPage && !selectedSubCategory) {
-      const defaultSubcategory = 'Réducteurs';
-      setSelectedSubCategory(defaultSubcategory);
-      
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set('subcategory', defaultSubcategory);
-      
-      router.push(`/products?${newParams.toString()}`);
-      
-      if (onFilterChange) {
-        onFilterChange({ 
-          subcategory: defaultSubcategory
-        });
-      }
-    }
-  }, [brand, filterOptions.category, searchParams, router, onFilterChange, selectedSubCategory]);
+  const lenzeSubcategoryCategories = [
+    'Variateurs et servovariateurs',
+    'Motoréducteurs',
+    'Moteurs',
+    'Réducteurs',
+  ];
   
   useEffect(() => {
     if (brand === 'lenze' && !filterOptions.category) {
@@ -109,6 +55,16 @@ export default function ProductGrid({
     }
   }, [brand, filterOptions.category]);
 
+  useEffect(() => {
+    setSelectedSubCategory(
+      getInitialSelectedSubcategory({
+        brand,
+        category: filterOptions.category,
+        requestedSubCategory: filterOptions.subcategory,
+      })
+    );
+  }, [brand, filterOptions.category, filterOptions.subcategory]);
+
   const handlePageChange = (page: number) => {
     if (onFilterChange) {
       onFilterChange({ page });
@@ -117,36 +73,12 @@ export default function ProductGrid({
   
   const handleCategorySelect = (category: string) => {
     if (onFilterChange) {
-      if (category === 'Variateurs et servovariateurs' && brand === 'lenze') {
-        const defaultSubcategory = 'Variateurs de vitesse';
-        setSelectedSubCategory(defaultSubcategory);
-        onFilterChange({ 
-          category, 
-          subcategory: defaultSubcategory, 
-          page: 1 
-        });
-      } else if (category === 'Motoréducteurs' && brand === 'lenze') {
-        const defaultSubcategory = 'Motoréducteurs triphasés';
-        setSelectedSubCategory(defaultSubcategory);
-        onFilterChange({ 
-          category, 
-          subcategory: defaultSubcategory, 
-          page: 1 
-        });
-      } else if (category === 'Moteurs' && brand === 'lenze') {
-        const defaultSubcategory = 'Moteurs triphasés';
-        setSelectedSubCategory(defaultSubcategory);
-        onFilterChange({ 
-          category, 
-          subcategory: defaultSubcategory, 
-          page: 1 
-        });
-      } else if (category === 'Réducteurs' && brand === 'lenze') {
-        setSelectedSubCategory('Réducteurs');
-        onFilterChange({ 
-          category, 
-          subcategory: 'Réducteurs', 
-          page: 1 
+      if (brand === 'lenze' && lenzeSubcategoryCategories.includes(category)) {
+        setSelectedSubCategory(undefined);
+        onFilterChange({
+          category,
+          subcategory: undefined,
+          page: 1,
         });
       } else {
         setSelectedSubCategory(undefined);
@@ -162,19 +94,19 @@ export default function ProductGrid({
   
   const handleSubCategoryChange = (subCategory?: string) => {
     setSelectedSubCategory(subCategory);
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (subCategory) {
+      newParams.set('subcategory', subCategory);
+    } else {
+      newParams.delete('subcategory');
+    }
+    window.history.pushState(null, '', `/products?${newParams.toString()}`);
+
     if (onFilterChange) {
       onFilterChange({ 
         subcategory: subCategory, 
         page: 1 
       });
-      
-      const newParams = new URLSearchParams(searchParams.toString());
-      if (subCategory) {
-        newParams.set('subcategory', subCategory);
-      } else {
-        newParams.delete('subcategory');
-      }
-      router.push(`/products?${newParams.toString()}`);
     }
   };
 
@@ -183,30 +115,27 @@ export default function ProductGrid({
   const isMoteursPage = brand === 'lenze' && filterOptions.category === 'Moteurs';
   const isReducteurPage = brand === 'lenze' && filterOptions.category === 'Réducteurs';
   const hasSubcategories = isVariateurPage || isMotoreducteurPage || isMoteursPage || isReducteurPage;
-
-  useEffect(() => {
-    const isMotoreducteursPage = filterOptions.category === 'Motoréducteurs';
-    const isMoteursPage = filterOptions.category === 'Moteurs';
-    const isReducteursPage = filterOptions.category === 'Réducteurs';
-
-    if ((isMotoreducteursPage || isMoteursPage || isReducteursPage) && !selectedSubCategory) {
-      setFilteredProducts(products);
-      return;
-    }
-    
-    if ((isMotoreducteursPage || isMoteursPage || isReducteursPage) && selectedSubCategory) {
-      const filteredBySubcategory = products.filter(p => p.subcategory === selectedSubCategory);
-      
-      filteredBySubcategory.sort((a, b) => a.name.localeCompare(b.name));
-      setFilteredProducts(filteredBySubcategory);
-      return;
-    }
-    
-    setFilteredProducts(products);
-  }, [products, filterOptions.category, selectedSubCategory]);
+  const backToCategoriesHref = brand ? `/products?brand=${encodeURIComponent(brand)}` : '/products';
+  const showBackToCategories = Boolean(filterOptions.category);
+  const filteredProducts = useMemo(
+    () => filterProductsForSubcategory(products, filterOptions.category, selectedSubCategory),
+    [products, filterOptions.category, selectedSubCategory]
+  );
 
   return (
     <div className="w-full">
+      {showBackToCategories && (
+        <div className="px-6 md:px-12 mb-6">
+          <Link
+            href={backToCategoriesHref}
+            className="inline-flex items-center gap-2 border border-[#0b2f4f] bg-[#0b2f4f] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:border-[#e47925] hover:bg-[#e47925]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Retour aux catégories
+          </Link>
+        </div>
+      )}
+
       {!hasSubcategories && (
         <div className="w-full mb-10">
           {brand === 'lenze' && !showFilters ? (
@@ -220,42 +149,12 @@ export default function ProductGrid({
               categories={categories}
               selectedCategory={filterOptions.category}
               onCategoryChange={(category) => {
-                if (category === 'Variateurs et servovariateurs' && brand === 'lenze') {
-                  setSelectedSubCategory('Variateurs de vitesse');
-                  onFilterChange?.({ 
-                    category, 
-                    subcategory: 'Variateurs de vitesse', 
-                    page: 1 
-                  });
-                } else if (category === 'Motoréducteurs' && brand === 'lenze') {
-                  setSelectedSubCategory('Motoréducteurs triphasés');
-                  onFilterChange?.({ 
-                    category, 
-                    subcategory: 'Motoréducteurs triphasés', 
-                    page: 1 
-                  });
-                } else if (category === 'Moteurs' && brand === 'lenze') {
-                  setSelectedSubCategory('Moteurs triphasés');
-                  onFilterChange?.({ 
-                    category, 
-                    subcategory: 'Moteurs triphasés', 
-                    page: 1 
-                  });
-                } else if (category === 'Réducteurs' && brand === 'lenze') {
-                  setSelectedSubCategory('Réducteurs');
-                  onFilterChange?.({ 
-                    category, 
-                    subcategory: 'Réducteurs', 
-                    page: 1 
-                  });
-                } else {
-                  setSelectedSubCategory(undefined);
-                  onFilterChange?.({ 
-                    category, 
-                    subcategory: undefined, 
-                    page: 1 
-                  });
-                }
+                setSelectedSubCategory(undefined);
+                onFilterChange?.({
+                  category,
+                  subcategory: undefined,
+                  page: 1
+                });
               }}
             />
           )}

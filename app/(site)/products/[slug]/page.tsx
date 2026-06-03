@@ -53,20 +53,20 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   return (
     <div className="bg-white">
-      <div className="bg-[#0b2f4f]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-3">
-          <nav className="flex items-center text-[13px] text-[#a8c4db]">
-            <Link href="/" className="text-white hover:text-[#e47925]">
+      <div className="bg-[#0b2f4f] pt-2 md:pt-3">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-2 pb-4">
+          <nav className="flex items-center flex-wrap gap-y-1 text-[13px] text-[#a8c4db]">
+            <Link href="/" className="text-white hover:text-[#e47925] transition-colors">
               Accueil
             </Link>
             <span className="mx-2 text-[#6b98b8]">/</span>
-            <Link href="/products" className="text-white hover:text-[#e47925]">
+            <Link href="/products" className="text-white hover:text-[#e47925] transition-colors">
               Produits
             </Link>
             <span className="mx-2 text-[#6b98b8]">/</span>
             <Link
               href={`/products?category=${encodeURIComponent(product.category)}`}
-              className="text-white hover:text-[#e47925]"
+              className="text-white hover:text-[#e47925] transition-colors"
             >
               {product.category}
             </Link>

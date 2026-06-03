@@ -36,10 +36,7 @@ export default function ProductFilter({
       'Variateurs et servovariateurs',
       'Moteurs',
       'Motoréducteurs',
-      'Réducteurs',
-      'Solutions et passerelles llot',
-      'Accessoires',
-      'Software'
+      'Réducteurs'
     ];
   } else if (brand === 'wago') {
     displayCategories = [

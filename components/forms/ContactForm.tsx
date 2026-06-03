@@ -21,9 +21,11 @@ const formSchema = z.object({
 
 interface ContactFormProps {
   isCompact?: boolean;
+  hideTitle?: boolean;
+  className?: string;
 }
 
-export default function ContactForm({ isCompact = false }: ContactFormProps) {
+export default function ContactForm({ isCompact = false, hideTitle = false, className = '' }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,8 +69,8 @@ export default function ContactForm({ isCompact = false }: ContactFormProps) {
   };
 
   return (
-    <div className={`bg-white ${isCompact ? 'p-4' : 'p-6'} rounded-lg ${!isCompact && 'shadow-sm border border-gray-200 hover:border-orange-300 transition-colors'}`}>
-      {!isCompact && <h2 className="text-2xl font-semibold mb-6">Contactez-<span className="text-orange-500">Nous</span></h2>}
+    <div className={`bg-white ${isCompact ? 'p-4' : 'p-6'} rounded-lg ${!isCompact && 'shadow-sm border border-gray-200 hover:border-orange-300 transition-colors'} ${className}`}>
+      {!hideTitle && !isCompact && <h2 className="text-2xl font-semibold mb-6">Contactez-<span className="text-orange-500">nous</span></h2>}
 
       {isSuccess ? (
         <div className="bg-green-50 border border-green-200 rounded-md p-4 flex items-start">
@@ -101,7 +103,7 @@ export default function ContactForm({ isCompact = false }: ContactFormProps) {
                       <Input
                         placeholder="Votre nom"
                         {...field}
-                        className="focus-visible:ring-orange-500"
+                        className="h-11 focus-visible:ring-orange-500"
                       />
                     </FormControl>
                     <FormMessage className="text-orange-500" />
@@ -120,7 +122,7 @@ export default function ContactForm({ isCompact = false }: ContactFormProps) {
                         placeholder="Votre adresse email"
                         type="email"
                         {...field}
-                        className="focus-visible:ring-orange-500"
+                        className="h-11 focus-visible:ring-orange-500"
                       />
                     </FormControl>
                     <FormMessage className="text-orange-500" />
@@ -139,7 +141,7 @@ export default function ContactForm({ isCompact = false }: ContactFormProps) {
                     <Input
                       placeholder="Objet du message"
                       {...field}
-                      className="focus-visible:ring-orange-500"
+                      className="h-11 focus-visible:ring-orange-500"
                     />
                   </FormControl>
                   <FormMessage className="text-orange-500" />
@@ -156,7 +158,7 @@ export default function ContactForm({ isCompact = false }: ContactFormProps) {
                   <FormControl>
                     <Textarea
                       placeholder="Votre message"
-                      className={`${isCompact ? 'min-h-24' : 'min-h-32'} focus-visible:ring-orange-500`}
+                      className={`${isCompact ? 'min-h-24' : 'min-h-40'} focus-visible:ring-orange-500`}
                       {...field}
                     />
                   </FormControl>
@@ -171,7 +173,7 @@ export default function ContactForm({ isCompact = false }: ContactFormProps) {
               </div>
             )}
 
-            <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600" disabled={isSubmitting}>
+            <Button type="submit" className="mt-2 w-full bg-orange-500 hover:bg-orange-600" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

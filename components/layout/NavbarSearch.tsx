@@ -30,13 +30,13 @@ export default function NavbarSearch() {
         <Input
           type="text"
           placeholder="Rechercher..."
-          className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-full transition-colors placeholder:text-white/55"
+          className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-lg transition-colors placeholder:text-white/55"
           value=""
           readOnly
         />
         <div className="absolute right-0 top-0 h-full flex items-center pr-3">
-          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 hover:bg-orange-50 rounded-md">
-            <Search className="h-[18px] w-[18px] text-[#e47925]" />
+          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10 rounded-md">
+            <Search className="h-[18px] w-[18px] text-white/75" />
           </Button>
         </div>
       </form>
@@ -50,7 +50,7 @@ export default function NavbarSearch() {
         placeholder={t('search.placeholder')}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-full transition-colors placeholder:text-white/55"
+        className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-lg transition-colors placeholder:text-white/55"
       />
       <div className="absolute right-0 top-0 h-full flex items-center pr-3">
         {searchTerm && (
@@ -65,7 +65,7 @@ export default function NavbarSearch() {
           </Button>
         )}
         <Button type="submit" variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10 rounded-full">
-          <Search className="h-[18px] w-[18px] text-[#e47925] hover:text-[#f18a3d]" />
+          <Search className="h-[18px] w-[18px] text-white/75 hover:text-white" />
         </Button>
       </div>
     </form>

@@ -58,7 +58,7 @@ export default function SubCategoryFilter({
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           onClick={handleShowAll}
-          className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+          className={`px-4 py-2 text-[13px] font-medium rounded-none ${
             showAll || !selectedSubCategory
               ? "bg-[#e47925] text-white border border-[#e47925]"
               : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -72,7 +72,7 @@ export default function SubCategoryFilter({
             onClick={() => {
               onSubCategoryChange(subCategory);
             }}
-            className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+            className={`px-4 py-2 text-[13px] font-medium rounded-none ${
               selectedSubCategory === subCategory
                 ? "bg-[#e47925] text-white border border-[#e47925]"
                 : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -89,7 +89,7 @@ export default function SubCategoryFilter({
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           onClick={handleShowAll}
-          className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+          className={`px-4 py-2 text-[13px] font-medium rounded-none ${
             showAll || !selectedSubCategory
               ? "bg-[#e47925] text-white border border-[#e47925]"
               : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -103,7 +103,7 @@ export default function SubCategoryFilter({
             onClick={() => {
               onSubCategoryChange(subCategory);
             }}
-            className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+            className={`px-4 py-2 text-[13px] font-medium rounded-none ${
               selectedSubCategory === subCategory
                 ? "bg-[#e47925] text-white border border-[#e47925]"
                 : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -120,7 +120,7 @@ export default function SubCategoryFilter({
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           onClick={handleShowAll}
-          className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+          className={`px-4 py-2 text-[13px] font-medium rounded-none ${
             showAll || !selectedSubCategory
               ? "bg-[#e47925] text-white border border-[#e47925]"
               : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -134,7 +134,7 @@ export default function SubCategoryFilter({
             onClick={() => {
               onSubCategoryChange(subCategory);
             }}
-            className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+            className={`px-4 py-2 text-[13px] font-medium rounded-none ${
               selectedSubCategory === subCategory
                 ? "bg-[#e47925] text-white border border-[#e47925]"
                 : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -151,7 +151,7 @@ export default function SubCategoryFilter({
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           onClick={handleShowAll}
-          className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+          className={`px-4 py-2 text-[13px] font-medium rounded-none ${
             showAll || !selectedSubCategory
               ? "bg-[#e47925] text-white border border-[#e47925]"
               : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
@@ -165,7 +165,7 @@ export default function SubCategoryFilter({
             onClick={() => {
               onSubCategoryChange(subCategory);
             }}
-            className={`px-4 py-2 text-[13px] font-medium rounded-full ${
+            className={`px-4 py-2 text-[13px] font-medium rounded-none ${
               selectedSubCategory === subCategory
                 ? "bg-[#e47925] text-white border border-[#e47925]"
                 : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"

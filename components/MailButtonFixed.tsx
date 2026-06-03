@@ -67,7 +67,7 @@ export default function MailButtonFixed() {
     <Dialog>
       <DialogTrigger asChild>
         <motion.button
-          className="group fixed bottom-8 right-6 md:bottom-12 md:right-10 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#e47925] text-white shadow-[0_22px_55px_rgba(228,121,37,0.34),0_12px_32px_rgba(7,24,39,0.24)] ring-1 ring-white/20 transition-transform duration-300 hover:scale-105 hover:bg-[#f18a3d] active:scale-95"
+          className="group fixed bottom-8 right-6 md:bottom-12 md:right-10 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#e47925] text-white shadow-lg transition-transform duration-300 hover:scale-105 hover:bg-[#f18a3d] active:scale-95"
           animate={{
             y: moveY
           }}
@@ -79,14 +79,13 @@ export default function MailButtonFixed() {
           }}
           aria-label="Ouvrir le formulaire de contact"
         >
-          <span className="absolute inset-1 rounded-full border border-white/18" />
-          <Mail className="relative h-7 w-7 transition-transform duration-300 group-hover:-translate-y-0.5" />
+          <Mail className="h-7 w-7 transition-transform duration-300 group-hover:-translate-y-0.5" />
         </motion.button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-[#0b2f4f]">
-            <span className="text-[#e47925]">Contactez</span>-Nous
+            <span className="text-[#e47925]">Contactez</span>-nous
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">

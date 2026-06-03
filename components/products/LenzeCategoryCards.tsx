@@ -21,20 +21,14 @@ export default function LenzeCategoryCards(_props: LenzeCategoryCardsProps) {
     'Variateurs et servovariateurs',
     'Moteurs',
     'Motoréducteurs',
-    'Réducteurs',
-    'Solutions et passerelles llot',
-    'Accessoires',
-    'Software'
+    'Réducteurs'
   ];
 
   const categoryDescriptions: Record<string, string> = {
     'Variateurs et servovariateurs': 'Solutions de contrôle de vitesse et de position haute performance pour applications industrielles.',
     'Moteurs': 'Moteurs électriques fiables et efficaces pour diverses applications industrielles.',
     'Motoréducteurs': 'Combinaisons intégrées de moteurs et réducteurs pour un contrôle précis du mouvement.',
-    'Réducteurs': 'Systèmes de transmission de puissance pour ajuster vitesse et couple dans les applications industrielles.',
-    'Solutions et passerelles llot': 'Connexion et intégration intelligente des systèmes d\'entraînement au monde numérique.',
-    'Accessoires': 'Composants complémentaires pour optimiser les performances de vos systèmes d\'entraînement.',
-    'Software': 'Logiciels de configuration, optimisation et diagnostic pour systèmes d\'entraînement.'
+    'Réducteurs': 'Systèmes de transmission de puissance pour ajuster vitesse et couple dans les applications industrielles.'
   };
 
   return (

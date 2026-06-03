@@ -63,19 +63,13 @@ export type LenzeCategory =
   | 'Variateurs et servovariateurs'
   | 'Moteurs'
   | 'Motoréducteurs'
-  | 'Réducteurs'
-  | 'Solutions et passerelles llot'
-  | 'Accessoires'
-  | 'Software';
+  | 'Réducteurs';
 
 export const LENZE_CATEGORIES: Record<LenzeCategory, string> = {
   'Variateurs et servovariateurs': 'Variateurs et servovariateurs',
   'Moteurs': 'Moteurs',
   'Motoréducteurs': 'Motoréducteurs',
-  'Réducteurs': 'Réducteurs',
-  'Solutions et passerelles llot': 'Solutions et passerelles llot',
-  'Accessoires': 'Accessoires',
-  'Software': 'Software'
+  'Réducteurs': 'Réducteurs'
 };
 
 // Types pour les catégories de produits WAGO

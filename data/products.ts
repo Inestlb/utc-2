@@ -1,4 +1,5 @@
 import { Product, LenzeVariateurSubCategory } from "@/lib/types";
+import { cache } from 'react';
 import fs from 'fs';
 import path from 'path';
 
@@ -588,7 +589,7 @@ export async function getLenzeReducteurs(): Promise<Product[]> {
 }
 
 // Fonction pour fusionner les produits Lenze avec les autres produits
-export async function getAllProducts(): Promise<Product[]> {
+export const getAllProducts = cache(async (): Promise<Product[]> => {
   try {
     const [staticProducts, lenzeVariateurs, lenzeMotoreducteurs, lenzeMoteurs, lenzeReducteurs] = await Promise.all([
       getStaticProducts(),
@@ -608,7 +609,7 @@ export async function getAllProducts(): Promise<Product[]> {
   } catch (error) {
     return getStaticProducts();
   }
-}
+});
 
 export async function getProducts(options?: {
   category?: string;

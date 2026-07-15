@@ -74,12 +74,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     <div className="bg-white">
       <div className="bg-[#0b2f4f]">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-10 pb-8">
-          <h1 className="text-2xl font-semibold text-white mb-3">{pageTitle}</h1>
-          <p className="text-[15px] text-[#a8c4db] max-w-3xl mb-4">
-            Parcourez notre catalogue complet de produits industriels conçus pour la <span className="text-white font-medium">fiabilité</span>,
-            l&apos;<span className="text-white font-medium">efficacité</span> et la <span className="text-white font-medium">performance</span>. Utilisez les filtres pour trouver exactement ce dont vous avez besoin.
-          </p>
-          <div className="h-px bg-[#e47925] w-16 mb-6" />
+          <h1 className="text-2xl font-semibold text-white mb-6">{pageTitle}</h1>
           <SearchBar
             products={products}
             initialQuery={search || ''}
@@ -87,7 +82,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-10">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-8 pb-12">
         <Suspense fallback={
           <div className="flex justify-center items-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-[#e47925]" />

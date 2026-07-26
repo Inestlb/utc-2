@@ -37,26 +37,24 @@ export interface ProductFilterOptions {
 }
 
 // Types pour les catégories de produits IFM
-export type IFMCategory = 
-  | 'Capteurs'
-  | 'Traitement d\'images'
-  | 'Technologies de sécurité'
-  | 'IO-Link'
-  | 'Interface de câblage capteurs/actionneurs'
-  | 'Technologies de connexion'
-  | 'Alimentation en tension'
-  | 'Accessoires';
+export const IFM_CATEGORIES = {
+  'Détecteur Inductifs': 'Détecteur Inductifs',
+  'Détecteurs Capacitifs': 'Détecteurs Capacitifs',
+  'Cellule Opto': 'Cellule Opto',
+  'Détecteurs à ultrasons': 'Détecteurs à ultrasons',
+  'Détecteurs pour vannes': 'Détecteurs pour vannes',
+  'Détecteurs pour vérins': 'Détecteurs pour vérins',
+  'Capteurs de pression / Capteurs de dépression': 'Capteurs de pression / Capteurs de dépression',
+  'Capteurs de niveau': 'Capteurs de niveau',
+  'Capteurs de débit / débitmètres': 'Capteurs de débit / débitmètres',
+  'Capteurs de température': 'Capteurs de température',
+  'IO LINK': 'IO LINK',
+  'Communication Industrielle ASI BUS': 'Communication Industrielle ASI BUS',
+  'Technologie de sécurité': 'Technologie de sécurité',
+  'Technologie de connexion': 'Technologie de connexion',
+} as const;
 
-export const IFM_CATEGORIES: Record<IFMCategory, string> = {
-  'Capteurs': 'Capteurs',
-  'Traitement d\'images': 'Traitement d\'images',
-  'Technologies de sécurité': 'Technologies de sécurité',
-  'IO-Link': 'IO-Link',
-  'Interface de câblage capteurs/actionneurs': 'Interface de câblage capteurs/actionneurs',
-  'Technologies de connexion': 'Technologies de connexion',
-  'Alimentation en tension': 'Alimentation en tension',
-  'Accessoires': 'Accessoires'
-};
+export type IFMCategory = keyof typeof IFM_CATEGORIES;
 
 // Types pour les catégories de produits Lenze
 export type LenzeCategory = 

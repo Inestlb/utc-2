@@ -6,11 +6,13 @@ import Link from 'next/link';
 import ProductCard from './ProductCard';
 import ProductFilter from './ProductFilter';
 import LenzeCategoryCards from './LenzeCategoryCards';
+import IFMCategoryCards from './IFMCategoryCards';
 import SubCategoryFilter from './SubCategoryFilter';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
 import { filterProductsForSubcategory, getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
+import { getCategoryPageVisibility } from '@/lib/products/categoryPageVisibility';
 
 interface ProductGridProps {
   products: Product[];
@@ -32,7 +34,6 @@ export default function ProductGrid({
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const searchParams = useSearchParams();
   const brand = searchParams.get('brand');
-  const [showFilters, setShowFilters] = useState(true);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>(
     getInitialSelectedSubcategory({
       brand,
@@ -47,14 +48,6 @@ export default function ProductGrid({
     'Réducteurs',
   ];
   
-  useEffect(() => {
-    if (brand === 'lenze' && !filterOptions.category) {
-      setShowFilters(false);
-    } else {
-      setShowFilters(true);
-    }
-  }, [brand, filterOptions.category]);
-
   useEffect(() => {
     setSelectedSubCategory(
       getInitialSelectedSubcategory({
@@ -88,7 +81,6 @@ export default function ProductGrid({
           page: 1 
         });
       }
-      setShowFilters(true);
     }
   };
   
@@ -115,6 +107,14 @@ export default function ProductGrid({
   const isMoteursPage = brand === 'lenze' && filterOptions.category === 'Moteurs';
   const isReducteurPage = brand === 'lenze' && filterOptions.category === 'Réducteurs';
   const hasSubcategories = isVariateurPage || isMotoreducteurPage || isMoteursPage || isReducteurPage;
+  const {
+    showBrandCategoryOverview,
+    showGenericCategoryFilter,
+    showProductResults,
+  } = getCategoryPageVisibility({
+    brand,
+    category: filterOptions.category,
+  });
   const backToCategoriesHref = brand ? `/products?brand=${encodeURIComponent(brand)}` : '/products';
   const showBackToCategories = Boolean(filterOptions.category);
   const filteredProducts = useMemo(
@@ -136,30 +136,35 @@ export default function ProductGrid({
         </div>
       )}
 
-      {!hasSubcategories && (
-        <div className="w-full mb-10">
-          {brand === 'lenze' && !showFilters ? (
-            <LenzeCategoryCards
-              categories={categories}
-              selectedCategory={filterOptions.category}
-              onCategorySelect={handleCategorySelect}
-            />
-          ) : (
-            <ProductFilter
-              categories={categories}
-              selectedCategory={filterOptions.category}
-              onCategoryChange={(category) => {
-                setSelectedSubCategory(undefined);
-                onFilterChange?.({
-                  category,
-                  subcategory: undefined,
-                  page: 1
-                });
-              }}
-            />
-          )}
-        </div>
-      )}
+      {!hasSubcategories &&
+        (showBrandCategoryOverview || showGenericCategoryFilter) && (
+          <div className="w-full mb-10">
+            {showBrandCategoryOverview ? (
+              brand === 'ifm' ? (
+                <IFMCategoryCards />
+              ) : (
+                <LenzeCategoryCards
+                  categories={categories}
+                  selectedCategory={filterOptions.category}
+                  onCategorySelect={handleCategorySelect}
+                />
+              )
+            ) : (
+              <ProductFilter
+                categories={categories}
+                selectedCategory={filterOptions.category}
+                onCategoryChange={(category) => {
+                  setSelectedSubCategory(undefined);
+                  onFilterChange?.({
+                    category,
+                    subcategory: undefined,
+                    page: 1,
+                  });
+                }}
+              />
+            )}
+          </div>
+        )}
       
       {hasSubcategories && (
         <div className="px-6 md:px-12 mb-8">
@@ -171,7 +176,7 @@ export default function ProductGrid({
         </div>
       )}
       
-      {showFilters && (
+      {showProductResults && (
         <div className="flex justify-between items-center mb-8 px-6 md:px-12">
           <p className="text-[13px] text-[#0b2f4f] font-medium">
             {isLoading ? 'Chargement des produits...' : (
@@ -211,14 +216,14 @@ export default function ProductGrid({
         </div>
       )}
 
-      {showFilters && isLoading && (
+      {showProductResults && isLoading && (
         <div className="flex flex-col justify-center items-center py-16 px-6 md:px-12">
           <div className="w-6 h-6 border-2 border-[#cacdcf] border-t-[#e47925] animate-spin"></div>
           <p className="mt-4 text-[13px] text-[#6b7280]">Chargement des produits...</p>
         </div>
       )}
 
-      {showFilters && !isLoading && filteredProducts.length === 0 && (
+      {showProductResults && !isLoading && filteredProducts.length === 0 && (
         <div className="text-center py-16 bg-[#f8f9fa] mx-6 md:mx-12">
           <h3 className="text-lg font-semibold text-[#34383c]">Aucun produit trouvé</h3>
           <p className="mt-3 text-[13px] text-[#6b7280]">
@@ -233,7 +238,6 @@ export default function ProductGrid({
                 search: undefined, 
                 page: 1 
               });
-              if (brand === 'lenze') setShowFilters(false);
               setSelectedSubCategory(undefined);
             }}
           >
@@ -242,7 +246,7 @@ export default function ProductGrid({
         </div>
       )}
 
-      {showFilters && !isLoading && filteredProducts.length > 0 && (
+      {showProductResults && !isLoading && filteredProducts.length > 0 && (
         <div className="px-6 md:px-12">
           {hasSubcategories ? (
             <div className="space-y-10">
@@ -307,7 +311,7 @@ export default function ProductGrid({
         </div>
       )}
 
-      {showFilters && totalPages > 1 && !hasSubcategories && (
+      {showProductResults && totalPages > 1 && !hasSubcategories && (
         <div className="flex justify-center mt-12 px-6 md:px-12">
           <div className="flex space-x-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (

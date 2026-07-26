@@ -14,7 +14,7 @@ export default function LanguageSelector() {
 
   // Static button for server-side rendering
   const staticSwitch = (
-    <div className="relative w-[120px] h-10 rounded-lg cursor-pointer overflow-hidden border border-white/12 bg-white/8">
+    <div className="relative w-[120px] h-10 rounded-none cursor-pointer overflow-hidden border border-white/12 bg-white/8">
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3">
           <span className="text-sm font-semibold text-white">FR</span>
@@ -41,7 +41,7 @@ export default function LanguageSelector() {
   };
 
   return (
-    <div className="relative w-[120px] h-10 rounded-lg cursor-pointer select-none border border-white/12 bg-white/8 hover:bg-white/12 transition-colors duration-200 overflow-hidden">
+    <div className="relative w-[120px] h-10 rounded-none cursor-pointer select-none border border-white/12 bg-white/8 hover:bg-white/12 transition-colors duration-200 overflow-hidden">
       {/* Background text */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex items-center gap-3">

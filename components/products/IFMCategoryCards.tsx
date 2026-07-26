@@ -43,6 +43,7 @@ export default function IFMCategoryCards() {
                   src="/images/logo-ifm.svg"
                   alt="IFM"
                   fill
+                  priority={category === ifmCategories[0]}
                   sizes="(min-width: 1024px) 22vw, (min-width: 640px) 44vw, 90vw"
                   className="object-contain p-10 transition-transform duration-300 group-hover/card:scale-[1.03]"
                 />

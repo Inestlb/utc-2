@@ -268,7 +268,7 @@ export default function Navbar() {
                             href={link.href}
                             className={`block text-lg font-medium transition-colors hover:text-[#e47925] ${
                               pathname === link.href ? 'text-[#e47925]' : 'text-white'
-                            } ${link.highlight ? 'mt-6 bg-[#e47925] text-white hover:text-white px-4 py-2 rounded-lg text-center' : ''}`}
+                            } ${link.highlight ? 'mt-6 bg-[#e47925] text-white hover:text-white px-4 py-2 rounded-none text-center' : ''}`}
                           >
                             {getTextContent(link.key)}
                           </Link>

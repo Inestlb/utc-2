@@ -63,7 +63,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
             >
-              <Button asChild size="lg" className="rounded-lg bg-[#e47925] px-7 py-6 text-base font-semibold text-white hover:bg-[#f18a3d]">
+              <Button asChild size="lg" className="rounded-none bg-[#e47925] px-7 py-6 text-base font-semibold text-white hover:bg-[#f18a3d]">
                 <Link href="/products" className="flex items-center">
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />

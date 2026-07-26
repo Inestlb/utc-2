@@ -226,7 +226,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="flex items-center">
                 <span className="text-gray-700 font-medium mr-4">Partager cet article :</span>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="rounded-full">
+                  <Button variant="outline" size="icon" className="rounded-none">
                     <Share2 className="h-4 w-4" />
                     <span className="sr-only">Partager</span>
                   </Button>

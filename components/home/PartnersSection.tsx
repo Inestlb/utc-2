@@ -104,7 +104,7 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                 transition={{ delay: 0.5, duration: 0.5 }}
                 viewport={{ once: true }}
               >
-                <Button asChild variant="outline" className="rounded-full border-[#0b2f4f]/20 px-6 text-[#0b2f4f] hover:border-[#e47925] hover:text-[#e47925]">
+                <Button asChild variant="outline" className="rounded-none border-[#0b2f4f]/20 px-6 text-[#0b2f4f] hover:border-[#e47925] hover:text-[#e47925]">
                   <Link href="/partners">
                     {t('button.readMore')}
                     <ArrowRight className="ml-1 h-4 w-4"/>
@@ -128,7 +128,7 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
               comment nous pouvons aider votre entreprise à réussir.
             </p>
               </div>
-            <Button asChild size="lg" className="rounded-full bg-[#e47925] px-7 py-6 text-white hover:bg-[#f18a3d]">
+            <Button asChild size="lg" className="rounded-none bg-[#e47925] px-7 py-6 text-white hover:bg-[#f18a3d]">
               <Link href="/contact">
                 {t('button.contact')}
                 <ArrowRight className="ml-2 h-5 w-5" />

@@ -56,7 +56,7 @@ export default function MapContainer({
         href={mapsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-md bg-[#0b2f4f] px-3 py-2 text-xs font-medium text-white shadow-md transition-colors hover:bg-[#e47925]"
+        className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-none bg-[#0b2f4f] px-3 py-2 text-xs font-medium text-white shadow-md transition-colors hover:bg-[#e47925]"
       >
         <ExternalLink className="h-3.5 w-3.5" />
         Ouvrir dans Google Maps

@@ -9,7 +9,7 @@ Apply square corners to every existing button and button-styled link across the 
 ## Scope
 
 - Replace only button-related Tailwind corner-radius classes with `rounded-none`.
-- Apply the rule to the shared `Button` primitive, its size variants, native `<button>` elements, `motion.button` elements, and existing links styled as actions.
+- Apply the rule to the shared `Button` primitive, its size variants, native `<button>` elements, `motion.button` elements, existing links styled as actions, and dialog/sheet close buttons.
 - Keep the floating e-mail button unchanged with `rounded-full`.
 - Keep all content, hrefs, labels, icons, colors, borders, sizes, spacing, shadows, transitions, disabled states, focus styles, and interactions unchanged.
 
@@ -18,7 +18,7 @@ Apply square corners to every existing button and button-styled link across the 
 Do not change corner-radius classes on:
 
 - Inputs, textareas, selects, checkboxes, and other form fields.
-- Cards, panels, images, badges, status messages, maps, dialogs, sheets, dropdown containers, menus, and decorative elements.
+- Cards, panels, images, badges, status messages, maps, dialog and sheet containers, dropdown containers, menus, and decorative elements. Their close buttons remain included as buttons.
 - The floating e-mail button, including `FloatingMailButton`, `MailButtonFixed`, and `SimpleMailButton`.
 
 ## Implementation

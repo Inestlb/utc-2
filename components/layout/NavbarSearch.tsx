@@ -30,13 +30,13 @@ export default function NavbarSearch() {
         <Input
           type="text"
           placeholder="Rechercher..."
-          className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-lg transition-colors placeholder:text-white/55"
+          className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-none transition-colors placeholder:text-white"
           value=""
           readOnly
         />
         <div className="absolute right-0 top-0 h-full flex items-center pr-3">
-          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10 rounded-md">
-            <Search className="h-[18px] w-[18px] text-white/75" />
+          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10 rounded-none">
+            <Search className="h-[18px] w-[18px] text-white" />
           </Button>
         </div>
       </form>
@@ -50,7 +50,7 @@ export default function NavbarSearch() {
         placeholder={t('search.placeholder')}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-lg transition-colors placeholder:text-white/55"
+        className="pr-16 h-10 text-[15px] bg-white/10 hover:bg-white/15 border-white/15 text-white focus:border-[#e47925] focus:ring-[#e47925]/25 rounded-none transition-colors placeholder:text-white"
       />
       <div className="absolute right-0 top-0 h-full flex items-center pr-3">
         {searchTerm && (
@@ -58,14 +58,14 @@ export default function NavbarSearch() {
             type="button"
             variant="ghost"
             size="icon"
-            className="h-8 w-8 hover:bg-white/10 rounded-full"
+            className="h-8 w-8 hover:bg-white/10 rounded-none"
             onClick={clearSearch}
           >
             <X className="h-[18px] w-[18px] text-white/55 hover:text-white" />
           </Button>
         )}
-        <Button type="submit" variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10 rounded-full">
-          <Search className="h-[18px] w-[18px] text-white/75 hover:text-white" />
+        <Button type="submit" variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10 rounded-none">
+          <Search className="h-[18px] w-[18px] text-white" />
         </Button>
       </div>
     </form>

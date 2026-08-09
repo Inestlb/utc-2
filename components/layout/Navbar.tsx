@@ -79,13 +79,29 @@ export default function Navbar() {
 
   // Handle transparent navbar on scroll
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+    let scrollFrame: number | null = null;
+
+    const updateScrolledState = () => {
+      const nextIsScrolled = window.scrollY > 10;
+      setIsScrolled((currentIsScrolled) =>
+        currentIsScrolled === nextIsScrolled ? currentIsScrolled : nextIsScrolled
+      );
     };
 
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      if (scrollFrame !== null) return;
+      scrollFrame = requestAnimationFrame(() => {
+        updateScrolledState();
+        scrollFrame = null;
+      });
+    };
+
+    updateScrolledState();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollFrame !== null) cancelAnimationFrame(scrollFrame);
+    };
   }, []);
 
   useEffect(() => {

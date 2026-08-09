@@ -38,3 +38,16 @@ for (const file of animatedHomeFiles) {
   assert.match(source, /import \{ m \} from ["']framer-motion["'];/);
   assert.doesNotMatch(source, /\bmotion\./);
 }
+
+const mailButtonSource = read('components', 'MailButtonFixed.tsx');
+const navbarSource = read('components', 'layout', 'Navbar.tsx');
+const translationSource = read('lib', 'context', 'TranslationContext.tsx');
+
+assert.match(mailButtonSource, /const lastScrollY = useRef\(0\)/);
+assert.match(mailButtonSource, /requestAnimationFrame/);
+assert.doesNotMatch(mailButtonSource, /const \[lastScrollY, setLastScrollY\]/);
+assert.match(navbarSource, /addEventListener\('scroll', handleScroll, \{ passive: true \}\)/);
+assert.match(navbarSource, /requestAnimationFrame/);
+assert.match(translationSource, /const t = useCallback/);
+assert.match(translationSource, /const contextValue = useMemo/);
+assert.match(translationSource, /<TranslationContext\.Provider value=\{contextValue\}>/);

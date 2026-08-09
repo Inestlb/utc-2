@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 
 // Define the available languages
 export type Language = 'fr' | 'ar';
@@ -522,16 +522,21 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
   }, [language, mounted]);
 
   // Translation function
-  const t = (key: string): string => {
+  const t = useCallback((key: string): string => {
     if (!translations[key]) {
       console.warn(`Translation key not found: ${key}`);
       return key;
     }
     return translations[key][language];
-  };
+  }, [language]);
+
+  const contextValue = useMemo(
+    () => ({ language, setLanguage, t, dir, isClient }),
+    [language, t, dir, isClient]
+  );
 
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t, dir, isClient }}>
+    <TranslationContext.Provider value={contextValue}>
       {children}
     </TranslationContext.Provider>
   );

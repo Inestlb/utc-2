@@ -51,3 +51,12 @@ assert.match(navbarSource, /requestAnimationFrame/);
 assert.match(translationSource, /const t = useCallback/);
 assert.match(translationSource, /const contextValue = useMemo/);
 assert.match(translationSource, /<TranslationContext\.Provider value=\{contextValue\}>/);
+
+const count = (source: string, token: string) => source.split(token).length - 1;
+const productCardSource = read('components', 'products', 'ProductCard.tsx');
+const productGallerySource = read('components', 'products', 'ProductGallery.tsx');
+const productDetailSource = read('app', '(site)', 'products', '[slug]', 'page.tsx');
+
+assert.equal(count(productCardSource, 'sizes='), 2);
+assert.equal(count(productGallerySource, 'sizes='), 2);
+assert.match(productDetailSource, /sizes="\(min-width: 1024px\) 29vw, \(min-width: 640px\) 44vw, 100vw"/);

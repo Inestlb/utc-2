@@ -166,6 +166,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                             alt={relatedDisplayTitle}
                             width={400}
                             height={300}
+                            sizes="(min-width: 1024px) 29vw, (min-width: 640px) 44vw, 100vw"
                             className="object-contain w-auto h-full max-w-full"
                           />
                         </div>

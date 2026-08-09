@@ -50,6 +50,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                   alt={displayTitle}
                   width={200}
                   height={200}
+                  sizes="(min-width: 768px) 14rem, 100vw"
                   className="object-contain w-auto h-full max-w-full p-3"
                   onError={handleImageError}
                 />
@@ -104,6 +105,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                   alt={displayTitle}
                   width={400}
                   height={300}
+                  sizes="(min-width: 1024px) 29vw, (min-width: 640px) 44vw, 100vw"
                   className="object-contain w-auto h-full max-w-full p-6"
                   onError={handleImageError}
                 />

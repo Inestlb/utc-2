@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/context/TranslationContext";
 import { Partner } from "@/lib/types";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface PartnersSectionProps {
   partners: Partner[];
@@ -21,7 +21,7 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
         <div className="flex justify-center w-full">
           <div className="w-full max-w-[1600px] px-6 md:px-12">
             <div className="mb-12 max-w-3xl">
-              <motion.h2
+              <m.h2
                 className="text-4xl md:text-6xl font-semibold tracking-[-0.055em] text-[#0b2f4f]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -29,9 +29,9 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                 transition={{ duration: 0.5 }}
               >
                 {t('partners.title')}
-              </motion.h2>
+              </m.h2>
 
-              <motion.p
+              <m.p
                 className="mt-6 text-lg leading-relaxed text-[#39495a]"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -39,13 +39,13 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 {t('partners.subtitle')}
-              </motion.p>
+              </m.p>
             </div>
 
             <div className="flex justify-center items-center py-6">
               <div className="w-full grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
                 {partners.map((partner, index) => (
-                  <motion.div
+                  <m.div
                     key={partner.id}
                     className="group flex min-h-56 flex-col items-center justify-center rounded-[1.75rem] border border-[#0b2f4f]/10 bg-white p-10 shadow-[0_22px_60px_rgba(3,25,43,0.08)] transition-colors hover:bg-[#0b2f4f]"
                     initial={{ opacity: 0, y: 30 }}
@@ -92,13 +92,13 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                     ) : (
                       <div className="font-bold text-4xl text-gray-800 group-hover:text-white transition-colors">{partner.name}</div>
                     )}
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
             </div>
 
             <div className="text-center mt-12">
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
@@ -110,7 +110,7 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
                     <ArrowRight className="ml-1 h-4 w-4"/>
                   </Link>
                 </Button>
-              </motion.div>
+              </m.div>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/lib/context/TranslationContext";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const brands = [
   { labelKey: 'home.hero.motorization' as const, name: 'Lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30, href: '/products?brand=lenze' },
@@ -26,7 +26,7 @@ export default function HeroSection() {
       <div className="relative flex justify-center w-full">
         <div className="w-full max-w-[1600px] px-6 md:px-12 grid min-h-screen grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] items-center gap-12 pt-28 pb-20">
           <div className="max-w-3xl">
-            <motion.h1
+            <m.h1
               className="text-[clamp(3rem,8vw,7rem)] font-semibold leading-[0.9] tracking-[-0.07em]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -39,25 +39,25 @@ export default function HeroSection() {
               ) : (
                 heroTitle
               )}
-            </motion.h1>
+            </m.h1>
 
-            <motion.div
+            <m.div
               className="my-8 h-px w-full max-w-xl bg-gradient-to-r from-[#e47925] via-white/30 to-transparent"
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: '100%' }}
               transition={{ duration: 0.7, delay: 0.2 }}
-            ></motion.div>
+            ></m.div>
 
-            <motion.p
+            <m.p
               className="max-w-2xl text-lg md:text-xl mb-9 text-[#d7e2eb] leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}
             >
               {t('home.hero.subtitle')}
-            </motion.p>
+            </m.p>
 
-            <motion.div
+            <m.div
               className="flex"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -69,10 +69,10 @@ export default function HeroSection() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-            </motion.div>
+            </m.div>
           </div>
 
-          <motion.div
+          <m.div
             className="relative hidden lg:block"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
@@ -105,7 +105,7 @@ export default function HeroSection() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

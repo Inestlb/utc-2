@@ -3,6 +3,7 @@ import HeroSection from "@/components/home/HeroSection";
 import SolutionsSection from "@/components/home/SolutionsSection";
 import ExpertiseSection from "@/components/home/ExpertiseSection";
 import PartnersSection from "@/components/home/PartnersSection";
+import HomeMotionProvider from "@/components/home/HomeMotionProvider";
 import { getPartners } from "@/data/partners";
 
 export const metadata: Metadata = {
@@ -14,11 +15,13 @@ export default async function Home() {
   const partners = await getPartners();
 
   return (
-    <main>
-      <HeroSection />
-      <SolutionsSection />
-      <ExpertiseSection />
-      <PartnersSection partners={partners} />
-    </main>
+    <HomeMotionProvider>
+      <main>
+        <HeroSection />
+        <SolutionsSection />
+        <ExpertiseSection />
+        <PartnersSection partners={partners} />
+      </main>
+    </HomeMotionProvider>
   );
 }

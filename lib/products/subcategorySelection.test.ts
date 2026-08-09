@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { filterProductsForSubcategory, getInitialSelectedSubcategory } from './subcategorySelection';
+import { filterProductsForSubcategory, getInitialSelectedSubcategory } from './subcategorySelection.ts';
 
 const lenzeCategories = [
   'Variateurs et servovariateurs',

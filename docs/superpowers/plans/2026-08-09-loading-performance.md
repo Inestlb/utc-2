@@ -28,7 +28,7 @@
 - Modify: `lib/maps.test.ts`
 - Modify: `lib/products/subcategorySelection.test.ts`
 
-- [ ] **Step 1: Reproduire l’échec actuel du runner Node**
+- [x] **Step 1: Reproduire l’échec actuel du runner Node**
 
 Run:
 
@@ -38,7 +38,7 @@ node --experimental-strip-types lib/maps.test.ts
 
 Expected: FAIL avec `ERR_MODULE_NOT_FOUND` pour `lib/maps`, car Node ESM exige l’extension du module TypeScript.
 
-- [ ] **Step 2: Autoriser les extensions TypeScript dans les imports de test**
+- [x] **Step 2: Autoriser les extensions TypeScript dans les imports de test**
 
 Ajouter dans `compilerOptions` de `tsconfig.json` :
 
@@ -59,7 +59,7 @@ import {
 } from './subcategorySelection.ts';
 ```
 
-- [ ] **Step 3: Ajouter la commande de test globale**
+- [x] **Step 3: Ajouter la commande de test globale**
 
 Ajouter dans `scripts` de `package.json` :
 
@@ -67,7 +67,7 @@ Ajouter dans `scripts` de `package.json` :
 "test": "node --experimental-strip-types --test lib/*.test.ts lib/products/*.test.ts"
 ```
 
-- [ ] **Step 4: Vérifier le runner et le typage**
+- [x] **Step 4: Vérifier le runner et le typage**
 
 Run:
 
@@ -78,7 +78,7 @@ npm exec -- tsc --noEmit
 
 Expected: tous les fichiers de test réussissent et TypeScript termine avec le code 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add package.json tsconfig.json lib/maps.test.ts lib/products/subcategorySelection.test.ts
@@ -92,7 +92,7 @@ git commit -m "test: make TypeScript checks reproducible"
 - Modify: `app/layout.tsx`
 - Modify: `next.config.mjs`
 
-- [ ] **Step 1: Écrire le test rouge des ressources globales**
+- [x] **Step 1: Écrire le test rouge des ressources globales**
 
 Créer `lib/loadingPerformance.test.ts` :
 
@@ -115,7 +115,7 @@ assert.doesNotMatch(layoutSource, /<link rel="preload" as="image" href="\/images
 assert.match(nextConfigSource, /minimumCacheTTL:\s*86400/);
 ```
 
-- [ ] **Step 2: Vérifier que le test échoue avant l’implémentation**
+- [x] **Step 2: Vérifier que le test échoue avant l’implémentation**
 
 Run:
 
@@ -125,7 +125,7 @@ node --experimental-strip-types --test lib/loadingPerformance.test.ts
 
 Expected: FAIL parce que les deux polices inutilisées, les préconnexions, le preload manuel et le TTL de 60 secondes sont encore présents.
 
-- [ ] **Step 3: Réduire les ressources du layout sans changer sa structure**
+- [x] **Step 3: Réduire les ressources du layout sans changer sa structure**
 
 Remplacer l’import et les déclarations de polices de `app/layout.tsx` par :
 
@@ -154,7 +154,7 @@ Le `<head>` doit conserver les deux balises meta existantes et ne plus contenir 
 </head>
 ```
 
-- [ ] **Step 4: Prolonger le cache des transformations d’images**
+- [x] **Step 4: Prolonger le cache des transformations d’images**
 
 Dans `next.config.mjs`, remplacer :
 
@@ -168,7 +168,7 @@ par :
 minimumCacheTTL: 86400,
 ```
 
-- [ ] **Step 5: Vérifier le test et le typage**
+- [x] **Step 5: Vérifier le test et le typage**
 
 Run:
 
@@ -179,7 +179,7 @@ npm exec -- tsc --noEmit
 
 Expected: PASS et TypeScript termine avec le code 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add lib/loadingPerformance.test.ts app/layout.tsx next.config.mjs
@@ -199,7 +199,7 @@ git commit -m "perf: reduce global loading resources"
 - Modify: `components/home/ValuePropositionSection.tsx`
 - Modify: `components/home/CtaSection.tsx`
 
-- [ ] **Step 1: Ajouter les assertions rouges pour LazyMotion**
+- [x] **Step 1: Ajouter les assertions rouges pour LazyMotion**
 
 Ajouter à `lib/loadingPerformance.test.ts` :
 
@@ -226,7 +226,7 @@ for (const file of animatedHomeFiles) {
 }
 ```
 
-- [ ] **Step 2: Vérifier que le nouveau test échoue**
+- [x] **Step 2: Vérifier que le nouveau test échoue**
 
 Run:
 
@@ -236,7 +236,7 @@ node --experimental-strip-types --test lib/loadingPerformance.test.ts
 
 Expected: FAIL parce que `HomeMotionProvider.tsx` n’existe pas encore et que les composants importent `motion`.
 
-- [ ] **Step 3: Créer le fournisseur de fonctions d’animation**
+- [x] **Step 3: Créer le fournisseur de fonctions d’animation**
 
 Créer `components/home/HomeMotionProvider.tsx` :
 
@@ -258,7 +258,7 @@ export default function HomeMotionProvider({
 }
 ```
 
-- [ ] **Step 4: Encadrer uniquement l’accueil avec le fournisseur**
+- [x] **Step 4: Encadrer uniquement l’accueil avec le fournisseur**
 
 Importer `HomeMotionProvider` dans `app/page.tsx` et conserver les sections dans le même ordre :
 
@@ -275,7 +275,7 @@ return (
 );
 ```
 
-- [ ] **Step 5: Remplacer uniquement les composants Framer complets**
+- [x] **Step 5: Remplacer uniquement les composants Framer complets**
 
 Dans chacun des six composants listés, utiliser :
 
@@ -285,7 +285,7 @@ import { m } from "framer-motion";
 
 Puis remplacer chaque balise `motion.element` par `m.element`, sans modifier les propriétés d’animation ou les classes.
 
-- [ ] **Step 6: Vérifier tests, typage et build intermédiaire**
+- [x] **Step 6: Vérifier tests, typage et build intermédiaire**
 
 Run:
 
@@ -297,7 +297,7 @@ npm run build
 
 Expected: tous les contrôles réussissent et le `First Load JS` de `/` est inférieur à 163 kB.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add lib/loadingPerformance.test.ts components/home app/page.tsx
@@ -312,7 +312,7 @@ git commit -m "perf: load only required home animation features"
 - Modify: `components/layout/Navbar.tsx`
 - Modify: `lib/context/TranslationContext.tsx`
 
-- [ ] **Step 1: Ajouter les assertions rouges de stabilité runtime**
+- [x] **Step 1: Ajouter les assertions rouges de stabilité runtime**
 
 Ajouter à `lib/loadingPerformance.test.ts` :
 
@@ -331,7 +331,7 @@ assert.match(translationSource, /const contextValue = useMemo/);
 assert.match(translationSource, /<TranslationContext\.Provider value=\{contextValue\}>/);
 ```
 
-- [ ] **Step 2: Vérifier que le test échoue**
+- [x] **Step 2: Vérifier que le test échoue**
 
 Run:
 
@@ -341,7 +341,7 @@ node --experimental-strip-types --test lib/loadingPerformance.test.ts
 
 Expected: FAIL sur la référence de scroll, `requestAnimationFrame` ou la mémorisation du contexte.
 
-- [ ] **Step 3: Stabiliser le scroll du bouton de contact**
+- [x] **Step 3: Stabiliser le scroll du bouton de contact**
 
 Dans `MailButtonFixed.tsx`, importer `useRef`, remplacer l’état `lastScrollY` par les références suivantes :
 
@@ -388,7 +388,7 @@ useEffect(() => {
 
 Toutes les valeurs de spring et les bornes `12`/`-48` restent inchangées.
 
-- [ ] **Step 4: Regrouper les contrôles de seuil de la navbar**
+- [x] **Step 4: Regrouper les contrôles de seuil de la navbar**
 
 Remplacer l’effet de scroll de `Navbar.tsx` par :
 
@@ -420,7 +420,7 @@ useEffect(() => {
 }, []);
 ```
 
-- [ ] **Step 5: Stabiliser le contexte de traduction**
+- [x] **Step 5: Stabiliser le contexte de traduction**
 
 Ajouter `useCallback` et `useMemo` aux imports React, puis remplacer `t` et la valeur inline du fournisseur par :
 
@@ -445,7 +445,7 @@ return (
 );
 ```
 
-- [ ] **Step 6: Vérifier tests et typage**
+- [x] **Step 6: Vérifier tests et typage**
 
 Run:
 
@@ -456,7 +456,7 @@ npm exec -- tsc --noEmit
 
 Expected: tous les contrôles réussissent.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add lib/loadingPerformance.test.ts components/MailButtonFixed.tsx components/layout/Navbar.tsx lib/context/TranslationContext.tsx
@@ -471,7 +471,7 @@ git commit -m "perf: reduce global rerenders during scroll"
 - Modify: `components/products/ProductGallery.tsx`
 - Modify: `app/(site)/products/[slug]/page.tsx`
 
-- [ ] **Step 1: Ajouter les assertions rouges sur les tailles d’image**
+- [x] **Step 1: Ajouter les assertions rouges sur les tailles d’image**
 
 Ajouter à `lib/loadingPerformance.test.ts` :
 
@@ -486,7 +486,7 @@ assert.equal(count(productGallerySource, 'sizes='), 2);
 assert.match(productDetailSource, /sizes="\(min-width: 1024px\) 29vw, \(min-width: 640px\) 44vw, 100vw"/);
 ```
 
-- [ ] **Step 2: Vérifier que le test échoue**
+- [x] **Step 2: Vérifier que le test échoue**
 
 Run:
 
@@ -496,7 +496,7 @@ node --experimental-strip-types --test lib/loadingPerformance.test.ts
 
 Expected: FAIL parce que ces cinq images n’ont pas encore de propriété `sizes`.
 
-- [ ] **Step 3: Décrire les largeurs réellement rendues**
+- [x] **Step 3: Décrire les largeurs réellement rendues**
 
 Ajouter aux deux images de `ProductCard.tsx` :
 
@@ -526,7 +526,7 @@ sizes="(min-width: 1024px) 29vw, (min-width: 640px) 44vw, 100vw"
 
 Ne modifier ni `src`, ni `alt`, ni `width`, ni `height`, ni `className`, ni la priorité.
 
-- [ ] **Step 4: Vérifier tests et typage**
+- [x] **Step 4: Vérifier tests et typage**
 
 Run:
 
@@ -537,7 +537,7 @@ npm exec -- tsc --noEmit
 
 Expected: tous les contrôles réussissent.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/loadingPerformance.test.ts components/products/ProductCard.tsx components/products/ProductGallery.tsx 'app/(site)/products/[slug]/page.tsx'
@@ -549,7 +549,7 @@ git commit -m "perf: serve responsive product images"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-09-loading-performance.md` uniquement pour cocher les étapes exécutées.
 
-- [ ] **Step 1: Exécuter la vérification automatisée complète**
+- [x] **Step 1: Exécuter la vérification automatisée complète**
 
 Run:
 
@@ -562,11 +562,11 @@ git diff --check
 
 Expected: toutes les commandes terminent avec le code 0.
 
-- [ ] **Step 2: Comparer les métriques du build**
+- [x] **Step 2: Comparer les métriques du build**
 
 Comparer la table finale aux références : `/` 163 kB, `/products` 125 kB, `/contact` 136 kB, `/partners` 106 kB, `/about` 100 kB. Rejeter toute hausse supérieure à 1 kB et conserver uniquement les optimisations qui réduisent la métrique ciblée ou le travail runtime démontré.
 
-- [ ] **Step 3: Tester les routes et interactions dans le navigateur**
+- [x] **Step 3: Tester les routes et interactions dans le navigateur**
 
 Vérifier en desktop et mobile :
 
@@ -584,7 +584,7 @@ Vérifier en desktop et mobile :
 
 Contrôler les animations, la navbar au scroll, le bouton de contact, les menus, la recherche, les catégories, grille/liste, le changement FR/AR et le RTL. Aucun texte, classe ou paramètre d’animation ne doit différer.
 
-- [ ] **Step 4: Examiner les changements finaux**
+- [x] **Step 4: Examiner les changements finaux**
 
 Run:
 

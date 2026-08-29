@@ -128,12 +128,13 @@ export default function PartnersSection({ partners }: PartnersSectionProps) {
               comment nous pouvons aider votre entreprise à réussir.
             </p>
               </div>
-            <Button asChild size="lg" className="rounded-none bg-[#e47925] px-7 py-6 text-white hover:bg-[#f18a3d]">
-              <Link href="/contact">
-                {t('button.contact')}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
+            <Link
+              href="/contact"
+              className="group inline-flex items-center text-lg font-medium text-white underline decoration-[#e47925] decoration-1 underline-offset-8 transition-colors hover:text-[#e47925]"
+            >
+              {t('button.contact')}
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
             </div>
           </div>
         </div>

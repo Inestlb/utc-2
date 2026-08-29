@@ -58,14 +58,20 @@ export default function HeroSection() {
             </m.p>
 
             <m.div
-              className="flex"
+              className="flex flex-wrap gap-3"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
             >
               <Button asChild size="lg" className="rounded-none bg-[#e47925] px-7 py-6 text-base font-semibold text-white hover:bg-[#f18a3d]">
-                <Link href="/products" className="flex items-center">
+                <Link href="/contact" className="flex items-center">
                   {t('home.hero.cta')}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="rounded-none border border-white bg-transparent px-7 py-6 text-base font-semibold text-white hover:bg-white hover:text-[#0b2f4f]">
+                <Link href="/products" className="flex items-center">
+                  {t('home.hero.secondaryCta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

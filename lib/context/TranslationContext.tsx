@@ -57,12 +57,12 @@ const translations: Translations = {
     ar: 'شريكك الموثوق للتصدير الصناعي. نربط خطوط إنتاجك بأفضل تجهيزات Lenze وIFM وWAGO.'
   },
   'home.hero.cta': {
-    fr: 'Découvrir nos produits',
-    ar: 'اكتشف منتجاتنا'
+    fr: 'Demander un devis',
+    ar: 'طلب عرض سعر'
   },
   'home.hero.secondaryCta': {
-    fr: 'Parler à un expert',
-    ar: 'تحدث إلى خبير'
+    fr: 'Voir les produits',
+    ar: 'عرض المنتجات'
   },
   'home.hero.network': {
     fr: 'Réseau UTC',

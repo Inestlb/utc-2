@@ -30,15 +30,6 @@ export default function SolutionsSection() {
               </m.h2>
             </div>
 
-            <m.div
-              className="max-w-2xl border-l border-[#e47925]/50 pl-6 text-lg leading-relaxed text-[#39495a]"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-            >
-              {t('home.solutions.subtitle')}
-            </m.div>
           </div>
 
           <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-3 lg:gap-7">

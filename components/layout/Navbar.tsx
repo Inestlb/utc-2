@@ -156,7 +156,7 @@ export default function Navbar() {
                   width={200}
                   height={200}
                   priority={true}
-                  className={`w-auto transition-all duration-500 ${isScrolled ? 'h-[78px]' : 'h-[95px]'}`}
+                  className={`w-auto transition-all duration-500 ${isScrolled ? 'h-[81px]' : 'h-[98px]'}`}
                 />
               </div>
             </Link>

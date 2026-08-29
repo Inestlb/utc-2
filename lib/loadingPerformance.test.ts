@@ -60,3 +60,8 @@ const productDetailSource = read('app', '(site)', 'products', '[slug]', 'page.ts
 assert.equal(count(productCardSource, 'sizes='), 2);
 assert.equal(count(productGallerySource, 'sizes='), 2);
 assert.match(productDetailSource, /sizes="\(min-width: 1024px\) 29vw, \(min-width: 640px\) 44vw, 100vw"/);
+
+const partnersSectionSource = read('components', 'home', 'PartnersSection.tsx');
+const ctaSectionSource = partnersSectionSource.split('{/* CTA Section */}')[1] ?? '';
+assert.doesNotMatch(ctaSectionSource, /bg-\[#e47925\]/);
+assert.match(ctaSectionSource, /underline/);

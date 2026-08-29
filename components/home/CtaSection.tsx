@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/lib/context/TranslationContext";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export default function CtaSection() {
   const { dir } = useTranslation();
@@ -12,7 +12,7 @@ export default function CtaSection() {
   return (
     <section className="py-16 bg-orange-500 text-white" dir={dir}>
       <div className="container mx-auto px-2 sm:px-3 lg:px-4 max-w-[1400px] text-center">
-        <motion.h2
+        <m.h2
           className="text-3xl font-bold mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -20,9 +20,9 @@ export default function CtaSection() {
           transition={{ duration: 0.5 }}
         >
           Besoin de Solutions Industrielles?
-        </motion.h2>
+        </m.h2>
 
-        <motion.p
+        <m.p
           className="text-lg mb-8 max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -30,9 +30,9 @@ export default function CtaSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           Contactez-nous dès aujourd&apos;hui pour découvrir comment nos solutions peuvent vous aider à optimiser vos processus industriels et à améliorer votre productivité.
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -44,7 +44,7 @@ export default function CtaSection() {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { Shield, Globe, Headphones } from "lucide-react";
 import { useTranslation } from "@/lib/context/TranslationContext";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const values = [
   { Icon: Shield, title: 'Assurance Qualité', desc: "Tous nos produits subissent des tests rigoureux et un contrôle de qualité pour garantir qu'ils répondent aux normes et spécifications internationales." },
@@ -20,7 +20,7 @@ export default function ValuePropositionSection() {
           <div className="mb-16 grid gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-end">
             <div>
               <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#e47925]">Engagement UTC</p>
-              <motion.h2
+              <m.h2
                 className="text-4xl md:text-6xl font-semibold tracking-[-0.055em] text-[#0b2f4f]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -28,10 +28,10 @@ export default function ValuePropositionSection() {
                 transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
               >
                 Pourquoi nous <span className="text-[#e47925]">choisir</span>
-              </motion.h2>
+              </m.h2>
             </div>
 
-            <motion.p
+            <m.p
               className="max-w-2xl border-l border-[#e47925]/50 pl-6 text-lg leading-relaxed text-[#39495a]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -40,12 +40,12 @@ export default function ValuePropositionSection() {
             >
               Nous fournissons des solutions industrielles complètes avec un accent sur la qualité,
               la fiabilité et la satisfaction du client.
-            </motion.p>
+            </m.p>
           </div>
 
           <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
             {values.map((item, i) => (
-              <motion.div
+              <m.div
                 key={item.title}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -60,7 +60,7 @@ export default function ValuePropositionSection() {
                   <h3 className="mb-4 text-2xl font-semibold tracking-[-0.03em] text-[#0b2f4f]">{item.title}</h3>
                   <p className="text-[#4a6478] leading-relaxed">{item.desc}</p>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

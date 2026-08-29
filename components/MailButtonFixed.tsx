@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Mail } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -10,7 +10,8 @@ import { motion } from 'framer-motion';
 export default function MailButtonFixed() {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
+  const scrollFrame = useRef<number | null>(null);
   const [moveY, setMoveY] = useState(0);
   const [scrollDirection, setScrollDirection] = useState(0);
 
@@ -22,27 +23,34 @@ export default function MailButtonFixed() {
   useEffect(() => {
     if (!isMounted) return;
 
+    lastScrollY.current = window.scrollY;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Déterminer la direction du scroll
-      const direction = currentScrollY > lastScrollY ? 1 : -1;
-      setScrollDirection(direction);
+      if (scrollFrame.current !== null) return;
 
-      setMoveY(prev => {
-        if (direction === 1) {
-          return Math.min(prev + 2, 12);
-        }
+      scrollFrame.current = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const direction = currentScrollY > lastScrollY.current ? 1 : -1;
 
-        return Math.max(prev - 4, -48);
+        setScrollDirection(direction);
+        setMoveY((previousMoveY) =>
+          direction === 1
+            ? Math.min(previousMoveY + 2, 12)
+            : Math.max(previousMoveY - 4, -48)
+        );
+        lastScrollY.current = currentScrollY;
+        scrollFrame.current = null;
       });
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMounted, lastScrollY]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollFrame.current !== null) {
+        cancelAnimationFrame(scrollFrame.current);
+      }
+    };
+  }, [isMounted]);
 
   // Effet pour réinitialiser progressivement la position du bouton
   useEffect(() => {

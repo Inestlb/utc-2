@@ -63,6 +63,7 @@ export default function ProductGallery({
                 alt={productName}
                 width={500}
                 height={500}
+                sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-contain max-w-full max-h-full"
                 onError={() => handleImageError(currentImage)}
               />
@@ -91,6 +92,7 @@ export default function ProductGallery({
                       alt={`${productName} - Vue ${index + 1}`}
                       width={120}
                       height={120}
+                      sizes="(min-width: 768px) 7.5rem, 25vw"
                       className="object-contain max-w-full max-h-full"
                       onError={() => handleImageError(imgSrc)}
                     />

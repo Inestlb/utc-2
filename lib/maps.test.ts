@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { getGoogleMapsEmbedUrl, getGoogleMapsUrl } from './maps';
+import { getGoogleMapsEmbedUrl, getGoogleMapsUrl } from './maps.ts';
 
 const address = '450 Rue Baden Powell, Espace Optimum, 34000 Montpellier';
 const encodedAddress = encodeURIComponent(address);

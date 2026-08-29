@@ -13,7 +13,6 @@ assert(buttonSource.includes('rounded-none'), 'The shared Button primitive shoul
 const expectedSquareActions = [
   ['components/home/HeroSection.tsx', 'rounded-none bg-[#e47925]'],
   ['components/home/PartnersSection.tsx', 'rounded-none border-[#0b2f4f]/20'],
-  ['components/home/PartnersSection.tsx', 'rounded-none bg-[#e47925]'],
   ['components/maps/MapContainer.tsx', 'rounded-none bg-[#0b2f4f]'],
   ['app/(site)/blog/[slug]/page.tsx', 'className="rounded-none"'],
   ['components/layout/Navbar.tsx', 'rounded-none text-center'],

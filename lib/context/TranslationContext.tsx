@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 
 // Define the available languages
 export type Language = 'fr' | 'ar';
@@ -57,12 +57,12 @@ const translations: Translations = {
     ar: 'شريكك الموثوق للتصدير الصناعي. نربط خطوط إنتاجك بأفضل تجهيزات Lenze وIFM وWAGO.'
   },
   'home.hero.cta': {
-    fr: 'Découvrir nos produits',
-    ar: 'اكتشف منتجاتنا'
+    fr: 'Demander un devis',
+    ar: 'طلب عرض سعر'
   },
   'home.hero.secondaryCta': {
-    fr: 'Parler à un expert',
-    ar: 'تحدث إلى خبير'
+    fr: 'Voir les produits',
+    ar: 'عرض المنتجات'
   },
   'home.hero.network': {
     fr: 'Réseau UTC',
@@ -522,16 +522,21 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
   }, [language, mounted]);
 
   // Translation function
-  const t = (key: string): string => {
+  const t = useCallback((key: string): string => {
     if (!translations[key]) {
       console.warn(`Translation key not found: ${key}`);
       return key;
     }
     return translations[key][language];
-  };
+  }, [language]);
+
+  const contextValue = useMemo(
+    () => ({ language, setLanguage, t, dir, isClient }),
+    [language, t, dir, isClient]
+  );
 
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t, dir, isClient }}>
+    <TranslationContext.Provider value={contextValue}>
       {children}
     </TranslationContext.Provider>
   );

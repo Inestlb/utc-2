@@ -1,3 +1,10 @@
+import {
+  IFM_ASI_BUS_CATEGORY,
+  IFM_CONNECTION_TECHNOLOGY_CATEGORY,
+  IFM_IO_LINK_CATEGORY,
+  IFM_SECURITY_TECHNOLOGY_CATEGORY,
+} from './ifmInductiveSubcategories.ts';
+
 interface CategoryPageVisibilityInput {
   brand: string | null;
   category?: string;
@@ -15,11 +22,49 @@ export function getCategoryPageVisibility({
 }: CategoryPageVisibilityInput): CategoryPageVisibility {
   const showBrandCategoryOverview =
     !category && (brand === 'lenze' || brand === 'ifm');
+  const isIFMInductiveCategory =
+    brand === 'ifm' && category === 'Détecteur Inductifs';
+  const isIFMCapacitiveCategory =
+    brand === 'ifm' && category === 'Détecteurs Capacitifs';
+  const isIFMPhotoelectricCategory =
+    brand === 'ifm' && category === 'Cellule Opto';
+  const isIFMUltrasonicCategory =
+    brand === 'ifm' && category === 'Détecteurs à ultrasons';
+  const isIFMValveCategory =
+    brand === 'ifm' && category === 'Détecteurs pour vannes';
+  const isIFMCylinderCategory =
+    brand === 'ifm' && category === 'Détecteurs pour vérins';
+  const isIFMPressureCategory =
+    brand === 'ifm' && category === 'Capteurs de pression / Capteurs de dépression';
+  const isIFMLevelCategory = brand === 'ifm' && category === 'Capteurs de niveau';
+  const isIFMFlowCategory = brand === 'ifm' && category === 'Capteurs de débit / débitmètres';
+  const isIFMTemperatureCategory = brand === 'ifm' && category === 'Capteurs de température';
+  const isIFMIOLinkCategory = brand === 'ifm' && category === IFM_IO_LINK_CATEGORY;
+  const isIFMASIBusCategory = brand === 'ifm' && category === IFM_ASI_BUS_CATEGORY;
+  const isIFMSecurityTechnologyCategory =
+    brand === 'ifm' && category === IFM_SECURITY_TECHNOLOGY_CATEGORY;
+  const isIFMConnectionTechnologyCategory =
+    brand === 'ifm' && category === IFM_CONNECTION_TECHNOLOGY_CATEGORY;
 
   return {
     showBrandCategoryOverview,
     showGenericCategoryFilter:
       !showBrandCategoryOverview && brand !== 'ifm',
-    showProductResults: !showBrandCategoryOverview,
+    showProductResults:
+      !showBrandCategoryOverview &&
+      !isIFMInductiveCategory &&
+      !isIFMCapacitiveCategory &&
+      !isIFMPhotoelectricCategory &&
+      !isIFMUltrasonicCategory &&
+      !isIFMValveCategory &&
+      !isIFMCylinderCategory &&
+      !isIFMPressureCategory &&
+      !isIFMLevelCategory &&
+      !isIFMFlowCategory &&
+      !isIFMTemperatureCategory &&
+      !isIFMIOLinkCategory &&
+      !isIFMASIBusCategory &&
+      !isIFMSecurityTechnologyCategory &&
+      !isIFMConnectionTechnologyCategory,
   };
 }

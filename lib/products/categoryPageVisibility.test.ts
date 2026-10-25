@@ -31,9 +31,66 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: false,
     showGenericCategoryFilter: false,
-    showProductResults: true,
+    showProductResults: false,
   },
-  'A selected IFM category should hide generic filters and show results',
+  'The IFM level-sensors page should show subcategories without generic filters or product results',
+);
+
+const { shouldShowIFMCategorySubcategories } = await import('./ifmInductiveSubcategories.ts');
+assert.equal(
+  shouldShowIFMCategorySubcategories('ifm', 'Capteurs de niveau'),
+  true,
+  'The IFM level-sensors page should show its static subcategories',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'ifm', category: 'Capteurs de débit / débitmètres' }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The IFM flow-sensors page should show subcategories without product results',
+);
+assert.equal(
+  shouldShowIFMCategorySubcategories('ifm', 'Capteurs de débit / débitmètres'),
+  true,
+  'The IFM flow-sensors page should show its static subcategories',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'ifm', category: 'Capteurs de température' }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The IFM temperature-sensors page should show subcategories without product results',
+);
+assert.equal(
+  shouldShowIFMCategorySubcategories('ifm', 'Capteurs de température'),
+  true,
+  'The IFM temperature-sensors page should show static subcategories',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'ifm', category: 'Détecteur Inductifs' }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The IFM inductive-detectors page should show subcategories without product results',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'ifm', category: 'Détecteurs Capacitifs' }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The IFM capacitive-detectors page should show subcategories without product results',
 );
 
 assert.deepEqual(

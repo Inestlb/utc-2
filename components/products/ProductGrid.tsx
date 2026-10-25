@@ -7,12 +7,42 @@ import ProductCard from './ProductCard';
 import ProductFilter from './ProductFilter';
 import LenzeCategoryCards from './LenzeCategoryCards';
 import IFMCategoryCards from './IFMCategoryCards';
+import IFMInductiveSubcategories from './IFMInductiveSubcategories';
+import IFMCapacitiveSubcategories from './IFMCapacitiveSubcategories';
+import IFMPhotoelectricSubcategories from './IFMPhotoelectricSubcategories';
+import IFMUltrasonicSubcategories from './IFMUltrasonicSubcategories';
+import IFMValveSubcategories from './IFMValveSubcategories';
+import IFMCylinderSubcategories from './IFMCylinderSubcategories';
+import IFMPressureSubcategories from './IFMPressureSubcategories';
+import IFMLevelSubcategories from './IFMLevelSubcategories';
+import IFMFlowSubcategories from './IFMFlowSubcategories';
+import IFMTemperatureSubcategories from './IFMTemperatureSubcategories';
+import IFMIOLinkSubcategories from './IFMIOLinkSubcategories';
+import IFMASIBusSubcategories from './IFMASIBusSubcategories';
+import IFMSecurityTechnologySubcategories from './IFMSecurityTechnologySubcategories';
+import IFMConnectionTechnologySubcategories from './IFMConnectionTechnologySubcategories';
 import SubCategoryFilter from './SubCategoryFilter';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
 import { filterProductsForSubcategory, getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
 import { getCategoryPageVisibility } from '@/lib/products/categoryPageVisibility';
+import {
+  IFM_CAPACITIVE_CATEGORY,
+  IFM_PHOTOELECTRIC_CATEGORY,
+  IFM_ULTRASONIC_CATEGORY,
+  IFM_VALVE_CATEGORY,
+  IFM_CYLINDER_CATEGORY,
+  IFM_PRESSURE_CATEGORY,
+  IFM_LEVEL_CATEGORY,
+  IFM_FLOW_CATEGORY,
+  IFM_TEMPERATURE_CATEGORY,
+  IFM_IO_LINK_CATEGORY,
+  IFM_ASI_BUS_CATEGORY,
+  IFM_SECURITY_TECHNOLOGY_CATEGORY,
+  IFM_CONNECTION_TECHNOLOGY_CATEGORY,
+  shouldShowIFMCategorySubcategories,
+} from '@/lib/products/ifmInductiveSubcategories';
 
 interface ProductGridProps {
   products: Product[];
@@ -165,6 +195,40 @@ export default function ProductGrid({
             )}
           </div>
         )}
+
+      {shouldShowIFMCategorySubcategories(brand, filterOptions.category) && (
+        <div className="px-6 md:px-12 mb-10">
+          {filterOptions.category === IFM_CAPACITIVE_CATEGORY ? (
+            <IFMCapacitiveSubcategories />
+          ) : filterOptions.category === IFM_PHOTOELECTRIC_CATEGORY ? (
+            <IFMPhotoelectricSubcategories />
+          ) : filterOptions.category === IFM_ULTRASONIC_CATEGORY ? (
+            <IFMUltrasonicSubcategories />
+          ) : filterOptions.category === IFM_VALVE_CATEGORY ? (
+            <IFMValveSubcategories />
+          ) : filterOptions.category === IFM_CYLINDER_CATEGORY ? (
+            <IFMCylinderSubcategories />
+          ) : filterOptions.category === IFM_PRESSURE_CATEGORY ? (
+            <IFMPressureSubcategories />
+          ) : filterOptions.category === IFM_LEVEL_CATEGORY ? (
+            <IFMLevelSubcategories />
+          ) : filterOptions.category === IFM_FLOW_CATEGORY ? (
+            <IFMFlowSubcategories />
+          ) : filterOptions.category === IFM_TEMPERATURE_CATEGORY ? (
+            <IFMTemperatureSubcategories />
+          ) : filterOptions.category === IFM_IO_LINK_CATEGORY ? (
+            <IFMIOLinkSubcategories />
+          ) : filterOptions.category === IFM_ASI_BUS_CATEGORY ? (
+            <IFMASIBusSubcategories />
+          ) : filterOptions.category === IFM_SECURITY_TECHNOLOGY_CATEGORY ? (
+            <IFMSecurityTechnologySubcategories />
+          ) : filterOptions.category === IFM_CONNECTION_TECHNOLOGY_CATEGORY ? (
+            <IFMConnectionTechnologySubcategories />
+          ) : (
+            <IFMInductiveSubcategories />
+          )}
+        </div>
+      )}
       
       {hasSubcategories && (
         <div className="px-6 md:px-12 mb-8">

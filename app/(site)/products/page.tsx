@@ -15,7 +15,7 @@ interface ProductsPageProps {
 }
 
 export const metadata = {
-  title: 'Produits | Entreprise d\'Exportation Industrielle',
+  title: 'Tous les produits | Entreprise d\'Exportation Industrielle',
   description: 'Parcourez notre catalogue de produits industriels de haute qualité pour l\'exportation mondiale',
 };
 
@@ -55,7 +55,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   const totalPages = Math.ceil(products.length / 4);
 
-  let pageTitle = 'Nos Produits';
+  let pageTitle = 'Tous les produits';
   if (brand === 'lenze') {
     pageTitle = 'Nos Produits Lenze';
     if (category === 'Variateurs et servovariateurs') {

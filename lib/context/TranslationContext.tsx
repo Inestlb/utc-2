@@ -24,6 +24,18 @@ const translations: Translations = {
     fr: 'Produits',
     ar: 'المنتجات'
   },
+  'nav.products.all': {
+    fr: 'Tous les produits',
+    ar: 'جميع المنتجات'
+  },
+  'nav.products.catalogue': {
+    fr: 'Voir l\'ensemble du catalogue',
+    ar: 'عرض الكتالوج الكامل'
+  },
+  'nav.products.byBrand': {
+    fr: 'PAR MARQUE',
+    ar: 'حسب العلامة التجارية'
+  },
   'nav.about': {
     fr: 'Société',
     ar: 'الشركة'

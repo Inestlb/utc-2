@@ -4,13 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown, LayoutGrid } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import NavbarSearch from './NavbarSearch';
@@ -23,13 +22,21 @@ interface NavLink {
   href: string;
   highlight?: boolean;
   hasSubmenu?: boolean;
-  submenu?: SubMenuItem[];
 }
 
-interface SubMenuItem {
+interface ProductBrand {
   name: string;
   href: string;
+  logo: string;
+  width: number;
+  height: number;
 }
+
+const productBrands: ProductBrand[] = [
+  { name: 'Lenze', href: '/products?brand=lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30 },
+  { name: 'IFM', href: '/products?brand=ifm', logo: '/images/logo-ifm.svg', width: 82, height: 82 },
+  { name: 'WAGO', href: '/products?brand=wago', logo: '/images/logo-WAGO.svg', width: 102, height: 38 },
+];
 
 // Liens de navigation principaux
 const mainNavLinks: NavLink[] = [
@@ -37,20 +44,6 @@ const mainNavLinks: NavLink[] = [
     key: 'nav.products',
     href: '/products',
     hasSubmenu: true,
-    submenu: [
-      {
-        name: 'Lenze',
-        href: '/products?brand=lenze'
-      },
-      {
-        name: 'IFM',
-        href: '/products?brand=ifm'
-      },
-      {
-        name: 'Wago',
-        href: '/products?brand=wago'
-      }
-    ]
   },
   { key: 'nav.about', href: '/about' },
   { key: 'nav.partners', href: '/partners' },
@@ -64,10 +57,65 @@ const allNavLinks: NavLink[] = [...mainNavLinks];
 const staticTranslations: Record<string, string> = {
   'nav.home': 'Accueil',
   'nav.products': 'Produits',
+  'nav.products.all': 'Tous les produits',
+  'nav.products.catalogue': "Voir l'ensemble du catalogue",
+  'nav.products.byBrand': 'PAR MARQUE',
   'nav.about': 'Société',
   'nav.partners': 'Partenaires',
   'nav.contact': 'Contact',
 };
+
+interface ProductMenuContentProps {
+  getTextContent: (key: string) => string;
+}
+
+function ProductMenuContent({ getTextContent }: ProductMenuContentProps) {
+  return (
+    <div className="w-full">
+      <Link
+        href="/products"
+        className="flex items-center gap-3 rounded-[4px] border border-[#d9e2e8] bg-white px-3 py-3 transition-colors duration-200 hover:border-[#c5d0d9] hover:bg-[#fbfcfd]"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[3px] border border-[#e47925]/30 text-[#e47925]">
+          <LayoutGrid className="h-5 w-5" aria-hidden="true" />
+        </span>
+        <span className="min-w-0 text-left">
+          <span className="block text-base font-semibold text-[#e47925]">
+            {getTextContent('nav.products.all')}
+          </span>
+          <span className="mt-1 block text-[13px] text-[#526578]">
+            {getTextContent('nav.products.catalogue')}
+          </span>
+        </span>
+      </Link>
+
+      <div className="mt-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6b7d8f]">
+          {getTextContent('nav.products.byBrand')}
+        </p>
+        <div className="mt-1 divide-y divide-[#d9e2e8]">
+          {productBrands.map((brand) => (
+            <Link
+              key={brand.name}
+              href={brand.href}
+              className="flex items-center justify-center px-1 py-4 transition-colors duration-200 hover:bg-[#f7f9fb]"
+            >
+              <span className="flex h-10 w-20 shrink-0 items-center justify-center">
+                <Image
+                  src={brand.logo}
+                  alt={`${brand.name} logo`}
+                  width={brand.width}
+                  height={brand.height}
+                  className="h-10 w-20 object-contain"
+                />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -187,7 +235,7 @@ export default function Navbar() {
 
                     {/* Conteneur du menu déroulant avec une grande zone de détection */}
                     <div
-                      className={`absolute left-1/2 top-full w-[220px] -translate-x-1/2 pt-5 transition-all duration-200 ${
+                      className={`absolute left-0 top-full w-[340px] pt-7 transition-all duration-200 ${
                         isProductsHovered 
                           ? 'translate-y-0 opacity-100 pointer-events-auto'
                           : '-translate-y-2 opacity-0 pointer-events-none'
@@ -196,18 +244,8 @@ export default function Navbar() {
                       onMouseLeave={closeProductsMenu}
                       onFocus={openProductsMenu}
                     >
-                      <div className="relative overflow-hidden rounded-[4px] border border-[#d9e2e8] bg-white shadow-[0_28px_70px_rgba(3,25,43,0.28)] ring-1 ring-[#0b2f4f]/5">
-                        <div className="grid gap-2 p-2.5">
-                          {link.submenu?.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              className="group flex items-center justify-center rounded-[3px] border border-transparent px-5 py-3 text-center transition-all duration-200 hover:border-[#e47925]/20 hover:bg-[#f7f9fb] hover:shadow-[0_10px_26px_rgba(11,47,79,0.10)]"
-                            >
-                              <span className="text-[15px] font-semibold text-[#0b2f4f] transition-colors duration-200 group-hover:text-[#e47925]">{item.name}</span>
-                            </Link>
-                          ))}
-                        </div>
+                      <div className="relative overflow-hidden rounded-[4px] border border-[#d9e2e8] bg-white p-5 shadow-[0_28px_70px_rgba(3,25,43,0.28)] ring-1 ring-[#0b2f4f]/5">
+                        <ProductMenuContent getTextContent={getTextContent} />
                       </div>
                     </div>
                   </div>
@@ -269,14 +307,11 @@ export default function Navbar() {
                               </span>
                               <ChevronDown className="h-4 w-4 opacity-70" />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-full">
-                              {link.submenu?.map((item) => (
-                                <DropdownMenuItem key={item.href} asChild>
-                                  <Link href={item.href} className="flex items-center w-full p-2">
-                                    <span>{item.name}</span>
-                                  </Link>
-                                </DropdownMenuItem>
-                              ))}
+                            <DropdownMenuContent
+                              align="start"
+                              className="w-[calc(85vw-2rem)] max-w-[318px] border-[#d9e2e8] bg-white p-3 shadow-[0_28px_70px_rgba(3,25,43,0.28)]"
+                            >
+                              <ProductMenuContent getTextContent={getTextContent} />
                             </DropdownMenuContent>
                           </DropdownMenu>
                         ) : (

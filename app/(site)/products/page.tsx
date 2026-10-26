@@ -3,6 +3,7 @@ import { getProducts, getProductCategories } from '@/data/products';
 import ProductGrid from '@/components/products/ProductGrid';
 import SearchBar from '@/components/products/SearchBar';
 import { Loader2 } from 'lucide-react';
+import { isWagoInstallationCategory } from '@/lib/products/wagoInstallationProducts';
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -26,6 +27,9 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const brand = resolvedSearchParams.brand;
   const search = resolvedSearchParams.q;
   const page = resolvedSearchParams.page ? parseInt(resolvedSearchParams.page) : 1;
+  const isWagoRailCategory = brand === 'wago' && category === 'Bornes sur rail';
+  const isWagoPowerSupplyCategory = brand === 'wago' && category === "Système d'alimentation";
+  const isWagoInstallationCategoryPage = isWagoInstallationCategory(brand, category);
 
   const productsOptions: {
     category?: string;
@@ -53,7 +57,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     categoriesPromise,
   ]);
 
-  const totalPages = Math.ceil(products.length / 4);
+  const totalPages = isWagoInstallationCategoryPage ? 1 : Math.ceil(products.length / 4);
 
   let pageTitle = 'Tous les produits';
   if (brand === 'lenze') {
@@ -75,10 +79,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       <div className="bg-[#0b2f4f]">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-10 pb-8">
           <h1 className="text-2xl font-semibold text-white mb-6">{pageTitle}</h1>
-          <SearchBar
-            products={products}
-            initialQuery={search || ''}
-          />
+          {!isWagoRailCategory && !isWagoPowerSupplyCategory && (
+            <SearchBar
+              products={products}
+              initialQuery={search || ''}
+            />
+          )}
         </div>
       </div>
 

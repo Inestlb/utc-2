@@ -6,6 +6,7 @@ import { ArrowLeft, Mail, ArrowRight } from 'lucide-react';
 import { getProductById, getProducts, extraImages } from '@/data/products';
 import { Metadata } from 'next';
 import ProductGallery from '@/components/products/ProductGallery';
+import { isWagoProduct } from '@/lib/products/wagoInstallationProducts';
 
 interface ProductDetailPageProps {
   params: Promise<{
@@ -40,16 +41,24 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   const displayTitle = product.header_title || product.name;
+  const isWagoInstallationProduct = isWagoProduct(product);
 
-  const relatedProducts = await getProducts({
-    category: product.category,
-  });
+  const relatedProducts = isWagoInstallationProduct
+    ? []
+    : await getProducts({
+        category: product.category,
+      });
 
   const filteredRelatedProducts = relatedProducts
     .filter(p => p.id !== product.id)
     .slice(0, 3);
 
-  const hasExtraImages = extraImages[product.id] && extraImages[product.id].length > 0;
+  const additionalImages = product.additionalImages?.length
+    ? product.additionalImages
+    : extraImages[product.id] ?? [];
+  const productsHref = isWagoInstallationProduct
+    ? `/products?brand=wago&category=${encodeURIComponent(product.category)}`
+    : `/products?category=${encodeURIComponent(product.category)}&brand=lenze`;
 
   return (
     <div className="bg-white">
@@ -65,7 +74,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </Link>
             <span className="mx-2 text-[#6b98b8]">/</span>
             <Link
-              href={`/products?category=${encodeURIComponent(product.category)}`}
+              href={productsHref}
               className="text-white hover:text-[#e47925] transition-colors"
             >
               {product.category}
@@ -78,7 +87,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-8">
         <Link
-          href={`/products?category=${encodeURIComponent(product.category)}&brand=lenze`}
+          href={productsHref}
           className="inline-flex items-center text-[13px] text-[#0b2f4f] hover:text-[#e47925] mb-8 font-medium"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -94,7 +103,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             ) : (
               <ProductGallery
                 mainImage={product.image}
-                additionalImages={hasExtraImages ? extraImages[product.id] : []}
+                additionalImages={additionalImages}
                 productName={displayTitle}
               />
             )}
@@ -109,35 +118,39 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               ))}
             </div>
 
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-lg font-semibold text-[#0b2f4f]">Spécifications</h2>
-                <div className="h-px flex-1 bg-[#e47925] opacity-40" />
+            {Object.keys(product.specifications).length > 0 && (
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <h2 className="text-lg font-semibold text-[#0b2f4f]">Spécifications</h2>
+                  <div className="h-px flex-1 bg-[#e47925] opacity-40" />
+                </div>
+                <div className="border border-[#cacdcf] overflow-hidden">
+                  <dl>
+                    {Object.entries(product.specifications).map(([key, value], index) => (
+                      <div
+                        key={key}
+                        className={`py-3 px-5 grid grid-cols-3 gap-4 ${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]'}`}
+                      >
+                        <dt className="text-[13px] text-[#0b2f4f] font-medium">{key}</dt>
+                        <dd className="text-[13px] text-[#34383c] col-span-2">{String(value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
               </div>
-              <div className="border border-[#cacdcf] overflow-hidden">
-                <dl>
-                  {Object.entries(product.specifications).map(([key, value], index) => (
-                    <div
-                      key={key}
-                      className={`py-3 px-5 grid grid-cols-3 gap-4 ${index % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]'}`}
-                    >
-                      <dt className="text-[13px] text-[#0b2f4f] font-medium">{key}</dt>
-                      <dd className="text-[13px] text-[#34383c] col-span-2">{String(value)}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
+            )}
 
-            <Button
-              asChild
-              className="rounded-none bg-[#e47925] text-white hover:bg-[#0b2f4f] px-6 py-3 text-[13px] font-medium border border-[#e47925] hover:border-[#0b2f4f]"
-            >
-              <Link href="/contact">
-                <Mail className="mr-2 h-4 w-4" />
-                Demander des Informations
-              </Link>
-            </Button>
+            {!isWagoInstallationProduct && (
+              <Button
+                asChild
+                className="rounded-none bg-[#e47925] text-white hover:bg-[#0b2f4f] px-6 py-3 text-[13px] font-medium border border-[#e47925] hover:border-[#0b2f4f]"
+              >
+                <Link href="/contact">
+                  <Mail className="mr-2 h-4 w-4" />
+                  Demander des Informations
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 

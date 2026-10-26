@@ -72,14 +72,14 @@ export const LENZE_CATEGORIES: Record<LenzeCategory, string> = {
 
 // Types pour les catégories de produits WAGO
 export type WAGOCategory = 
-  | 'Technologies de raccordement électriques'
-  | 'Interfaces électroniques'
-  | 'Techniques d\'automatisation';
+  | 'Bornes sur rail'
+  | 'Système d\'alimentation'
+  | 'Bornes d\'installation';
 
 export const WAGO_CATEGORIES: Record<WAGOCategory, string> = {
-  'Technologies de raccordement électriques': 'Technologies de raccordement électriques',
-  'Interfaces électroniques': 'Interfaces électroniques',
-  'Techniques d\'automatisation': 'Techniques d\'automatisation'
+  'Bornes sur rail': 'Bornes sur rail',
+  'Système d\'alimentation': 'Système d\'alimentation',
+  'Bornes d\'installation': 'Bornes d\'installation'
 };
 
 // Types pour les sous-catégories de Variateurs et servovariateurs Lenze

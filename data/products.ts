@@ -2,6 +2,12 @@ import { Product, LenzeVariateurSubCategory } from "@/lib/types";
 import { cache } from 'react';
 import fs from 'fs';
 import path from 'path';
+import {
+  isWagoProduct,
+  sortProductResults,
+  WAGO_INSTALLATION_CATEGORY,
+  WAGO_INSTALLATION_PRODUCTS,
+} from '@/lib/products/wagoInstallationProducts';
 
 // Ajout d'un tableau pour les images additionnelles des produits
 export const extraImages: Record<string, string[]> = {
@@ -604,7 +610,8 @@ export const getAllProducts = cache(async (): Promise<Product[]> => {
       ...lenzeVariateurs, 
       ...lenzeMotoreducteurs, 
       ...lenzeMoteurs,
-      ...lenzeReducteurs
+      ...lenzeReducteurs,
+      ...WAGO_INSTALLATION_PRODUCTS,
     ];
   } catch (error) {
     return getStaticProducts();
@@ -771,13 +778,28 @@ export async function getProducts(options?: {
   if (options?.brand) {
     filteredProducts = filteredProducts.filter((product) => {
       const productNameLower = product.name.toLowerCase();
+      if (options.brand === 'wago') {
+        return isWagoProduct(product);
+      }
+
       return productNameLower.includes(options.brand!.toLowerCase());
     });
   }
 
-  filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+  filteredProducts = sortProductResults(
+    filteredProducts,
+    options?.brand,
+    options?.category,
+  );
 
   if (options?.page !== undefined) {
+    if (
+      options.brand === 'wago' &&
+      options.category === WAGO_INSTALLATION_CATEGORY
+    ) {
+      return filteredProducts;
+    }
+
     const ITEMS_PER_PAGE = 8;
     const start = (options.page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;

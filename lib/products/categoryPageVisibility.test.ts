@@ -106,11 +106,41 @@ assert.deepEqual(
 assert.deepEqual(
   getCategoryPageVisibility({ brand: 'wago' }),
   {
+    showBrandCategoryOverview: true,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The WAGO root page should show its category-card overview',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'wago', category: 'Bornes sur rail' }),
+  {
     showBrandCategoryOverview: false,
-    showGenericCategoryFilter: true,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The WAGO rail-terminal page should show editorial content without product filters or results',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'wago', category: "Système d'alimentation" }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: false,
+    showProductResults: false,
+  },
+  'The WAGO power-supply page should show editorial content without product filters or results',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'wago', category: "Bornes d'installation" }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: false,
     showProductResults: true,
   },
-  'WAGO should retain the existing generic filters and product results',
+  'The WAGO installation page should show products without the unrelated category filter',
 );
 
 assert.deepEqual(

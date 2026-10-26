@@ -63,6 +63,7 @@ export default function ProductGallery({
                 alt={productName}
                 width={500}
                 height={500}
+                priority
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-contain max-w-full max-h-full"
                 onError={() => handleImageError(currentImage)}

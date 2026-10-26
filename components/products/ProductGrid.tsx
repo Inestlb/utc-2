@@ -7,6 +7,9 @@ import ProductCard from './ProductCard';
 import ProductFilter from './ProductFilter';
 import LenzeCategoryCards from './LenzeCategoryCards';
 import IFMCategoryCards from './IFMCategoryCards';
+import WAGOCategoryCards from './WAGOCategoryCards';
+import WAGORailCategoryContent from './WAGORailCategoryContent';
+import WAGOPowerSupplyCategoryContent from './WAGOPowerSupplyCategoryContent';
 import IFMInductiveSubcategories from './IFMInductiveSubcategories';
 import IFMCapacitiveSubcategories from './IFMCapacitiveSubcategories';
 import IFMPhotoelectricSubcategories from './IFMPhotoelectricSubcategories';
@@ -27,6 +30,7 @@ import { ArrowLeft, Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
 import { filterProductsForSubcategory, getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
 import { getCategoryPageVisibility } from '@/lib/products/categoryPageVisibility';
+import { isWagoPowerSupplyCategory } from '@/lib/products/wagoPowerSupplyCategory';
 import {
   IFM_CAPACITIVE_CATEGORY,
   IFM_PHOTOELECTRIC_CATEGORY,
@@ -145,6 +149,8 @@ export default function ProductGrid({
     brand,
     category: filterOptions.category,
   });
+  const isWAGORailCategory = brand === 'wago' && filterOptions.category === 'Bornes sur rail';
+  const isWAGOPowerSupplyCategory = isWagoPowerSupplyCategory(brand, filterOptions.category);
   const backToCategoriesHref = brand ? `/products?brand=${encodeURIComponent(brand)}` : '/products';
   const showBackToCategories = Boolean(filterOptions.category);
   const filteredProducts = useMemo(
@@ -172,6 +178,8 @@ export default function ProductGrid({
             {showBrandCategoryOverview ? (
               brand === 'ifm' ? (
                 <IFMCategoryCards />
+              ) : brand === 'wago' ? (
+                <WAGOCategoryCards />
               ) : (
                 <LenzeCategoryCards
                   categories={categories}
@@ -195,6 +203,18 @@ export default function ProductGrid({
             )}
           </div>
         )}
+
+      {isWAGORailCategory && (
+        <div className="mb-10">
+          <WAGORailCategoryContent />
+        </div>
+      )}
+
+      {isWAGOPowerSupplyCategory && (
+        <div className="mb-10">
+          <WAGOPowerSupplyCategoryContent />
+        </div>
+      )}
 
       {shouldShowIFMCategorySubcategories(brand, filterOptions.category) && (
         <div className="px-6 md:px-12 mb-10">

@@ -4,6 +4,9 @@ import {
   IFM_IO_LINK_CATEGORY,
   IFM_SECURITY_TECHNOLOGY_CATEGORY,
 } from './ifmInductiveSubcategories.ts';
+import { isWagoRailCategory } from './wagoRailCategory.ts';
+import { isWagoPowerSupplyCategory } from './wagoPowerSupplyCategory.ts';
+import { isWagoInstallationCategory } from './wagoInstallationProducts.ts';
 
 interface CategoryPageVisibilityInput {
   brand: string | null;
@@ -21,7 +24,7 @@ export function getCategoryPageVisibility({
   category,
 }: CategoryPageVisibilityInput): CategoryPageVisibility {
   const showBrandCategoryOverview =
-    !category && (brand === 'lenze' || brand === 'ifm');
+    !category && (brand === 'lenze' || brand === 'ifm' || brand === 'wago');
   const isIFMInductiveCategory =
     brand === 'ifm' && category === 'Détecteur Inductifs';
   const isIFMCapacitiveCategory =
@@ -45,13 +48,22 @@ export function getCategoryPageVisibility({
     brand === 'ifm' && category === IFM_SECURITY_TECHNOLOGY_CATEGORY;
   const isIFMConnectionTechnologyCategory =
     brand === 'ifm' && category === IFM_CONNECTION_TECHNOLOGY_CATEGORY;
+  const isWAGORailCategory = isWagoRailCategory(brand, category);
+  const isWAGOPowerSupplyCategory = isWagoPowerSupplyCategory(brand, category);
+  const isWAGOInstallationCategoryPage = isWagoInstallationCategory(brand, category);
 
   return {
     showBrandCategoryOverview,
     showGenericCategoryFilter:
-      !showBrandCategoryOverview && brand !== 'ifm',
+      !showBrandCategoryOverview &&
+      brand !== 'ifm' &&
+      !isWAGORailCategory &&
+      !isWAGOPowerSupplyCategory &&
+      !isWAGOInstallationCategoryPage,
     showProductResults:
       !showBrandCategoryOverview &&
+      !isWAGORailCategory &&
+      !isWAGOPowerSupplyCategory &&
       !isIFMInductiveCategory &&
       !isIFMCapacitiveCategory &&
       !isIFMPhotoelectricCategory &&

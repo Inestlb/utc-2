@@ -40,9 +40,9 @@ export default function ProductFilter({
     ];
   } else if (brand === 'wago') {
     displayCategories = [
-      'Technologies de raccordement électriques',
-      'Interfaces électroniques',
-      'Techniques d\'automatisation'
+      'Bornes sur rail',
+      'Système d\'alimentation',
+      'Bornes d\'installation'
     ];
   } else {
     displayCategories = categories;

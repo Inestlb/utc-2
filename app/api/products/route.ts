@@ -9,6 +9,7 @@ export async function GET(request: Request) {
     const search = searchParams.get('q');
     const featured = searchParams.get('featured');
     const page = searchParams.get('page');
+    const brand = searchParams.get('brand');
 
     // If an ID is provided, return a single product
     if (id) {
@@ -36,6 +37,7 @@ export async function GET(request: Request) {
       search: search || undefined,
       featured: featured ? featured === 'true' : undefined,
       page: page ? parseInt(page) : undefined,
+      brand: brand || undefined,
     });
 
     return NextResponse.json(products);

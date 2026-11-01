@@ -10,7 +10,11 @@ export function buildProductsUrl(
   current: URLSearchParams,
   changes: ProductNavigationChanges,
 ): string {
-  const next = new URLSearchParams(current.toString());
+  const next = new URLSearchParams();
+  const allowedParameters = new Set(['brand', 'category', 'subcategory', 'q', 'page']);
+  current.forEach((value, key) => {
+    if (allowedParameters.has(key)) next.append(key, value);
+  });
   const hasFilterChange = Object.keys(changes).some((key) => key !== 'page');
 
   if ('brand' in changes) {

@@ -2,6 +2,9 @@ import assert from 'node:assert/strict';
 import { buildProductsUrl, resetProductsUrl } from './productsPageNavigation.ts';
 
 const current = new URLSearchParams('brand=ifm&category=Capteurs&page=3');
+const currentWithUnsupportedParameter = new URLSearchParams(
+  'brand=ifm&foo=bar&category=Capteurs&page=3',
+);
 
 assert.equal(
   buildProductsUrl(current, { category: 'IO LINK' }),
@@ -17,6 +20,10 @@ assert.equal(
 );
 assert.equal(
   buildProductsUrl(current, { page: 2 }),
+  '/products?brand=ifm&category=Capteurs&page=2',
+);
+assert.equal(
+  buildProductsUrl(currentWithUnsupportedParameter, { page: 2 }),
   '/products?brand=ifm&category=Capteurs&page=2',
 );
 assert.equal(

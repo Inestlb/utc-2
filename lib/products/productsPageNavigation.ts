@@ -18,19 +18,35 @@ export function buildProductsUrl(
   const hasFilterChange = Object.keys(changes).some((key) => key !== 'page');
 
   if ('brand' in changes) {
-    changes.brand ? next.set('brand', changes.brand) : next.delete('brand');
+    if (changes.brand) {
+      next.set('brand', changes.brand);
+    } else {
+      next.delete('brand');
+    }
     next.delete('category');
     next.delete('subcategory');
   }
   if ('category' in changes) {
-    changes.category ? next.set('category', changes.category) : next.delete('category');
+    if (changes.category) {
+      next.set('category', changes.category);
+    } else {
+      next.delete('category');
+    }
     next.delete('subcategory');
   }
   if ('subcategory' in changes) {
-    changes.subcategory ? next.set('subcategory', changes.subcategory) : next.delete('subcategory');
+    if (changes.subcategory) {
+      next.set('subcategory', changes.subcategory);
+    } else {
+      next.delete('subcategory');
+    }
   }
   if ('search' in changes) {
-    changes.search?.trim() ? next.set('q', changes.search.trim()) : next.delete('q');
+    if (changes.search?.trim()) {
+      next.set('q', changes.search.trim());
+    } else {
+      next.delete('q');
+    }
   }
 
   if (hasFilterChange) {

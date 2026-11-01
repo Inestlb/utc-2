@@ -30,4 +30,11 @@ assert.equal(
   buildProductsUrl(current, { category: undefined, subcategory: undefined }),
   '/products?brand=ifm&page=1',
 );
+assert.equal(
+  buildProductsUrl(
+    new URLSearchParams('brand=ifm&category=Capteurs&subcategory=IO&page=4&q=i550'),
+    { brand: '', category: '', subcategory: '', search: '' },
+  ),
+  '/products?page=1',
+);
 assert.equal(resetProductsUrl(), '/products');

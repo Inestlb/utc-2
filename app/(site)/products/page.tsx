@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
-import { getProducts, getProductCategories } from '@/data/products';
+import { getProductCatalog, getProductCategories } from '@/data/products';
 import ProductGrid from '@/components/products/ProductGrid';
 import SearchBar from '@/components/products/SearchBar';
 import { Loader2 } from 'lucide-react';
-import { isWagoInstallationCategory } from '@/lib/products/wagoInstallationProducts';
+import { normalizeProductPage } from '@/lib/products/catalog';
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -26,10 +26,9 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const subcategory = resolvedSearchParams.subcategory;
   const brand = resolvedSearchParams.brand;
   const search = resolvedSearchParams.q;
-  const page = resolvedSearchParams.page ? parseInt(resolvedSearchParams.page) : 1;
+  const page = normalizeProductPage(resolvedSearchParams.page);
   const isWagoRailCategory = brand === 'wago' && category === 'Bornes sur rail';
   const isWagoPowerSupplyCategory = brand === 'wago' && category === "Système d'alimentation";
-  const isWagoInstallationCategoryPage = isWagoInstallationCategory(brand, category);
 
   const productsOptions: {
     category?: string;
@@ -39,25 +38,17 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     page: number;
   } = {
     category,
+    subcategory,
     brand,
     search,
     page,
   };
-
-  if (!(brand === 'lenze' && (category === 'Variateurs et servovariateurs' ||
-                              category === 'Motoréducteurs' ||
-                              category === 'Moteurs'))) {
-    productsOptions.subcategory = subcategory;
-  }
-
-  const productsPromise = getProducts(productsOptions);
-  const categoriesPromise = getProductCategories();
-  const [products, categories] = await Promise.all([
-    productsPromise,
+  const catalogPromise = getProductCatalog(productsOptions);
+  const categoriesPromise = getProductCategories(brand);
+  const [catalog, categories] = await Promise.all([
+    catalogPromise,
     categoriesPromise,
   ]);
-
-  const totalPages = isWagoInstallationCategoryPage ? 1 : Math.ceil(products.length / 4);
 
   let pageTitle = 'Tous les produits';
   if (brand === 'lenze') {
@@ -81,7 +72,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           <h1 className="text-2xl font-semibold text-white mb-6">{pageTitle}</h1>
           {!isWagoRailCategory && !isWagoPowerSupplyCategory && (
             <SearchBar
-              products={products}
+              products={catalog.products}
               initialQuery={search || ''}
             />
           )}
@@ -95,16 +86,17 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </div>
         }>
           <ProductGrid
-            products={products}
+            products={catalog.products}
             categories={categories}
             filterOptions={{
               category,
               subcategory,
               brand,
               search,
-              page,
+              page: catalog.page,
             }}
-            totalPages={totalPages}
+            total={catalog.total}
+            totalPages={catalog.totalPages}
           />
         </Suspense>
       </div>

@@ -8,6 +8,7 @@ import {
   WAGO_INSTALLATION_CATEGORY,
   WAGO_INSTALLATION_PRODUCTS,
 } from '@/lib/products/wagoInstallationProducts';
+import { paginateProducts, PRODUCTS_PER_PAGE } from '@/lib/products/catalog';
 
 // Ajout d'un tableau pour les images additionnelles des produits
 export const extraImages: Record<string, string[]> = {
@@ -618,14 +619,23 @@ export const getAllProducts = cache(async (): Promise<Product[]> => {
   }
 });
 
-export async function getProducts(options?: {
+export interface ProductQuery {
   category?: string;
   subcategory?: string;
   search?: string;
   featured?: boolean;
   page?: number;
   brand?: string;
-}): Promise<Product[]> {
+}
+
+export interface ProductCatalogResult {
+  products: Product[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
+async function getFilteredProducts(options: ProductQuery = {}): Promise<Product[]> {
   const allProducts = await getAllProducts();
 
   const isLenzeVariateursPage = options?.brand === 'lenze' && options?.category === 'Variateurs et servovariateurs';
@@ -644,11 +654,7 @@ export async function getProducts(options?: {
       filteredProducts = filteredProducts.filter(product => product.category === options.category);
     }
 
-    if (options?.subcategory && (options.category === 'Motoréducteurs' || options.category === 'Moteurs' || options.category === 'Réducteurs')) {
-      // Pour les motoréducteurs, moteurs et réducteurs, on continue à renvoyer tous les produits de la catégorie,
-      // mais on note la sous-catégorie demandée pour que l'interface puisse la mettre en surbrillance
-    } 
-    else if (options?.subcategory) {
+    if (options?.subcategory) {
       filteredProducts = filteredProducts.filter(p => p.subcategory === options.subcategory);
     }
 
@@ -736,13 +742,6 @@ export async function getProducts(options?: {
       filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    if (options?.page !== undefined) {
-      const ITEMS_PER_PAGE = isLenzeSpecialPage ? 50 : 8;
-      const start = (options.page - 1) * ITEMS_PER_PAGE;
-      const end = start + ITEMS_PER_PAGE;
-      return filteredProducts.slice(start, end);
-    }
-
     return filteredProducts;
   }
 
@@ -792,21 +791,41 @@ export async function getProducts(options?: {
     options?.category,
   );
 
-  if (options?.page !== undefined) {
-    if (
-      options.brand === 'wago' &&
-      options.category === WAGO_INSTALLATION_CATEGORY
-    ) {
-      return filteredProducts;
-    }
+  return filteredProducts;
+}
 
-    const ITEMS_PER_PAGE = 8;
-    const start = (options.page - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
-    return filteredProducts.slice(start, end);
+export async function getProductCatalog(
+  options: ProductQuery = {},
+): Promise<ProductCatalogResult> {
+  const filteredProducts = await getFilteredProducts(options);
+
+  if (
+    options.brand === 'wago' &&
+    options.category === WAGO_INSTALLATION_CATEGORY
+  ) {
+    return {
+      products: filteredProducts,
+      total: filteredProducts.length,
+      page: 1,
+      totalPages: 1,
+    };
   }
 
-  return filteredProducts;
+  return paginateProducts(filteredProducts, options?.page);
+}
+
+export async function getProducts(options?: ProductQuery): Promise<Product[]> {
+  const filteredProducts = await getFilteredProducts(options);
+  if (options?.page === undefined) return filteredProducts;
+
+  if (
+    options.brand === 'wago' &&
+    options.category === WAGO_INSTALLATION_CATEGORY
+  ) {
+    return filteredProducts;
+  }
+
+  return paginateProducts(filteredProducts, options?.page).products;
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
@@ -814,9 +833,11 @@ export async function getProductById(id: string): Promise<Product | undefined> {
   return allProducts.find((product) => product.id === id);
 }
 
-export async function getProductCategories(): Promise<string[]> {
-  const allProducts = await getAllProducts();
-  const categories = new Set(allProducts.map((product) => product.category));
+export async function getProductCategories(brand?: string): Promise<string[]> {
+  const matchingProducts = brand
+    ? await getFilteredProducts({ brand })
+    : await getAllProducts();
+  const categories = new Set(matchingProducts.map((product) => product.category));
   return Array.from(categories);
 }
 

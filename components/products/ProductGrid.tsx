@@ -167,7 +167,12 @@ export default function ProductGrid({
               onBrandChange={(nextBrand) => {
                 setSelectedSubCategory(undefined);
                 if (nextBrand) {
-                  applyFilters({ brand: nextBrand });
+                  applyFilters({
+                    brand: nextBrand,
+                    category: undefined,
+                    subcategory: undefined,
+                    page: 1,
+                  });
                 } else {
                   router.push(resetProductsUrl());
                 }

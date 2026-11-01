@@ -14,4 +14,8 @@ assert.match(filterSource, /Catégories/);
 assert.match(filterSource, /hover:bg-\[#0b2f4f\]/);
 assert.match(gridSource, /buildProductsUrl/);
 assert.match(gridSource, /totalProducts/);
+assert.match(
+  gridSource,
+  /applyFilters\(\{\s*brand: nextBrand,\s*category: undefined,\s*subcategory: undefined,\s*page: 1,?\s*\}\)/,
+);
 assert.match(searchSource, /useSearchParams/);

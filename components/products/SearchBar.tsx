@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, X, Loader2 } from 'lucide-react';
 import { useDebounce } from '@/lib/hooks/useDebounce';
 import { Product } from '@/lib/types';
 import Link from 'next/link';
+import { buildProductsUrl } from '@/lib/products/productsPageNavigation';
 
 interface SearchBarProps {
   products: Product[];
@@ -27,6 +28,7 @@ export default function SearchBar({
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,7 +70,9 @@ export default function SearchBar({
       if (onSearch) {
         onSearch(searchTerm);
       } else {
-        router.push(`/products?q=${encodeURIComponent(searchTerm.trim())}`);
+        router.push(buildProductsUrl(new URLSearchParams(searchParams.toString()), {
+          search: searchTerm.trim(),
+        }));
       }
       setIsDropdownOpen(false);
     }
@@ -80,6 +84,10 @@ export default function SearchBar({
     setIsDropdownOpen(false);
     if (onSearch) {
       onSearch('');
+    } else {
+      router.push(buildProductsUrl(new URLSearchParams(searchParams.toString()), {
+        search: undefined,
+      }));
     }
   };
 

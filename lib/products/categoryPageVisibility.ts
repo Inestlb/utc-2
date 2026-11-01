@@ -61,7 +61,6 @@ export function getCategoryPageVisibility({
       !isWAGOPowerSupplyCategory &&
       !isWAGOInstallationCategoryPage,
     showProductResults:
-      !showBrandCategoryOverview &&
       !isWAGORailCategory &&
       !isWAGOPowerSupplyCategory &&
       !isIFMInductiveCategory &&

@@ -21,7 +21,7 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: true,
     showGenericCategoryFilter: false,
-    showProductResults: false,
+    showProductResults: true,
   },
   'The IFM root page should show only category cards',
 );
@@ -98,7 +98,7 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: true,
     showGenericCategoryFilter: false,
-    showProductResults: false,
+    showProductResults: true,
   },
   'The Lenze root page should retain its category-card overview',
 );
@@ -108,7 +108,7 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: true,
     showGenericCategoryFilter: false,
-    showProductResults: false,
+    showProductResults: true,
   },
   'The WAGO root page should show its category-card overview',
 );

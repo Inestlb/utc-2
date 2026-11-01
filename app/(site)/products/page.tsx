@@ -95,7 +95,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               search,
               page: catalog.page,
             }}
-            total={catalog.total}
+            totalProducts={catalog.total}
             totalPages={catalog.totalPages}
           />
         </Suspense>

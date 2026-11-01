@@ -1,83 +1,94 @@
 "use client";
 
-import { useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 interface ProductFilterProps {
   categories: string[];
+  selectedBrand?: string | null;
+  onBrandChange: (brand?: string) => void;
   selectedCategory?: string;
   onCategoryChange: (category?: string) => void;
 }
 
+const brands: Array<{ value?: string; label: string }> = [
+  { value: undefined, label: 'Tous les produits' },
+  { value: 'lenze', label: 'Lenze' },
+  { value: 'ifm', label: 'IFM' },
+  { value: 'wago', label: 'WAGO' },
+];
+
+function FilterButton({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'rounded-none border px-5 py-2.5 text-[13px] font-medium transition-colors',
+        selected
+          ? 'border-[#e47925] bg-[#e47925] text-white'
+          : 'border-[#cacdcf] bg-white text-[#34383c] hover:border-[#0b2f4f] hover:bg-[#0b2f4f] hover:text-white',
+      )}
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function ProductFilter({
   categories,
+  selectedBrand,
+  onBrandChange,
   selectedCategory,
   onCategoryChange,
 }: ProductFilterProps) {
-  const searchParams = useSearchParams();
-  const brand = searchParams.get('brand');
-
-  let displayCategories: string[] = [];
-  
-  if (brand === 'ifm') {
-    const orderedCategories = [
-      'Capteurs',
-      'IO-Link',
-      'Traitement d\'images',
-      'Accessoires',
-      'Technologies de sécurité',
-      'Alimentation en tension',
-      'Technologies de connexion',
-      'Interface de câblage capteurs/actionneurs'
-    ];
-    displayCategories = orderedCategories;
-  } else if (brand === 'lenze') {
-    displayCategories = [
-      'Variateurs et servovariateurs',
-      'Moteurs',
-      'Motoréducteurs',
-      'Réducteurs'
-    ];
-  } else if (brand === 'wago') {
-    displayCategories = [
-      'Bornes sur rail',
-      'Système d\'alimentation',
-      'Bornes d\'installation'
-    ];
-  } else {
-    displayCategories = categories;
-  }
-
-  const allCategories = ["All", ...displayCategories];
-
   return (
-    <div className="w-full">
-      <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-base font-semibold text-[#0b2f4f]">Catégories</h2>
-        <div className="h-px flex-1 bg-[#0b2f4f] opacity-20" />
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {allCategories.map((category) => {
-          const isSelected =
-            (category === "All" && !selectedCategory) ||
-            category === selectedCategory;
+    <div className="w-full space-y-6">
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <h2 className="text-base font-semibold text-[#0b2f4f]">Marques</h2>
+          <div className="h-px flex-1 bg-[#0b2f4f] opacity-20" />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {brands.map((brand) => (
+            <FilterButton
+              key={brand.label}
+              label={brand.label}
+              selected={(brand.value ?? undefined) === (selectedBrand ?? undefined)}
+              onClick={() => onBrandChange(brand.value)}
+            />
+          ))}
+        </div>
+      </section>
 
-          return (
-            <button
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <h2 className="text-base font-semibold text-[#0b2f4f]">Catégories</h2>
+          <div className="h-px flex-1 bg-[#0b2f4f] opacity-20" />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <FilterButton
+            label="Tous les produits"
+            selected={!selectedCategory}
+            onClick={() => onCategoryChange(undefined)}
+          />
+          {categories.map((category) => (
+            <FilterButton
               key={category}
-              onClick={() => onCategoryChange(category === "All" ? undefined : category)}
-              className={cn(
-                "rounded-none px-5 py-2.5 text-[13px] font-medium",
-                isSelected
-                  ? "bg-[#e47925] text-white border border-[#e47925]"
-                  : "bg-white border border-[#cacdcf] text-[#34383c] hover:border-[#e47925] hover:text-[#e47925]"
-              )}
-            >
-              {category}
-            </button>
-          );
-        })}
-      </div>
+              label={category}
+              selected={category === selectedCategory}
+              onClick={() => onCategoryChange(category)}
+            />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
 import ProductFilter from './ProductFilter';
@@ -28,9 +28,10 @@ import SubCategoryFilter from './SubCategoryFilter';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
-import { filterProductsForSubcategory, getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
+import { getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
 import { getCategoryPageVisibility } from '@/lib/products/categoryPageVisibility';
 import { isWagoPowerSupplyCategory } from '@/lib/products/wagoPowerSupplyCategory';
+import { buildProductsUrl, resetProductsUrl, type ProductNavigationChanges } from '@/lib/products/productsPageNavigation';
 import {
   IFM_CAPACITIVE_CATEGORY,
   IFM_PHOTOELECTRIC_CATEGORY,
@@ -54,6 +55,7 @@ interface ProductGridProps {
   categories?: string[];
   filterOptions?: ProductFilterOptions;
   onFilterChange?: (filters: Partial<ProductFilterOptions>) => void;
+  totalProducts?: number;
   totalPages?: number;
 }
 
@@ -63,10 +65,12 @@ export default function ProductGrid({
   categories = [],
   filterOptions = {},
   onFilterChange,
+  totalProducts,
   totalPages = 1,
 }: ProductGridProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const searchParams = useSearchParams();
+  const router = useRouter();
   const brand = searchParams.get('brand');
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>(
     getInitialSelectedSubcategory({
@@ -75,13 +79,6 @@ export default function ProductGrid({
       requestedSubCategory: filterOptions.subcategory,
     })
   );
-  const lenzeSubcategoryCategories = [
-    'Variateurs et servovariateurs',
-    'Motoréducteurs',
-    'Moteurs',
-    'Réducteurs',
-  ];
-  
   useEffect(() => {
     setSelectedSubCategory(
       getInitialSelectedSubcategory({
@@ -92,48 +89,24 @@ export default function ProductGrid({
     );
   }, [brand, filterOptions.category, filterOptions.subcategory]);
 
-  const handlePageChange = (page: number) => {
+  const applyFilters = (changes: ProductNavigationChanges) => {
     if (onFilterChange) {
-      onFilterChange({ page });
+      onFilterChange(changes);
+      return;
     }
+    router.push(buildProductsUrl(new URLSearchParams(searchParams.toString()), changes));
   };
+
+  const handlePageChange = (page: number) => applyFilters({ page });
   
   const handleCategorySelect = (category: string) => {
-    if (onFilterChange) {
-      if (brand === 'lenze' && lenzeSubcategoryCategories.includes(category)) {
-        setSelectedSubCategory(undefined);
-        onFilterChange({
-          category,
-          subcategory: undefined,
-          page: 1,
-        });
-      } else {
-        setSelectedSubCategory(undefined);
-        onFilterChange({ 
-          category, 
-          subcategory: undefined, 
-          page: 1 
-        });
-      }
-    }
+    setSelectedSubCategory(undefined);
+    applyFilters({ category, subcategory: undefined, page: 1 });
   };
   
   const handleSubCategoryChange = (subCategory?: string) => {
     setSelectedSubCategory(subCategory);
-    const newParams = new URLSearchParams(searchParams.toString());
-    if (subCategory) {
-      newParams.set('subcategory', subCategory);
-    } else {
-      newParams.delete('subcategory');
-    }
-    window.history.pushState(null, '', `/products?${newParams.toString()}`);
-
-    if (onFilterChange) {
-      onFilterChange({ 
-        subcategory: subCategory, 
-        page: 1 
-      });
-    }
+    applyFilters({ subcategory: subCategory, page: 1 });
   };
 
   const isVariateurPage = brand === 'lenze' && filterOptions.category === 'Variateurs et servovariateurs';
@@ -153,10 +126,8 @@ export default function ProductGrid({
   const isWAGOPowerSupplyCategory = isWagoPowerSupplyCategory(brand, filterOptions.category);
   const backToCategoriesHref = brand ? `/products?brand=${encodeURIComponent(brand)}` : '/products';
   const showBackToCategories = Boolean(filterOptions.category);
-  const filteredProducts = useMemo(
-    () => filterProductsForSubcategory(products, filterOptions.category, selectedSubCategory),
-    [products, filterOptions.category, selectedSubCategory]
-  );
+  const filteredProducts = useMemo(() => products, [products]);
+  const visibleTotal = totalProducts ?? products.length;
 
   return (
     <div className="w-full">
@@ -175,32 +146,38 @@ export default function ProductGrid({
       {!hasSubcategories &&
         (showBrandCategoryOverview || showGenericCategoryFilter) && (
           <div className="w-full mb-10">
-            {showBrandCategoryOverview ? (
-              brand === 'ifm' ? (
-                <IFMCategoryCards />
-              ) : brand === 'wago' ? (
-                <WAGOCategoryCards />
-              ) : (
-                <LenzeCategoryCards
-                  categories={categories}
-                  selectedCategory={filterOptions.category}
-                  onCategorySelect={handleCategorySelect}
-                />
-              )
-            ) : (
-              <ProductFilter
-                categories={categories}
-                selectedCategory={filterOptions.category}
-                onCategoryChange={(category) => {
-                  setSelectedSubCategory(undefined);
-                  onFilterChange?.({
-                    category,
-                    subcategory: undefined,
-                    page: 1,
-                  });
-                }}
-              />
+            {showBrandCategoryOverview && (
+              <div className="mb-10">
+                {brand === 'ifm' ? (
+                  <IFMCategoryCards />
+                ) : brand === 'wago' ? (
+                  <WAGOCategoryCards />
+                ) : (
+                  <LenzeCategoryCards
+                    categories={categories}
+                    selectedCategory={filterOptions.category}
+                    onCategorySelect={handleCategorySelect}
+                  />
+                )}
+              </div>
             )}
+            <ProductFilter
+              categories={categories}
+              selectedBrand={brand}
+              onBrandChange={(nextBrand) => {
+                setSelectedSubCategory(undefined);
+                if (nextBrand) {
+                  applyFilters({ brand: nextBrand });
+                } else {
+                  router.push(resetProductsUrl());
+                }
+              }}
+              selectedCategory={filterOptions.category}
+              onCategoryChange={(category) => {
+                setSelectedSubCategory(undefined);
+                applyFilters({ category, subcategory: undefined, page: 1 });
+              }}
+            />
           </div>
         )}
 
@@ -265,7 +242,7 @@ export default function ProductGrid({
           <p className="text-[13px] text-[#0b2f4f] font-medium">
             {isLoading ? 'Chargement des produits...' : (
               <>
-                Affichage de <span className="text-[#e47925]">{filteredProducts.length}</span> produits
+                Affichage de <span className="text-[#e47925]">{visibleTotal}</span> produits
               </>
             )}
           </p>
@@ -316,13 +293,8 @@ export default function ProductGrid({
           <Button
             className="mt-6 rounded-none text-[#e47925] text-[13px] py-2 px-4 border border-[#e47925] bg-white hover:bg-[#e47925] hover:text-white"
             onClick={() => {
-              onFilterChange?.({ 
-                category: undefined, 
-                subcategory: undefined, 
-                search: undefined, 
-                page: 1 
-              });
               setSelectedSubCategory(undefined);
+              router.push(resetProductsUrl());
             }}
           >
             Effacer les filtres

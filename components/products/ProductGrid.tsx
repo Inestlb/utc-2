@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
@@ -28,7 +28,7 @@ import SubCategoryFilter from './SubCategoryFilter';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Grid, List } from 'lucide-react';
 import { Product, ProductFilterOptions } from '@/lib/types';
-import { getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
+import { filterProductsForSubcategory, getInitialSelectedSubcategory } from '@/lib/products/subcategorySelection';
 import { getCategoryPageVisibility } from '@/lib/products/categoryPageVisibility';
 import { isWagoPowerSupplyCategory } from '@/lib/products/wagoPowerSupplyCategory';
 import { buildProductsUrl, resetProductsUrl, type ProductNavigationChanges } from '@/lib/products/productsPageNavigation';
@@ -69,9 +69,11 @@ export default function ProductGrid({
   totalPages = 1,
 }: ProductGridProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const router = useRouter();
   const brand = searchParams.get('brand');
+  const isCatalogView = searchParams.get('catalog') === 'all' || !brand;
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>(
     getInitialSelectedSubcategory({
       brand,
@@ -90,11 +92,22 @@ export default function ProductGrid({
   }, [brand, filterOptions.category, filterOptions.subcategory]);
 
   const applyFilters = (changes: ProductNavigationChanges) => {
-    if (onFilterChange) {
-      onFilterChange(changes);
-      return;
-    }
-    router.push(buildProductsUrl(new URLSearchParams(searchParams.toString()), changes));
+    const navigate = () => {
+      if (onFilterChange) {
+        onFilterChange(changes);
+        return;
+      }
+      router.push(
+        buildProductsUrl(new URLSearchParams(searchParams.toString()), changes),
+        { scroll: false },
+      );
+    };
+
+    startTransition(navigate);
+  };
+
+  const applyCatalogFilters = (changes: ProductNavigationChanges) => {
+    applyFilters({ ...changes, catalog: true });
   };
 
   const handlePageChange = (page: number) => applyFilters({ page });
@@ -106,7 +119,11 @@ export default function ProductGrid({
   
   const handleSubCategoryChange = (subCategory?: string) => {
     setSelectedSubCategory(subCategory);
-    applyFilters({ subcategory: subCategory, page: 1 });
+    if (isCatalogView) {
+      applyCatalogFilters({ subcategory: subCategory, page: 1 });
+    } else {
+      applyFilters({ subcategory: subCategory, page: 1 });
+    }
   };
 
   const isVariateurPage = brand === 'lenze' && filterOptions.category === 'Variateurs et servovariateurs';
@@ -121,13 +138,25 @@ export default function ProductGrid({
   } = getCategoryPageVisibility({
     brand,
     category: filterOptions.category,
+    catalogView: isCatalogView,
   });
   const isWAGORailCategory = brand === 'wago' && filterOptions.category === 'Bornes sur rail';
   const isWAGOPowerSupplyCategory = isWagoPowerSupplyCategory(brand, filterOptions.category);
-  const backToCategoriesHref = brand ? `/products?brand=${encodeURIComponent(brand)}` : '/products';
+  const backToCategoriesHref = isCatalogView
+    ? brand
+      ? `/products?catalog=all&brand=${encodeURIComponent(brand)}`
+      : '/products'
+    : brand
+      ? `/products?brand=${encodeURIComponent(brand)}`
+      : '/products';
   const showBackToCategories = Boolean(filterOptions.category);
-  const filteredProducts = useMemo(() => products, [products]);
-  const visibleTotal = totalProducts ?? products.length;
+  const filteredProducts = useMemo(
+    () => isCatalogView
+      ? products
+      : filterProductsForSubcategory(products, filterOptions.category, selectedSubCategory),
+    [isCatalogView, products, filterOptions.category, selectedSubCategory],
+  );
+  const visibleTotal = isCatalogView ? (totalProducts ?? products.length) : filteredProducts.length;
 
   return (
     <div className="w-full">
@@ -143,10 +172,9 @@ export default function ProductGrid({
         </div>
       )}
 
-      {!hasSubcategories &&
-        (showBrandCategoryOverview || showGenericCategoryFilter) && (
+      {(isCatalogView || (!hasSubcategories && (showBrandCategoryOverview || showGenericCategoryFilter))) && (
           <div className="w-full mb-10">
-            {showBrandCategoryOverview && (
+            {!isCatalogView && showBrandCategoryOverview && (
               <div className="mb-10">
                 {brand === 'ifm' ? (
                   <IFMCategoryCards />
@@ -161,28 +189,46 @@ export default function ProductGrid({
                 )}
               </div>
             )}
-            <ProductFilter
-              categories={categories}
-              selectedBrand={brand}
-              onBrandChange={(nextBrand) => {
-                setSelectedSubCategory(undefined);
-                if (nextBrand) {
-                  applyFilters({
-                    brand: nextBrand,
-                    category: undefined,
-                    subcategory: undefined,
-                    page: 1,
-                  });
-                } else {
-                  router.push(resetProductsUrl());
-                }
-              }}
-              selectedCategory={filterOptions.category}
-              onCategoryChange={(category) => {
-                setSelectedSubCategory(undefined);
-                applyFilters({ category, subcategory: undefined, page: 1 });
-              }}
-            />
+            {isCatalogView && !filterOptions.category && (brand === 'ifm' || brand === 'wago') && (
+              <div className="mb-10">
+                {brand === 'ifm' ? (
+                  <IFMCategoryCards catalogView={isCatalogView} />
+                ) : (
+                  <WAGOCategoryCards catalogView={isCatalogView} />
+                )}
+              </div>
+            )}
+            {(isCatalogView || showGenericCategoryFilter) && (
+              <ProductFilter
+                categories={categories}
+                selectedBrand={brand}
+                showBrandFilter={isCatalogView}
+                onBrandChange={(nextBrand) => {
+                  setSelectedSubCategory(undefined);
+                  if (nextBrand) {
+                    applyCatalogFilters({
+                      brand: nextBrand,
+                      category: undefined,
+                      subcategory: undefined,
+                      page: 1,
+                    });
+                  } else {
+                    startTransition(() => {
+                      router.push(resetProductsUrl(), { scroll: false });
+                    });
+                  }
+                }}
+                selectedCategory={filterOptions.category}
+                onCategoryChange={(category) => {
+                  setSelectedSubCategory(undefined);
+                  if (isCatalogView) {
+                    applyCatalogFilters({ category, subcategory: undefined, page: 1 });
+                  } else {
+                    applyFilters({ category, subcategory: undefined, page: 1 });
+                  }
+                }}
+              />
+            )}
           </div>
         )}
 
@@ -198,7 +244,7 @@ export default function ProductGrid({
         </div>
       )}
 
-      {shouldShowIFMCategorySubcategories(brand, filterOptions.category) && (
+      {shouldShowIFMCategorySubcategories(brand, filterOptions.category) && (!isCatalogView || brand === 'ifm') && (
         <div className="px-6 md:px-12 mb-10">
           {filterOptions.category === IFM_CAPACITIVE_CATEGORY ? (
             <IFMCapacitiveSubcategories />
@@ -299,7 +345,9 @@ export default function ProductGrid({
             className="mt-6 rounded-none text-[#e47925] text-[13px] py-2 px-4 border border-[#e47925] bg-white hover:bg-[#e47925] hover:text-white"
             onClick={() => {
               setSelectedSubCategory(undefined);
-              router.push(resetProductsUrl());
+              startTransition(() => {
+                router.push(resetProductsUrl(), { scroll: false });
+              });
             }}
           >
             Effacer les filtres
@@ -372,7 +420,7 @@ export default function ProductGrid({
         </div>
       )}
 
-      {showProductResults && totalPages > 1 && !hasSubcategories && (
+      {showProductResults && totalPages > 1 && (isCatalogView || !hasSubcategories) && (
         <div className="flex justify-center mt-12 px-6 md:px-12">
           <div className="flex space-x-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (

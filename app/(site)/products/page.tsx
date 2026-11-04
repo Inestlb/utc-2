@@ -1,9 +1,11 @@
 import { Suspense } from 'react';
-import { getProductCatalog, getProductCategories } from '@/data/products';
+import { getProductCatalog, getProductCategories, getProducts } from '@/data/products';
+import type { ProductCatalogResult } from '@/data/products';
 import ProductGrid from '@/components/products/ProductGrid';
 import SearchBar from '@/components/products/SearchBar';
 import { Loader2 } from 'lucide-react';
 import { normalizeProductPage } from '@/lib/products/catalog';
+import { isCompactBrandOverviewPage } from '@/lib/products/productsPageLayout';
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -12,6 +14,7 @@ interface ProductsPageProps {
     brand?: string;
     q?: string;
     page?: string;
+    catalog?: string;
   }>;
 }
 
@@ -27,8 +30,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const brand = resolvedSearchParams.brand;
   const search = resolvedSearchParams.q;
   const page = normalizeProductPage(resolvedSearchParams.page);
+  const isCatalogView = !brand || resolvedSearchParams.catalog === 'all';
   const isWagoRailCategory = brand === 'wago' && category === 'Bornes sur rail';
   const isWagoPowerSupplyCategory = brand === 'wago' && category === "Système d'alimentation";
+  const isCompactOverview = isCompactBrandOverviewPage({ brand, category, catalogView: isCatalogView });
 
   const productsOptions: {
     category?: string;
@@ -38,12 +43,27 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     page: number;
   } = {
     category,
-    subcategory,
     brand,
     search,
     page,
   };
-  const catalogPromise = getProductCatalog(productsOptions);
+  if (
+    !(brand === 'lenze' && (
+      category === 'Variateurs et servovariateurs' ||
+      category === 'Motoréducteurs' ||
+      category === 'Moteurs'
+    ))
+  ) {
+    productsOptions.subcategory = subcategory;
+  }
+  const catalogPromise: Promise<ProductCatalogResult> = isCatalogView
+    ? getProductCatalog(productsOptions)
+    : getProducts(productsOptions).then((products) => ({
+        products,
+        total: products.length,
+        page: 1,
+        totalPages: 1,
+      }));
   const categoriesPromise = getProductCategories(brand);
   const [catalog, categories] = await Promise.all([
     catalogPromise,
@@ -68,8 +88,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   return (
     <div className="bg-white">
       <div className="bg-[#0b2f4f]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-10 pb-8">
-          <h1 className="text-2xl font-semibold text-white mb-6">{pageTitle}</h1>
+        <div className={`max-w-[1400px] mx-auto px-6 md:px-12 ${isCompactOverview ? 'pt-6 pb-5' : 'pt-10 pb-8'}`}>
+          <h1 className={`text-2xl font-semibold text-white ${isCompactOverview ? 'mb-4' : 'mb-6'}`}>{pageTitle}</h1>
           {!isWagoRailCategory && !isWagoPowerSupplyCategory && (
             <SearchBar
               products={catalog.products}
@@ -79,7 +99,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 pt-8 pb-12">
+      <div className={`max-w-[1400px] mx-auto px-6 md:px-12 ${isCompactOverview ? 'pt-6' : 'pt-8'} pb-12`}>
         <Suspense fallback={
           <div className="flex justify-center items-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-[#e47925]" />

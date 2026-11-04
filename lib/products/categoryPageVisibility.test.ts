@@ -10,6 +10,7 @@ interface VisibilityModule {
   getCategoryPageVisibility(input: {
     brand: string | null;
     category?: string;
+    catalogView?: boolean;
   }): CategoryPageVisibility;
 }
 
@@ -21,7 +22,7 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: true,
     showGenericCategoryFilter: false,
-    showProductResults: true,
+    showProductResults: false,
   },
   'The IFM root page should show only category cards',
 );
@@ -98,7 +99,7 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: true,
     showGenericCategoryFilter: false,
-    showProductResults: true,
+    showProductResults: false,
   },
   'The Lenze root page should retain its category-card overview',
 );
@@ -108,7 +109,7 @@ assert.deepEqual(
   {
     showBrandCategoryOverview: true,
     showGenericCategoryFilter: false,
-    showProductResults: true,
+    showProductResults: false,
   },
   'The WAGO root page should show its category-card overview',
 );
@@ -151,4 +152,42 @@ assert.deepEqual(
     showProductResults: true,
   },
   'The unbranded products page should retain its existing behavior',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({ brand: 'lenze', catalogView: true }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: true,
+    showProductResults: true,
+  },
+  'The catalog filter view should keep the generic filter presentation for a selected brand',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({
+    brand: 'ifm',
+    category: 'Détecteurs Capacitifs',
+    catalogView: true,
+  }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: true,
+    showProductResults: false,
+  },
+  'The IFM catalog category view should keep filters visible without showing an empty product grid',
+);
+
+assert.deepEqual(
+  getCategoryPageVisibility({
+    brand: 'wago',
+    category: 'Bornes sur rail',
+    catalogView: true,
+  }),
+  {
+    showBrandCategoryOverview: false,
+    showGenericCategoryFilter: true,
+    showProductResults: false,
+  },
+  'The WAGO catalog category view should keep filters visible without showing an empty product grid',
 );

@@ -11,6 +11,7 @@ import { isWagoInstallationCategory } from './wagoInstallationProducts.ts';
 interface CategoryPageVisibilityInput {
   brand: string | null;
   category?: string;
+  catalogView?: boolean;
 }
 
 export interface CategoryPageVisibility {
@@ -22,9 +23,10 @@ export interface CategoryPageVisibility {
 export function getCategoryPageVisibility({
   brand,
   category,
+  catalogView = false,
 }: CategoryPageVisibilityInput): CategoryPageVisibility {
   const showBrandCategoryOverview =
-    !category && (brand === 'lenze' || brand === 'ifm' || brand === 'wago');
+    !catalogView && !category && (brand === 'lenze' || brand === 'ifm' || brand === 'wago');
   const isIFMInductiveCategory =
     brand === 'ifm' && category === 'Détecteur Inductifs';
   const isIFMCapacitiveCategory =
@@ -51,16 +53,37 @@ export function getCategoryPageVisibility({
   const isWAGORailCategory = isWagoRailCategory(brand, category);
   const isWAGOPowerSupplyCategory = isWagoPowerSupplyCategory(brand, category);
   const isWAGOInstallationCategoryPage = isWagoInstallationCategory(brand, category);
+  const isCatalogSubcategoryOverview = catalogView && (
+    isIFMInductiveCategory ||
+    isIFMCapacitiveCategory ||
+    isIFMPhotoelectricCategory ||
+    isIFMUltrasonicCategory ||
+    isIFMValveCategory ||
+    isIFMCylinderCategory ||
+    isIFMPressureCategory ||
+    isIFMLevelCategory ||
+    isIFMFlowCategory ||
+    isIFMTemperatureCategory ||
+    isIFMIOLinkCategory ||
+    isIFMASIBusCategory ||
+    isIFMSecurityTechnologyCategory ||
+    isIFMConnectionTechnologyCategory ||
+    isWAGORailCategory ||
+    isWAGOPowerSupplyCategory
+  );
 
   return {
     showBrandCategoryOverview,
     showGenericCategoryFilter:
+      catalogView || (
       !showBrandCategoryOverview &&
       brand !== 'ifm' &&
       !isWAGORailCategory &&
       !isWAGOPowerSupplyCategory &&
-      !isWAGOInstallationCategoryPage,
+      !isWAGOInstallationCategoryPage),
     showProductResults:
+      !isCatalogSubcategoryOverview && (catalogView || (
+      !showBrandCategoryOverview &&
       !isWAGORailCategory &&
       !isWAGOPowerSupplyCategory &&
       !isIFMInductiveCategory &&
@@ -76,6 +99,6 @@ export function getCategoryPageVisibility({
       !isIFMIOLinkCategory &&
       !isIFMASIBusCategory &&
       !isIFMSecurityTechnologyCategory &&
-      !isIFMConnectionTechnologyCategory,
+      !isIFMConnectionTechnologyCategory)),
   };
 }

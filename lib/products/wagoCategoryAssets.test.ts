@@ -21,6 +21,10 @@ assert(fs.existsSync(cleanAssetPath), 'The installation terminals card should ha
 
 const componentSource = fs.readFileSync(componentPath, 'utf8');
 assert(
+  componentSource.includes('catalogView'),
+  'WAGO cards should support catalog-view links without changing brand pages',
+);
+assert(
   componentSource.includes('/images/wago/bornes-d-installation-clean.png'),
   'The installation terminals card should use the cleaned image asset',
 );

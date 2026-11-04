@@ -11,6 +11,10 @@ assert.equal(
   '/products?brand=ifm&category=IO+LINK&page=1',
 );
 assert.equal(
+  buildProductsUrl(current, { brand: 'wago', catalog: true }),
+  '/products?brand=wago&catalog=all&page=1',
+);
+assert.equal(
   buildProductsUrl(current, { brand: 'wago' }),
   '/products?brand=wago&page=1',
 );

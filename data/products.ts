@@ -8,7 +8,7 @@ import {
   WAGO_INSTALLATION_CATEGORY,
   WAGO_INSTALLATION_PRODUCTS,
 } from '@/lib/products/wagoInstallationProducts';
-import { paginateProducts, PRODUCTS_PER_PAGE } from '@/lib/products/catalog';
+import { paginateProducts } from '@/lib/products/catalog';
 
 // Ajout d'un tableau pour les images additionnelles des produits
 export const extraImages: Record<string, string[]> = {
@@ -779,6 +779,10 @@ async function getFilteredProducts(options: ProductQuery = {}): Promise<Product[
       const productNameLower = product.name.toLowerCase();
       if (options.brand === 'wago') {
         return isWagoProduct(product);
+      }
+
+      if (options.brand === 'lenze') {
+        return product.id.startsWith('lenze-') || productNameLower.includes(options.brand.toLowerCase());
       }
 
       return productNameLower.includes(options.brand!.toLowerCase());

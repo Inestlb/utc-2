@@ -21,7 +21,7 @@ export function useProducts(initialOptions?: ProductFilterOptions) {
       try {
         const [catalog, categoriesData] = await Promise.all([
           getProductCatalog(filterOptions),
-          getProductCategories(),
+          getProductCategories(filterOptions.brand),
         ]);
 
         setProducts(catalog.products);

@@ -7,5 +7,6 @@ const route = fs.readFileSync(path.join(process.cwd(), 'app', 'api', 'products',
 
 assert.match(hook, /getProductCatalog/);
 assert.match(hook, /totalItems/);
+assert.match(hook, /getProductCategories\(filterOptions\.brand\)/);
 assert.match(route, /const brand = searchParams\.get\('brand'\)/);
 assert.match(route, /brand: brand \|\| undefined/);

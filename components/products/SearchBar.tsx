@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,7 @@ export default function SearchBar({
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [, startTransition] = useTransition();
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const router = useRouter();
@@ -43,6 +44,12 @@ export default function SearchBar({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    setSearchTerm(initialQuery);
+    setSearchResults([]);
+    setIsDropdownOpen(false);
+  }, [initialQuery]);
 
   useEffect(() => {
     if (!debouncedSearchTerm) {
@@ -70,9 +77,14 @@ export default function SearchBar({
       if (onSearch) {
         onSearch(searchTerm);
       } else {
-        router.push(buildProductsUrl(new URLSearchParams(searchParams.toString()), {
-          search: searchTerm.trim(),
-        }));
+        startTransition(() => {
+          router.push(
+            buildProductsUrl(new URLSearchParams(searchParams.toString()), {
+              search: searchTerm.trim(),
+            }),
+            { scroll: false },
+          );
+        });
       }
       setIsDropdownOpen(false);
     }
@@ -85,9 +97,14 @@ export default function SearchBar({
     if (onSearch) {
       onSearch('');
     } else {
-      router.push(buildProductsUrl(new URLSearchParams(searchParams.toString()), {
-        search: undefined,
-      }));
+      startTransition(() => {
+        router.push(
+          buildProductsUrl(new URLSearchParams(searchParams.toString()), {
+            search: undefined,
+          }),
+          { scroll: false },
+        );
+      });
     }
   };
 

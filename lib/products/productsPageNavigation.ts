@@ -4,6 +4,7 @@ export interface ProductNavigationChanges {
   subcategory?: string;
   search?: string;
   page?: number;
+  catalog?: boolean;
 }
 
 export function buildProductsUrl(
@@ -11,7 +12,7 @@ export function buildProductsUrl(
   changes: ProductNavigationChanges,
 ): string {
   const next = new URLSearchParams();
-  const allowedParameters = new Set(['brand', 'category', 'subcategory', 'q', 'page']);
+  const allowedParameters = new Set(['brand', 'category', 'subcategory', 'q', 'page', 'catalog']);
   current.forEach((value, key) => {
     if (allowedParameters.has(key)) next.append(key, value);
   });
@@ -46,6 +47,14 @@ export function buildProductsUrl(
       next.set('q', changes.search.trim());
     } else {
       next.delete('q');
+    }
+  }
+
+  if ('catalog' in changes) {
+    if (changes.catalog) {
+      next.set('catalog', 'all');
+    } else {
+      next.delete('catalog');
     }
   }
 

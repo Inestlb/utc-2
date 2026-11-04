@@ -23,7 +23,7 @@ const categoryDescriptions: Record<IFMCategory, string> = {
   'Technologie de connexion': 'Connecteurs, câbles et accessoires pour des raccordements industriels fiables.',
 };
 
-export default function IFMCategoryCards() {
+export default function IFMCategoryCards({ catalogView = false }: { catalogView?: boolean }) {
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-5">
@@ -34,7 +34,9 @@ export default function IFMCategoryCards() {
         {ifmCategories.map((category) => (
           <Link
             key={category}
-            href={`/products?brand=ifm&category=${encodeURIComponent(category)}`}
+            href={catalogView
+              ? `/products?catalog=all&brand=ifm&category=${encodeURIComponent(category)}`
+              : `/products?brand=ifm&category=${encodeURIComponent(category)}`}
             className="block hover:no-underline"
           >
             <div className="h-full border border-[#cacdcf] bg-white hover:border-[#0b2f4f] transition-colors flex flex-col group/card">

@@ -27,7 +27,7 @@ const categoryImages: Record<WAGOCategory, { src: string; alt: string }> = {
   },
 };
 
-export default function WAGOCategoryCards() {
+export default function WAGOCategoryCards({ catalogView = false }: { catalogView?: boolean }) {
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-5">
@@ -38,7 +38,9 @@ export default function WAGOCategoryCards() {
         {wagoCategories.map((category, index) => (
           <Link
             key={category}
-            href={`/products?brand=wago&category=${encodeURIComponent(category)}`}
+            href={catalogView
+              ? `/products?catalog=all&brand=wago&category=${encodeURIComponent(category)}`
+              : `/products?brand=wago&category=${encodeURIComponent(category)}`}
             className="block hover:no-underline"
           >
             <div className="h-full border border-[#cacdcf] bg-white hover:border-[#0b2f4f] transition-colors flex flex-col group/card">

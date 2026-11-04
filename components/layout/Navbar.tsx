@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, ChevronDown, LayoutGrid } from 'lucide-react';
+import { Menu, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -74,16 +74,13 @@ function ProductMenuContent({ getTextContent }: ProductMenuContentProps) {
     <div className="w-full">
       <Link
         href="/products"
-        className="flex items-center gap-3 rounded-[4px] border border-[#d9e2e8] bg-white px-3 py-3 transition-colors duration-200 hover:border-[#c5d0d9] hover:bg-[#fbfcfd]"
+        className="block border-b border-[#d9e2e8] px-1 pb-5 transition-colors duration-200 hover:border-[#c5d0d9] hover:bg-[#f7f9fb]"
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[3px] border border-[#e47925]/30 text-[#e47925]">
-          <LayoutGrid className="h-5 w-5" aria-hidden="true" />
-        </span>
         <span className="min-w-0 text-left">
           <span className="block text-base font-semibold text-[#e47925]">
             {getTextContent('nav.products.all')}
           </span>
-          <span className="mt-1 block text-[13px] text-[#526578]">
+          <span className="mt-1.5 block text-[13px] text-[#526578]">
             {getTextContent('nav.products.catalogue')}
           </span>
         </span>

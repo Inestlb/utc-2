@@ -17,6 +17,8 @@ assert.match(navbarSource, /logo: '\/images\/logo-WAGO\.svg'/);
 assert.match(navbarSource, /getTextContent\('nav\.products\.all'\)/);
 assert.match(navbarSource, /getTextContent\('nav\.products\.catalogue'\)/);
 assert.match(navbarSource, /getTextContent\('nav\.products\.byBrand'\)/);
+assert.doesNotMatch(navbarSource, /LayoutGrid/);
+assert.doesNotMatch(navbarSource, /border-\[#e47925\]\/30/);
 assert.match(productsPageSource, /let pageTitle = 'Tous les produits'/);
 assert.match(translationSource, /'nav\.products\.all': \{\s*fr: 'Tous les produits'/);
 assert.match(translationSource, /'nav\.products\.catalogue': \{\s*fr: 'Voir l\\'ensemble du catalogue'/);

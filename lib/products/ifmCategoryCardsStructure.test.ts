@@ -20,6 +20,7 @@ assert(source.includes('Object.values(IFM_CATEGORIES)'), 'Cards should use the s
 assert(source.includes('/images/logo-ifm.svg'), 'Cards should use the approved neutral IFM logo visual');
 assert(source.includes('priority={category === ifmCategories[0]}'), 'Only the first IFM logo should receive LCP loading priority');
 assert(source.includes('brand=ifm&category='), 'Cards should link to IFM category URLs');
+assert(source.includes('catalogView'), 'IFM cards should support catalog-view links without changing brand pages');
 assert(source.includes('encodeURIComponent(category)'), 'Category names should be URL encoded');
 assert(source.includes('grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'), 'The grid should match the Lenze responsive format');
 assert(source.includes('Catégories de produits'), 'The overview should use the Lenze section heading');

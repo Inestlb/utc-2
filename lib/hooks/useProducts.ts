@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Product, ProductFilterOptions } from '@/lib/types';
-import { getProducts, getProductCategories } from '@/data/products';
+import { getProductCatalog, getProductCategories } from '@/data/products';
 
 export function useProducts(initialOptions?: ProductFilterOptions) {
   const [products, setProducts] = useState<Product[]>([]);
@@ -11,6 +11,7 @@ export function useProducts(initialOptions?: ProductFilterOptions) {
   const [error, setError] = useState<string | null>(null);
   const [filterOptions, setFilterOptions] = useState<ProductFilterOptions>(initialOptions || {});
   const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,17 +19,15 @@ export function useProducts(initialOptions?: ProductFilterOptions) {
       setError(null);
 
       try {
-        const [productsData, categoriesData] = await Promise.all([
-          getProducts(filterOptions),
-          getProductCategories(),
+        const [catalog, categoriesData] = await Promise.all([
+          getProductCatalog(filterOptions),
+          getProductCategories(filterOptions.brand),
         ]);
 
-        setProducts(productsData);
+        setProducts(catalog.products);
         setCategories(categoriesData);
-
-        // Calculate total pages (assuming 4 items per page)
-        const totalItems = productsData.length;
-        setTotalPages(Math.ceil(totalItems / 4));
+        setTotalPages(catalog.totalPages);
+        setTotalItems(catalog.total);
       } catch (err) {
         setError('Failed to fetch products');
         console.error(err);
@@ -57,5 +56,6 @@ export function useProducts(initialOptions?: ProductFilterOptions) {
     filterOptions,
     updateFilters,
     totalPages,
+    totalItems,
   };
 }

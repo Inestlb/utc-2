@@ -88,11 +88,6 @@ export default function HeroSection() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_10%,rgba(228,121,37,0.17),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]" />
               <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full border border-white/12" />
               <div className="relative">
-                <div className="mb-7 border-b border-white/12 pb-5">
-                  <p className="text-sm uppercase tracking-[0.32em] text-white/55">{t('home.hero.network')}</p>
-                  <p className="mt-2 text-2xl font-semibold tracking-[-0.03em]">{t('home.hero.reliableAutomation')}</p>
-                </div>
-
                 <div className="grid grid-cols-3 gap-3">
                   {brands.map((item) => (
                     <Link key={item.name} href={item.href} className="group flex min-h-[178px] flex-col items-center justify-between rounded-2xl bg-white/[0.92] p-5 shadow-[0_18px_45px_rgba(3,25,43,0.18)] transition-colors duration-200 hover:bg-[#0b2f4f]">

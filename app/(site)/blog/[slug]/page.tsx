@@ -44,9 +44,9 @@ const blogPosts = [
 
       <p>Ces améliorations se traduisent directement par des économies de coûts et une productivité accrue pour nos clients.</p>
 
-      <h2>Disponibilité Mondiale</h2>
+      <h2>Disponibilité</h2>
 
-      <p>La nouvelle gamme de pompes sera disponible dans le monde entier à partir du 1er juillet 2023. Notre réseau de distribution mondial assure une livraison rapide et un support local dans plus de 50 pays.</p>
+      <p>La nouvelle gamme de pompes sera disponible à partir du 1er juillet 2023.</p>
 
       <p>Pour les clients disposant d'équipements existants, nous proposons des packages de mise à niveau complets et des options de reprise pour faciliter la transition vers notre nouvelle technologie.</p>
 
@@ -73,7 +73,7 @@ const blogPosts = [
     category: 'Perspectives Industrielles',
     imageUrl: '/images/blog/trends.jpg',
     content: `<p>Le secteur des équipements industriels continue d'évoluer rapidement, porté par les avancées technologiques, l'évolution des demandes du marché et les facteurs économiques mondiaux. Cet article explore les principales tendances qui façonnent l'industrie en 2023.</p>`,
-    relatedPosts: [1, 3, 4]
+    relatedPosts: [1, 3]
   },
   {
     id: 3,
@@ -86,20 +86,7 @@ const blogPosts = [
     category: 'Durabilité',
     imageUrl: '/images/blog/sustainability.jpg',
     content: `<p>La durabilité n'est plus seulement un mot à la mode dans le secteur manufacturier—elle devient un impératif commercial fondamental. Cet article examine comment les pratiques durables remodèlent les opérations industrielles.</p>`,
-    relatedPosts: [2, 4, 5]
-  },
-  {
-    id: 4,
-    slug: 'international-trade-challenges',
-    title: 'Naviguer dans les Défis du Commerce International en 2023',
-    excerpt: 'Un guide complet pour surmonter les obstacles courants dans le commerce mondial d\'équipements industriels.',
-    date: '5 mars 2023',
-    author: 'Robert Johnson',
-    authorRole: 'Directeur Général',
-    category: 'Commerce Mondial',
-    imageUrl: '/images/blog/trade.jpg',
-    content: `<p>Le commerce international d'équipements industriels présente des défis uniques, de la conformité réglementaire aux complexités logistiques. Ce guide fournit des stratégies pratiques pour réussir sur les marchés mondiaux.</p>`,
-    relatedPosts: [2, 3, 6]
+    relatedPosts: [2, 5]
   },
   {
     id: 5,
@@ -125,7 +112,7 @@ const blogPosts = [
     category: 'Étude de Cas',
     imageUrl: '/images/blog/mining.jpg',
     content: `<p>Cette étude de cas examine comment nos solutions d'équipement sur mesure ont transformé les opérations d'une grande entreprise minière, entraînant des améliorations significatives d'efficacité et des économies de coûts.</p>`,
-    relatedPosts: [1, 4, 5]
+    relatedPosts: [1, 5]
   },
 ];
 
@@ -147,7 +134,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
   }
 
   return {
-    title: `${post.title} | Blog de l'Entreprise d'Exportation Industrielle`,
+    title: `${post.title} | Blog UTC Industrie`,
     description: post.excerpt,
   };
 }

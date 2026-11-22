@@ -41,22 +41,26 @@ export default function ContactForm({ isCompact = false, hideTitle = false, clas
     },
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async ({ name, email, subject, message }: ContactFormData) => {
     setIsSubmitting(true);
     setError(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const body = new FormData();
+      body.set('name', name);
+      body.set('email', email);
+      body.set('subject', subject);
+      body.set('message', message);
 
-      // In a real app, you would send the form data to your API
-      // const response = await fetch('/api/contact', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(form.getValues()),
-      // });
+      const response = await fetch('https://formspree.io/f/mdegpojo', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body,
+      });
 
-      // if (!response.ok) throw new Error('Failed to submit form');
+      if (!response.ok) {
+        throw new Error(`Formspree submission failed (HTTP ${response.status})`);
+      }
 
       setIsSuccess(true);
       form.reset();

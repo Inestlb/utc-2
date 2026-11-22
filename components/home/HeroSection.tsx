@@ -8,9 +8,9 @@ import { useTranslation } from "@/lib/context/TranslationContext";
 import { m } from "framer-motion";
 
 const brands = [
-  { labelKey: 'home.hero.motorization' as const, name: 'Lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30, href: '/products?brand=lenze' },
-  { labelKey: 'home.hero.detection' as const, name: 'IFM', logo: '/images/logo-ifm.svg', width: 82, height: 82, href: '/products?brand=ifm' },
-  { labelKey: 'home.hero.connectivity' as const, name: 'WAGO', logo: '/images/logo-WAGO.svg', width: 102, height: 38, href: '/products?brand=wago' },
+  { name: 'Lenze', logo: '/images/logo-Lenze.svg', width: 96, height: 30, href: '/products?brand=lenze' },
+  { name: 'IFM', logo: '/images/logo-ifm.svg', width: 82, height: 82, href: '/products?brand=ifm' },
+  { name: 'WAGO', logo: '/images/logo-WAGO.svg', width: 102, height: 38, href: '/products?brand=wago' },
 ];
 
 export default function HeroSection() {
@@ -100,7 +100,6 @@ export default function HeroSection() {
                           className={`max-h-14 w-auto object-contain transition-[filter] duration-200 ${item.name === 'IFM' ? '!max-h-[72px]' : 'group-hover:brightness-0 group-hover:invert'}`}
                         />
                       </div>
-                      <p className="text-xs uppercase tracking-[0.18em] text-[#5d7081] transition-colors duration-200 group-hover:text-white/60">{t(item.labelKey)}</p>
                     </Link>
                   ))}
                 </div>

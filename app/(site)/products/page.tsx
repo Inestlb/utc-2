@@ -19,8 +19,8 @@ interface ProductsPageProps {
 }
 
 export const metadata = {
-  title: 'Tous les produits | Entreprise d\'Exportation Industrielle',
-  description: 'Parcourez notre catalogue de produits industriels de haute qualité pour l\'exportation mondiale',
+  title: 'Tous les produits | UTC Industrie',
+  description: 'Parcourez notre catalogue de produits industriels en automatisme, motorisation et connectique.',
 };
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {

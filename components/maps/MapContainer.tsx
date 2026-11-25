@@ -13,8 +13,8 @@ interface MapContainerProps {
 export default function MapContainer({
   markerTitle = 'UTC Industrie',
   address = '450 Rue Baden Powell, Espace Optimum, 34000 Montpellier',
-  phone = '+1 (234) 567-890',
-  email = 'info@industrialexport.com',
+  phone = '+ 33 467 59 53 26',
+  email = 'contact@utcindustrie.com',
   latitude,
   longitude
 }: MapContainerProps) {

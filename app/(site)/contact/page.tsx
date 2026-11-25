@@ -8,8 +8,6 @@ export const metadata = {
 
 const contactLocation = {
   address: '450 Rue Baden Powell, Espace Optimum, 34000 Montpellier',
-  phone: '+1 (234) 567-890',
-  email: 'info@industrialexport.com',
   latitude: 43.6102441,
   longitude: 3.9086065,
 };
@@ -36,8 +34,6 @@ export default function ContactPage() {
                 <MapContainer
                   markerTitle="UTC Industrie - Espace Optimum"
                   address={contactLocation.address}
-                  phone={contactLocation.phone}
-                  email={contactLocation.email}
                   latitude={contactLocation.latitude}
                   longitude={contactLocation.longitude}
                 />
